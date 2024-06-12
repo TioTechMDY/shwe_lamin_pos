@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div class="row gx-2 gx-lg-3 mb-3 mb-lg-5">
+    <!-- <div class="row gx-2 gx-lg-3 mb-3 mb-lg-5">
         <div class="col-lg-12">
             <div class="card h-100">
                 <div class="card-body">
@@ -183,7 +183,7 @@
                         }
                         }'></canvas>
                     </div>
-                    <!-- Bar Chart -->
+                    // Bar Chart
                     <div class="chartjs-custom" id="lastYearStatistic">
                         <canvas id="updatingData_yearly"
                                 class="h-one-dash"
@@ -267,9 +267,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="row gx-2 gx-lg-3 mb-3 mb-lg-5">
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="card ">
                 <div class="card-header">
                     <h3>{{\App\CPU\translate('accounts')}}
@@ -311,7 +311,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-6">
             <div class="card ">
                 <div class="card-header">

@@ -50,7 +50,7 @@
     </a>
 </div>
 
-<div class="col-sm-6 col-lg-6 mb-3 mt-3 mb-lg-5">
+<!-- <div class="col-sm-6 col-lg-6 mb-3 mt-3 mb-lg-5">
     <a class="card card-hover-shadow h-100 color-four" href="{{route('admin.account.list-paylable')}}">
         <div class="card-body">
             <div class="flex-between align-items-center mb-1">
@@ -66,8 +66,8 @@
             </div>
         </div>
     </a>
-</div>
-<div class="col-sm-6 col-lg-6 mb-3 mt-3 mb-lg-5">
+</div> -->
+<!-- <div class="col-sm-6 col-lg-6 mb-3 mt-3 mb-lg-5">
     <a class="card card-hover-shadow h-100 color-five" href="{{route('admin.account.list-recievable')}}">
         <div class="card-body">
             <div class="flex-between align-items-center mb-1">
@@ -83,4 +83,4 @@
             </div>
         </div>
     </a>
-</div>
+</div> -->
