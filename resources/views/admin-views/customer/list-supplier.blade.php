@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title',\App\CPU\translate('customer_list'))
+@section('title',\App\CPU\translate('supplier_list'))
 
 @push('css_or_js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -12,7 +12,7 @@
         <div class="row align-items-center mb-3">
             <div class="col-sm mb-2 mb-sm-0">
                 <h1 class="page-header-title d-flex align-items-center g-2px text-capitalize"><i
-                        class="tio-filter-list"></i> {{\App\CPU\translate('customer_list')}}
+                        class="tio-filter-list"></i> {{\App\CPU\translate('supplier_list')}}
                     <span class="badge badge-soft-dark ml-2">{{$customers->total()}}</span>
                 </h1>
             </div>
@@ -37,8 +37,8 @@
                                 </form>
                             </div>
                             <div class="col-12 col-sm-5">
-                                <a href="{{route('admin.customer.add')}}" class="btn btn-primary float-right"><i
-                                        class="tio-add-circle"></i> {{\App\CPU\translate('add_new_customer')}}
+                                <a href="{{route('admin.customer.add-supplier')}}" class="btn btn-primary float-right"><i
+                                        class="tio-add-circle"></i> {{\App\CPU\translate('add_new_supplier')}}
                                 </a>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
 
                             <tbody id="set-rows">
                                 @if($customers->currentPage() === 1)
-                                <tr>
+                                <!-- <tr>
                                     <td>{{ 1 }}</td>
                                     <td>
                                         <a href="{{ route('admin.customer.view', [$walkingCustomer['id']]) }}">
@@ -80,7 +80,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $walkingCustomer->orders->count() }}</td>
-                                    <!-- <td class="text-center p-5">
+                                     <td class="text-center p-5">
                                         @if ($walkingCustomer->id != 0)
                                             <div class="row">
                                                 <div class="col-5">
@@ -100,16 +100,16 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    </td> -->
+                                    </td>
                                     <td>
                                         <a class="btn btn-white mr-1" href="{{ route('admin.customer.view', [$walkingCustomer['id']]) }}"><span class="tio-visible"></span></a>
                                     </td>
-                                </tr>
+                                </tr> -->
                             @endif
 
                                 @foreach($customers as $key => $customer)
                                 <tr>
-                                    <td>{{ $customers->firstItem() + $key+1 }}</td>
+                                    <td>{{ $customers->firstItem() + $key }}</td>
                                     <td>
                                         <a href="{{ route('admin.customer.view', [$customer['id']]) }}">
                                             <img class="img-one-cl" src="{{ $customer['image_fullpath'] }}" alt="">
@@ -146,12 +146,12 @@
                                         </div>
                                     </td> -->
                                     <td>
-                                        <a class="btn btn-white mr-1" href="{{ route('admin.customer.view', [$customer['id']]) }}"><span class="tio-visible"></span></a>
-                                        <a class="btn btn-white mr-1" href="{{ route('admin.customer.edit', [$customer['id']]) }}">
+                                        <a class="btn btn-white mr-1" href="{{ route('admin.customer.view-supplier', [$customer['id']]) }}"><span class="tio-visible"></span></a>
+                                        <a class="btn btn-white mr-1" href="{{ route('admin.customer.edit-supplier', [$customer['id']]) }}">
                                             <span class="tio-edit"></span>
                                         </a>
-                                        <a class="btn btn-white mr-1 form-alert" href="javascript:" data-id="customer-{{ $customer['id'] }}" data-message="{{ $customer['balance'] < 0 ? \App\CPU\translate('This customer has Payable amount. Current balance is') . ' ' . $customer->balance . ' .' : '' }} {{ \App\CPU\translate('Do you want to delete this customer') }}?"><span class="tio-delete"></span></a>
-                                        <form action="{{ route('admin.customer.delete', [$customer['id']]) }}" method="post" id="customer-{{ $customer['id'] }}">
+                                        <a class="btn btn-white mr-1 form-alert" href="javascript:" data-id="customer-{{ $customer['id'] }}" data-message="{{ $customer['balance'] < 0 ? \App\CPU\translate('This customer has Payable amount. Current balance is') . ' ' . $customer->balance . ' .' : '' }} {{ \App\CPU\translate('Do you want to delete this supplier') }}?"><span class="tio-delete"></span></a>
+                                        <form action="{{ route('admin.customer.delete-supplier', [$customer['id']]) }}" method="post" id="customer-{{ $customer['id'] }}">
                                             @csrf @method('delete')
                                         </form>
                                     </td>

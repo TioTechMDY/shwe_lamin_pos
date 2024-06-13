@@ -287,12 +287,12 @@
                                 class="nav-subtitle">{{\App\CPU\translate('customer_section')}}</small>
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/customer*')?'active':''}}">
+                        <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/customer/add')||Request::is('admin/customer/list'))?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
                                 <i class="tio-poi-user nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{\App\CPU\translate('customer')}}</span>
                             </a>
-                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub {{Request::is('admin/customer*')?'d-block':''}}">
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub {{(Request::is('admin/customer/add')||Request::is('admin/customer/list'))?'d-block':''}}">
                                 <li class="nav-item {{Request::is('admin/customer/add')?'active':''}}">
                                     <a class="nav-link " href="{{route('admin.customer.add')}}"
                                        title="{{\App\CPU\translate('add_new_customer')}}">
@@ -306,6 +306,36 @@
                                        title="{{\App\CPU\translate('list_of_customers')}}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{\App\CPU\translate('customer_list')}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                        @if (\App\CPU\Helpers::module_permission_check('supplier_section'))
+                        <li class="nav-item">
+                            <small
+                                class="nav-subtitle">{{\App\CPU\translate('supplier_section')}}</small>
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+                        <li class="navbar-vertical-aside-has-menu {{(Request::is('admin/customer/add-supplier')||Request::is('admin/customer/list-supplier'))?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
+                                <i class="tio-poi-user nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{\App\CPU\translate('supplier')}}</span>
+                            </a>
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub {{(Request::is('admin/customer/add-supplier')||Request::is('admin/customer/list-supplier'))?'d-block':''}}">
+                                <li class="nav-item {{Request::is('admin/customer/add-supplier')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.customer.add-supplier')}}"
+                                       title="{{\App\CPU\translate('add_new_supplier')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('add_supplier')}}</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item {{Request::is('admin/customer/list-supplier')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.customer.list-supplier')}}"
+                                       title="{{\App\CPU\translate('list_of_suppliers')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('supplier_list')}}</span>
                                     </a>
                                 </li>
                             </ul>

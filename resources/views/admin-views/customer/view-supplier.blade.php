@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title',\App\CPU\translate('customer_details'))
+@section('title',\App\CPU\translate('supplier_details'))
 
 @push('css_or_js')
     <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
@@ -15,16 +15,16 @@
                         <div class="js-nav-scroller hs-nav-scroller-horizontal">
                             <ul class="nav nav-tabs page-header-tabs">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="{{ route('admin.customer.view',[$customer['id']]) }}">{{\App\CPU\translate('order_list')}}</a>
+                                    <a class="nav-link active" href="{{ route('admin.customer.view-supplier',[$customer['id']]) }}">{{\App\CPU\translate('order_list')}}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " href="{{ route('admin.customer.transaction-list',[$customer['id']]) }}">{{\App\CPU\translate('transaction_list')}}</a>
+                                    <a class="nav-link " href="{{ route('admin.customer.transaction-list-supplier',[$customer['id']]) }}">{{\App\CPU\translate('transaction_list')}}</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="d-sm-flex align-items-sm-center">
-                        <h4 class="page-header-title">{{\App\CPU\translate('customer')}} {{\App\CPU\translate('id')}}#{{$customer['id']}}</h4>
+                        <h4 class="page-header-title">{{\App\CPU\translate('supplier')}} {{\App\CPU\translate('id')}}#{{$customer['id']}}</h4>
                         <span class="ml-2 ml-sm-3">
                         <i class="tio-date-range"></i> {{\App\CPU\translate('joined_at')}} : {{date('d M Y H:i:s',strtotime($customer['created_at']))}}
                         </span>
@@ -101,7 +101,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-header-title">{{\App\CPU\translate('customer')}}</h4>
+                        <h4 class="card-header-title">{{\App\CPU\translate('Supplier')}}</h4>
                     </div>
                     @if($customer)
                         <div class="card-body">

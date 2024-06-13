@@ -917,4 +917,7 @@
   'list_of_recievable' => 'List of recievable',
   'recievable_list' => 'Recievable list',
   'You can not generate more than 270 barcode' => 'You can not generate more than 270 barcode',
+  'Do you want to delete this supplier' => 'Do you want to delete this supplier',
+  'Supplier' => 'Supplier',
+  'Supplier not found' => 'Supplier not found',
 );

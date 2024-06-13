@@ -243,14 +243,41 @@ Route::group(['namespace'=>'Admin', 'as' => 'admin.', 'prefix'=>'admin'] ,functi
         //customer
         Route::group(['prefix' => 'customer', 'as' => 'customer.', 'middleware' => ['module:customer_section']], function () {
             Route::get('add','CustomerController@index')->name('add');
+            Route::get('add-supplier','CustomerController@indexSupplier')->name('add-supplier'); // supplier add page
+
             Route::post('store', 'CustomerController@store')->name('store');
+            Route::post('store-supplier', 'CustomerController@storeSupplier')->name('store-supplier'); // supplier add post method
+
+
             Route::get('list', 'CustomerController@list')->name('list');
+            Route::get('list-supplier', 'CustomerController@listSupplier')->name('list-supplier'); // supplier list page
+
+
             Route::get('view/{id}', 'CustomerController@view')->name('view');
+            Route::get('view-supplier/{id}', 'CustomerController@viewSupplier')->name('view-supplier'); // supplier view page
+
+
+
             Route::get('edit/{id}', 'CustomerController@edit')->name('edit');
+            Route::get('edit-supplier/{id}', 'CustomerController@editSupplier')->name('edit-supplier'); // supplier edit page
+
+
             Route::post('update/{id}', 'CustomerController@update')->name('update');
+            Route::post('update-supplier/{id}', 'CustomerController@updateSupplier')->name('update-supplier'); //supplier update page
+
+
             Route::delete('delete/{id}', 'CustomerController@delete')->name('delete');
+            Route::delete('delete-supplier/{id}', 'CustomerController@deleteSupplier')->name('delete-supplier'); // supplier delete method
+
+
             Route::post('update-balance','CustomerController@updateBalance')->name('update-balance');
+            Route::post('update-balance-supplier','CustomerController@updateBalance')->name('update-balance-supplier'); // supplier update balanace method
+
+
+
             Route::get('transaction-list/{id}', 'CustomerController@transactionList')->name('transaction-list');
+            Route::get('transaction-list-supplier/{id}', 'CustomerController@transactionListSupplier')->name('transaction-list-supplier');
+
         });
         //supplier
         Route::group(['prefix' => 'supplier', 'as' => 'supplier.', 'middleware' => ['module:supplier_section']], function () {

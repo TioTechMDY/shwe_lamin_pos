@@ -33,16 +33,18 @@
                                     </div>
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
-                                            <label class="input-label">{{\App\CPU\translate('mobile_no')}} <span
-                                                    class="input-label-secondary text-danger">*</span></label>
+                                            <label class="input-label">{{\App\CPU\translate('mobile_no')}} 
+                                                <!-- <span
+                                                    class="input-label-secondary text-danger">*</span> -->
+                                                </label>
                                             <input type="tel" id="mobile" name="mobile" class="form-control" value="{{ $customer->mobile }}"
                                                    pattern="[+0-9]+"
                                                    title="Please enter a valid phone number with only numbers and the plus sign (+)"
-                                                   placeholder="{{\App\CPU\translate('mobile_no')}}" required>
+                                                   placeholder="{{\App\CPU\translate('mobile_no')}}" >
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row pl-2" >
+                                <!-- <div class="row pl-2" >
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
                                             <label class="input-label" >{{\App\CPU\translate('email')}}</label>
@@ -69,15 +71,15 @@
                                             <input type="text"  name="zip_code" class="form-control" value="{{ $customer->zip_code }}" placeholder="{{\App\CPU\translate('zip_code')}}" >
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row pl-2" >
 
-                                    <div class="col-12 col-sm-6">
+                                    <!-- <div class="col-12 col-sm-6">
                                         <div class="form-group">
                                             <label class="input-label">{{\App\CPU\translate('address')}} </label>
                                             <input type="text"  name="address" class="form-control" value="{{ $customer->address }}" placeholder="{{\App\CPU\translate('address')}}" >
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-12 col-sm-6">
                                         <label>{{\App\CPU\translate('image')}}</label><small> ( {{\App\CPU\translate('ratio_1:1')}} )( {{\App\CPU\translate('optional')}} )</small>
                                         <div class="custom-file">

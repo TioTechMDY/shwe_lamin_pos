@@ -33,6 +33,11 @@ class CustomerController extends Controller
         return view('admin-views.customer.index');
     }
 
+    public function indexSupplier(): View|Factory|Application
+    {
+        return view('admin-views.customer.index-supplier');
+    }
+
     /**
      * @param Request $request
      * @return RedirectResponse
@@ -41,7 +46,7 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'mobile'=> 'required|unique:customers',
+            // 'mobile'=> 'required|unique:customers', // mobile required removed
             'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -51,19 +56,78 @@ class CustomerController extends Controller
             $imageName = 'def.png';
         }
 
+        // $customer = $this->customer;
+        // $customer->name = $request->name;
+        // $customer->mobile = $request->mobile;
+        // $customer->email = $request->email;
+        // $customer->image = $imageName;
+        // $customer->state = $request->state;
+        // $customer->city = $request->city;
+        // $customer->zip_code = $request->zip_code;
+        // $customer->address = $request->address;
+        // $customer->balance = $request->balance;
+        // $customer->save();
+
+
         $customer = $this->customer;
         $customer->name = $request->name;
-        $customer->mobile = $request->mobile;
-        $customer->email = $request->email;
+        // $customer->mobile = $request->mobile;
+        $customer->mobile = $request->filled('mobile') ? $request->mobile : '';
+        $customer->is_customer = 0;
+        $customer->email = 'admin@gmail.com';
         $customer->image = $imageName;
-        $customer->state = $request->state;
-        $customer->city = $request->city;
-        $customer->zip_code = $request->zip_code;
-        $customer->address = $request->address;
-        $customer->balance = $request->balance;
+        $customer->state = 'Mandalay';
+        $customer->city = 'Mandalay';
+        $customer->zip_code = '05186';
+        $customer->address = 'Mandalay';
+        $customer->balance = 0;
         $customer->save();
 
         Toastr::success(translate('Customer Added successfully'));
+        return back();
+    }
+    public function storeSupplier(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required',
+            // 'mobile'=> 'required|unique:customers', // mobile required removed
+            'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        if (!empty($request->file('image'))) {
+            $imageName =  Helpers::upload('customer/', 'png', $request->file('image'));
+        } else {
+            $imageName = 'def.png';
+        }
+
+        // $customer = $this->customer;
+        // $customer->name = $request->name;
+        // $customer->mobile = $request->mobile;
+        // $customer->email = $request->email;
+        // $customer->image = $imageName;
+        // $customer->state = $request->state;
+        // $customer->city = $request->city;
+        // $customer->zip_code = $request->zip_code;
+        // $customer->address = $request->address;
+        // $customer->balance = $request->balance;
+        // $customer->save();
+
+
+        $customer = $this->customer;
+        $customer->name = $request->name;
+        // $customer->mobile = $request->mobile;
+        $customer->mobile = $request->filled('mobile') ? $request->mobile : '';
+        $customer->is_customer = 1;
+        $customer->email = 'admin@gmail.com';
+        $customer->image = $imageName;
+        $customer->state = 'Mandalay';
+        $customer->city = 'Mandalay';
+        $customer->zip_code = '05186';
+        $customer->address = 'Mandalay';
+        $customer->balance = 0;
+        $customer->save();
+
+        Toastr::success(translate('Supplier Added successfully'));
         return back();
     }
 
@@ -90,9 +154,34 @@ class CustomerController extends Controller
             $customers = $this->customer;
         }
 
-        $customers = $customers->where('id', '!=', '0')->latest('id')->paginate(Helpers::pagination_limit())->appends($queryParam);
+        $customers = $customers->where('is_customer',0)->where('id', '!=', '0')->latest('id')->paginate(Helpers::pagination_limit())->appends($queryParam);
         $walkingCustomer = $this->customer->where('id', '=', '0')->first();
         return view('admin-views.customer.list',compact('customers','accounts','search', 'walkingCustomer'));
+    }
+
+
+    public function listSupplier(Request $request): View|Factory|Application
+    {
+        $accounts = $this->account->orderBy('id')->get();
+        $queryParam = [];
+        $search = $request['search'];
+        if ($request->has('search')) {
+            $key = explode(' ', $request['search']);
+            $customers = $this->customer->where(function ($q) use ($key) {
+                foreach ($key as $value) {
+                    $q->orWhere('name', 'like', "%{$value}%")
+                        ->orWhere('mobile', 'like', "%{$value}%");
+                }
+            });
+
+            $queryParam = ['search' => $request['search']];
+        } else {
+            $customers = $this->customer;
+        }
+
+        $customers = $customers->where('is_customer',1)->where('id', '!=', '0')->latest('id')->paginate(Helpers::pagination_limit())->appends($queryParam);
+        $walkingCustomer = $this->customer->where('id', '=', '0')->first();
+        return view('admin-views.customer.list-supplier',compact('customers','accounts','search', 'walkingCustomer'));
     }
 
     /**
@@ -128,6 +217,34 @@ class CustomerController extends Controller
         return back();
     }
 
+    public function viewSupplier(Request $request, $id): View|Factory|RedirectResponse|Application
+    {
+        $customer = $this->customer->where('id',$id)->first();
+        if(isset($customer))
+        {
+            $queryParam = [];
+            $search = $request['search'];
+            if ($request->has('search')) {
+                $key = explode(' ', $request['search']);
+                $orders = $this->order->where(['user_id' => $id])
+                                    ->where(function ($q) use ($key) {
+                                        foreach ($key as $value) {
+                                            $q->where('id', 'like', "%{$value}%");
+                                        }
+                                    });
+                $queryParam = ['search' => $request['search']];
+            } else {
+                $orders = $this->order->where(['user_id' => $id]);
+            }
+
+            $orders = $orders->latest()->paginate(Helpers::pagination_limit())->appends($queryParam);
+            return view('admin-views.customer.view-supplier',compact('customer', 'orders','search'));
+        }
+
+        Toastr::error('Supplier not found!');
+        return back();
+    }
+
     /**
      * @param Request $request
      * @param $id
@@ -157,6 +274,30 @@ class CustomerController extends Controller
         return back();
     }
 
+    public function transactionListSupplier(Request $request, $id): View|Factory|RedirectResponse|Application
+    {
+        $accounts = $this->account->get();
+        $customer = $this->customer->where('id',$id)->first();
+        if(isset($customer))
+        {
+            $accId = $request['account_id'];
+            $tran_type = $request['tran_type'];
+            $orders = $this->order->where(['user_id' => $id])->get();
+            $transactions = $this->transection->where(['customer_id' => $id])
+                                ->when($accId!=null, function($q) use ($request){
+                                    return $q->where('account_id',$request['account_id']);
+                                })
+                                ->when($tran_type!=null, function($q) use ($request){
+                                    return $q->where('tran_type',$request['tran_type']);
+                                })->latest()->paginate(Helpers::pagination_limit())
+                                ->appends(['account_id' => $request['account_id'],'tran_type'=>$request['tran_type']]);
+            return view('admin-views.customer.transaction-list-supplier',compact('customer', 'transactions','orders','tran_type','accounts','accId'));
+        }
+
+        Toastr::error(translate('Supplier not found'));
+        return back();
+    }
+
     /**
      * @param Request $request
      * @return Application|Factory|View
@@ -165,6 +306,11 @@ class CustomerController extends Controller
     {
         $customer = $this->customer->where('id',$request->id)->first();
         return view('admin-views.customer.edit',compact('customer'));
+    }
+    public function editSupplier(Request $request): Factory|View|Application
+    {
+        $customer = $this->customer->where('id',$request->id)->first();
+        return view('admin-views.customer.edit-supplier',compact('customer'));
     }
 
     /**
@@ -177,22 +323,71 @@ class CustomerController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'mobile'=> 'required|unique:customers,mobile,'.$customer->id,
+            // 'mobile'=> 'required|unique:customers,mobile,'.$customer->id,  // mobile required removed
             'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // $customer->name = $request->name;
+        // $customer->mobile = $request->mobile;
+        // $customer->email = $request->email;
+        // $customer->image = $request->has('image') ? Helpers::update('customer/', $customer->image, 'png', $request->file('image')) : $customer->image;
+        // $customer->state = $request->state;
+        // $customer->city = $request->city;
+        // $customer->zip_code = $request->zip_code;
+        // $customer->address = $request->address;
+        // $customer->balance = $request->balance;
+        // $customer->save();
+
         $customer->name = $request->name;
         $customer->mobile = $request->mobile;
-        $customer->email = $request->email;
-        $customer->image = $request->has('image') ? Helpers::update('customer/', $customer->image, 'png', $request->file('image')) : $customer->image;
-        $customer->state = $request->state;
-        $customer->city = $request->city;
-        $customer->zip_code = $request->zip_code;
-        $customer->address = $request->address;
-        $customer->balance = $request->balance;
+        $customer->email = 'admin@gmail.com';
+        $customer->image = $request->has('image') ? Helpers::update('customer/', $customer->image, 'png', $request->file('image')) : $customer->image;;
+        $customer->state = 'Mandalay';
+        $customer->city = 'Mandalay';
+        $customer->zip_code = '05186';
+        $customer->address = 'Mandalay';
+        $customer->balance = 0;
         $customer->save();
 
         Toastr::success(translate('Customer updated successfully'));
+        return back();
+    }
+
+
+
+    public function updateSupplier(Request $request): RedirectResponse
+    {
+        $customer = $this->customer->where('id',$request->id)->first();
+
+        $request->validate([
+            'name' => 'required',
+            // 'mobile'=> 'required|unique:customers,mobile,'.$customer->id,  // mobile required removed
+            'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        // $customer->name = $request->name;
+        // $customer->mobile = $request->mobile;
+        // $customer->email = $request->email;
+        // $customer->image = $request->has('image') ? Helpers::update('customer/', $customer->image, 'png', $request->file('image')) : $customer->image;
+        // $customer->state = $request->state;
+        // $customer->city = $request->city;
+        // $customer->zip_code = $request->zip_code;
+        // $customer->address = $request->address;
+        // $customer->balance = $request->balance;
+        // $customer->save();
+
+        $customer->name = $request->name;
+        $customer->mobile = $request->mobile;
+        $customer->email = 'admin@gmail.com';
+        $customer->image = $request->has('image') ? Helpers::update('customer/', $customer->image, 'png', $request->file('image')) : $customer->image;;
+        $customer->state = 'Mandalay';
+        $customer->city = 'Mandalay';
+        $customer->zip_code = '05186';
+        $customer->address = 'Mandalay';
+        $customer->balance = 1;
+        $customer->save();
+
+        Toastr::success(translate('Supplier updated successfully'));
         return back();
     }
 
@@ -207,6 +402,15 @@ class CustomerController extends Controller
         $customer->delete();
 
         Toastr::success(translate('Customer removed successfully'));
+        return back();
+    }
+    public function deleteSupplier(Request $request): RedirectResponse
+    {
+        $customer = $this->customer->find($request->id);
+        Helpers::delete('customer/' . $customer['image']);
+        $customer->delete();
+
+        Toastr::success(translate('Supplier removed successfully'));
         return back();
     }
 

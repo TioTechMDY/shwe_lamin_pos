@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title',\App\CPU\translate('add_new_customer'))
+@section('title',\App\CPU\translate('add_new_supplier'))
 
 @push('css_or_js')
     <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
@@ -11,7 +11,7 @@
         <div class="row align-items-center mb-3">
             <div class="col-sm mb-2 mb-sm-0">
                 <h1 class="page-header-title d-flex align-items-center g-2px text-capitalize"><i
-                        class="tio-add-circle-outlined"></i> {{\App\CPU\translate('add_new_customer')}}
+                        class="tio-add-circle-outlined"></i> {{\App\CPU\translate('add_new_supplier')}}
                 </h1>
             </div>
         </div>
@@ -19,16 +19,16 @@
             <div class="col-sm-12 col-lg-12  mb-lg-2">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{route('admin.customer.store')}}" method="post" id="product_form"
+                        <form action="{{route('admin.customer.store-supplier')}}" method="post" id="product_form"
                             enctype="multipart/form-data">
                             @csrf
                                 <input type="hidden"   class="form-control" name="balance"  value= 0>
                                 <div class="row pl-2" >
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
-                                            <label class="input-label" >{{\App\CPU\translate('customer_name')}} <span
+                                            <label class="input-label" >{{\App\CPU\translate('supplier_name')}} <span
                                                     class="input-label-secondary text-danger">*</span></label>
-                                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="{{\App\CPU\translate('customer_name')}}" required>
+                                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="{{\App\CPU\translate('supplier_name')}}" required>
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
