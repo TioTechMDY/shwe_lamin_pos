@@ -123,13 +123,13 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:products',
-            'product_code'=> 'required|unique:products',
+            // 'product_code'=> 'required|unique:products',
             'category_id' => 'required',
             'unit_type' => 'required',
-            'unit_value' => 'required|numeric|min:0',
+            // 'unit_value' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:0',
-            'purchase_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
+            // 'purchase_price' => 'required|numeric|min:0',
+            // 'selling_price' => 'required|numeric|min:0',
             'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
         ],//modified BY PSP
         //  $request->validate([
@@ -149,20 +149,23 @@ class ProductController extends Controller
         ]);
 
         if ($request['discount_type'] == 'percent') {
-            $dis = ($request['selling_price'] / 100) * $request['discount'];
+            // $dis = ($request['selling_price'] / 100) * $request['discount'];
+            $dis =0;
         } else {
-            $dis = $request['discount'];
+            // $dis = $request['discount'];
+            $dis =0;
         }
         // if ($request['selling_price'] <= $dis) {
         if ($request['selling_price'] < $dis) { //modified BY PSP
+            $dis = 0 ;
 
-            Toastr::warning(translate('Discount can not be more than Selling price'));
-            return back();
+            // Toastr::warning(translate('Discount can not be more than Selling price'));
+            // return back();
         }
 
         $products = $this->product;
         $products->name = $request->name;
-        $products->product_code = $request->product_code;
+        $products->product_code = $request->product_code??0000;
 
         $category = [];
         if ($request->category_id != null) {
@@ -179,12 +182,12 @@ class ProductController extends Controller
         }
 
         $products->category_ids = json_encode($category);
-        $products->purchase_price = $request->purchase_price;
-        $products->selling_price = $request->selling_price;
+        $products->purchase_price = $request->purchase_price??0;
+        $products->selling_price = $request->selling_price??0;
         $products->unit_type = $request->unit_type;
-        $products->unit_value = $request->unit_value;
-        $products->brand = $request->brand_id;
-        $products->discount_type = $request->discount_type;
+        $products->unit_value = $request->unit_value??0;
+        $products->brand = $request->brand_id??0;
+        $products->discount_type = $request->discount_type??'Amount';
         $products->discount = $request->discount??0;
         $products->tax = $request->tax??0;
         $products->quantity = $request->quantity;
@@ -192,6 +195,42 @@ class ProductController extends Controller
         $products->image = Helpers::upload('product/', 'png', $request->file('image'));
         $products->supplier_id = $request->supplier_id;
         $products->save();
+
+
+
+
+        // $products = $this->product;
+        // $products->name = $request->name;
+        // $products->product_code = $request->product_code;
+
+        // $category = [];
+        // if ($request->category_id != null) {
+        //     $category[] = [
+        //         'id' => $request->category_id,
+        //         'position' => 1,
+        //     ];
+        // }
+        // if ($request->sub_category_id != null) {
+        //     $category[] = [
+        //         'id' => $request->sub_category_id,
+        //         'position' => 2,
+        //     ];
+        // }
+
+        // $products->category_ids = json_encode($category);
+        // $products->purchase_price = $request->purchase_price;
+        // $products->selling_price = $request->selling_price;
+        // $products->unit_type = $request->unit_type;
+        // $products->unit_value = $request->unit_value;
+        // $products->brand = $request->brand_id;
+        // $products->discount_type = $request->discount_type??;
+        // $products->discount = $request->discount??0;
+        // $products->tax = $request->tax??0;
+        // $products->quantity = $request->quantity;
+        // $products->order_count = 0;
+        // $products->image = Helpers::upload('product/', 'png', $request->file('image'));
+        // $products->supplier_id = $request->supplier_id;
+        // $products->save();
 
         Toastr::success(translate('Product Added Successfully'));
         return redirect()->route('admin.product.list');
@@ -223,13 +262,13 @@ class ProductController extends Controller
         $product = $this->product->find($id);
         $request->validate([
             'name' => 'required|unique:products,name,'.$product->id,
-            'product_code'=> 'required|unique:products,product_code,'.$product->id,
+            // 'product_code'=> 'required|unique:products,product_code,'.$product->id,
             'category_id' => 'required',
             'unit_type' => 'required',
-            'unit_value' => 'required|numeric|min:0',
+            // 'unit_value' => 'required|numeric|min:0',
             'quantity' => 'required|numeric|min:0',
-            'purchase_price' => 'required|numeric|min:0',
-            'selling_price' => 'required|numeric|min:0',
+            // 'purchase_price' => 'required|numeric|min:0',
+            // 'selling_price' => 'required|numeric|min:0',
             'image'=>'image|mimes:jpeg,png,jpg,gif|max:2048'
         ], [
             'name.required' => translate('Product name is required'),
@@ -237,21 +276,24 @@ class ProductController extends Controller
         ]);
 
         if ($request['discount_type'] == 'percent') {
-            $dis = ($request['selling_price'] / 100) * $request['discount'];
+            // $dis = ($request['selling_price'] / 100) * $request['discount'];
+            $dis = 0;
         } else {
-            $dis = $request['discount'];
+            // $dis = $request['discount'];
+            $dis = 0;
         }
 
         // if ($request['selling_price'] <= $dis) { //modified by PSP
          if ($request['selling_price'] < $dis) {
+            $dis = 0;
 
 
-            Toastr::warning(translate('Discount can not be more than Selling price'));
-            return back();
+            // Toastr::warning(translate('Discount can not be more than Selling price'));
+            // return back();
         }
 
         $product->name = $request->name;
-        $product->product_code = $request->product_code;
+        $product->product_code = $request->product_code?? 00000;
 
         $category = [];
         if ($request->category_id != null) {
@@ -268,12 +310,12 @@ class ProductController extends Controller
         }
 
         $product->category_ids = json_encode($category);
-        $product->purchase_price = $request->purchase_price;
-        $product->selling_price = $request->selling_price;
+        $product->purchase_price = $request->purchase_price??0;
+        $product->selling_price = $request->selling_price??0;
         $product->unit_type = $request->unit_type;
-        $product->unit_value = $request->unit_value;
-        $product->brand = $request->brand_id;
-        $product->discount_type = $request->discount_type;
+        $product->unit_value = $request->unit_value??0;
+        $product->brand = $request->brand_id??0;
+        $product->discount_type = $request->discount_type??'Amount';
         $product->discount = $request->discount??0;
         $product->tax = $request->tax??0;
         $product->quantity = $request->quantity;

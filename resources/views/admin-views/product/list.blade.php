@@ -44,7 +44,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="mt-1 col-12 col-sm-4">
+                            <!-- <div class="mt-1 col-12 col-sm-4">
                                 <select name="qty_order_sort" class="form-control" id="qtyOrderSortSelect">
                                     <option value="default" {{ $sortOrderQty== "default"?'selected':''}}>{{\App\CPU\translate('default_sort')}}</option>
                                     <option value="quantity_asc" {{ $sortOrderQty== "quantity_asc"?'selected':''}}>{{\App\CPU\translate('quantity_sort_by_(low_to_high)')}}</option>
@@ -52,7 +52,7 @@
                                     <option value="order_asc" {{ $sortOrderQty== "order_asc"?'selected':''}}>{{\App\CPU\translate('order_sort_by_(low_to_high)')}}</option>
                                     <option value="order_desc" {{ $sortOrderQty== "order_desc"?'selected':''}}>{{\App\CPU\translate('order_sort_by_(high_to_low)')}}</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -63,10 +63,10 @@
                                 <th>{{\App\CPU\translate('#')}}</th>
                                 <th>{{\App\CPU\translate('name')}}</th>
                                 <th >{{\App\CPU\translate('image')}}</th>
-                                <th>{{ \App\CPU\translate('supplier_name/mobile') }}</th>
-                                <th>{{\App\CPU\translate('product_code')}}</th>
-                                <th>{{\App\CPU\translate('purchase_price')}}</th>
-                                <th>{{\App\CPU\translate('selling_price')}}</th>
+                                <!-- <th>{{ \App\CPU\translate('supplier_name/mobile') }}</th> -->
+                                <!-- <th>{{\App\CPU\translate('product_code')}}</th> -->
+                                <!-- <th>{{\App\CPU\translate('purchase_price')}}</th> -->
+                                <!-- <th>{{\App\CPU\translate('selling_price')}}</th> -->
                                 <th>{{\App\CPU\translate('quantity')}}</th>
                                 <th>{{ \App\CPU\translate('orders') }}</th>
                                 <th>{{\App\CPU\translate('action')}}</th>
@@ -85,7 +85,7 @@
                                     <td>
                                         <img class="img-one-plst" src="{{$product['image_fullpath']}}">
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         @if($product->supplier)
                                             <a class="supplier-color" href="{{route('admin.supplier.view',[$product->supplier_id])}}">{{ $product->supplier->name }}</a><br>
                                             <a class="supplier-color" href="tel:{{$product->supplier->mobile}}">{{$product->supplier->mobile}}</a>
@@ -93,10 +93,10 @@
                                             {{ \App\CPU\translate('not_found') }} <br>
                                             {{ \App\CPU\translate('not_found') }}
                                         @endif
-                                    </td>
-                                    <td>{{ $product['product_code'] }}</td>
+                                    </td> -->
+                                    <!-- <td>{{ $product['product_code'] }}</td>
                                     <td>{{$product['purchase_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td>
-                                    <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td>
+                                    <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td> -->
                                     <td>
                                         {{ $product['quantity'] }}
                                         <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
@@ -119,11 +119,11 @@
                                                     @csrf @method('delete')
                                                 </form>
                                             </div>
-                                            <div class="d-inline">
+                                            <!-- <div class="d-inline">
                                                 <a class="btn btn-white mr-1" data-toggle="tooltip" data-placement="top" title="{{ \App\CPU\translate('generate_barcode') }}" href="{{ route('admin.product.barcode-generate',[$product['id']]) }}" target="_blank">
                                                     <span class="tio-barcode"></span>
                                                 </a>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </td>
                                 </tr>

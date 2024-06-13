@@ -34,6 +34,18 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
+                                               for="exampleFormControlInput1">{{\App\CPU\translate('quantity')}}
+                                            <span class="input-label-secondary">*</span>
+                                        </label>
+                                        <!-- modified BY PSP -->
+                                        <input type="number" min="0" name="quantity" class="form-control" 
+                                               value="{{ old('quantity') }}"
+                                               placeholder="{{\App\CPU\translate('quantity')}}" required>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="input-label"
                                                for="exampleFormControlInput1">{{\App\CPU\translate('product_code_SKU')}}
                                             <span class="input-label-secondary">*</span>
                                             <a class="style-one-pro" id="generateCodeLink">{{\App\CPU\translate('generate_code')}}
@@ -43,9 +55,9 @@
                                                class="form-control" value="{{ old('product_code') }}"
                                                placeholder="{{\App\CPU\translate('product_code')}}" required>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
-                            <div class="row pl-2">
+                            <!-- <div class="row pl-2">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
@@ -58,19 +70,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label class="input-label"
-                                               for="exampleFormControlInput1">{{\App\CPU\translate('quantity')}}
-                                            <span class="input-label-secondary">*</span>
-                                        </label>
-                                        <!-- modified BY PSP -->
-                                        <input type="number" min="0" name="quantity" class="form-control" 
-                                               value="{{ old('quantity') }}"
-                                               placeholder="{{\App\CPU\translate('quantity')}}" required>
-                                    </div>
-                                </div>
-                            </div>
+                                
+                            </div> -->
                             <div class="row pl-2">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -89,19 +90,6 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
-                                               for="exampleFormControlInput1">{{\App\CPU\translate('unit_value')}}
-                                            <span class="input-label-secondary">*</span>
-                                        </label>
-                                        <input type="number" min="0" step="0.01" name="unit_value" class="form-control"
-                                               value="{{ old('unit_value') }}"
-                                               placeholder="{{\App\CPU\translate('unit_value')}}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pl-2">
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label class="input-label"
                                                for="exampleFormControlSelect1">{{\App\CPU\translate('category')}}<span
                                                 class="input-label-secondary">*</span></label>
                                         <select name="category_id" class="form-control js-select2-custom" required>
@@ -112,6 +100,20 @@
                                         </select>
                                     </div>
                                 </div>
+                                <!-- <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="input-label"
+                                               for="exampleFormControlInput1">{{\App\CPU\translate('unit_value')}}
+                                            <span class="input-label-secondary">*</span>
+                                        </label>
+                                        <input type="number" min="0" step="0.01" name="unit_value" class="form-control"
+                                               value="{{ old('unit_value') }}"
+                                               placeholder="{{\App\CPU\translate('unit_value')}}" required>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="row pl-2">
+                                
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
@@ -123,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pl-2">
+                            <!-- <div class="row pl-2">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
@@ -146,8 +148,8 @@
                                                placeholder="{{\App\CPU\translate('purchase_price')}}" required>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pl-2">
+                            </div> -->
+                            <!-- <div class="row pl-2">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
@@ -173,8 +175,8 @@
                                                placeholder="{{\App\CPU\translate('discount')}}">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pl-2">
+                            </div> -->
+                            <!-- <div class="row pl-2">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label class="input-label"
@@ -200,7 +202,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row pl-2">
                                 <div class="col-12 col-sm-12">
                                     <label>{{\App\CPU\translate('image')}}</label>
