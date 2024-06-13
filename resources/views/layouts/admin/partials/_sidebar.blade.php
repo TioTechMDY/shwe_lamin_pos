@@ -166,7 +166,7 @@
                             </ul>
                         </li>
                         @endif
-                        @if (\App\CPU\Helpers::module_permission_check('brand_section'))
+                        <!-- @if (\App\CPU\Helpers::module_permission_check('brand_section'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/brand*')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                href="{{route('admin.brand.add')}}">
@@ -176,7 +176,7 @@
                                 </span>
                             </a>
                         </li>
-                        @endif
+                        @endif -->
                         @if (\App\CPU\Helpers::module_permission_check('unit_section'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/unit*')?'active':''}}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
@@ -341,7 +341,7 @@
                             </ul>
                         </li>
                         @endif
-                        @if (\App\CPU\Helpers::module_permission_check('supplier_section'))
+                        <!-- @if (\App\CPU\Helpers::module_permission_check('supplier_section'))
                         <li class="nav-item">
                             <small
                                 class="nav-subtitle">{{\App\CPU\translate('supplier_section')}}</small>
@@ -370,7 +370,7 @@
                                 </li>
                             </ul>
                         </li>
-                        @endif
+                        @endif -->
                         @if (\App\CPU\Helpers::module_permission_check('setting_section'))
                         <li class="nav-item">
                             <small class="nav-subtitle">{{\App\CPU\translate('shop_setting_section')}}</small>

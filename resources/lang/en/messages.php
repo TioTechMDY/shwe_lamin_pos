@@ -920,4 +920,5 @@
   'Do you want to delete this supplier' => 'Do you want to delete this supplier',
   'Supplier' => 'Supplier',
   'Supplier not found' => 'Supplier not found',
+  'search_by_product_name' => 'Search by product name',
 );
