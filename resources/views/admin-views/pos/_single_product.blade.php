@@ -8,7 +8,7 @@
         </div>
         <div class="pos-product-item_content">
             <div class="pos-product-item_title">{{ $product['name'] }}</div>
-            <div class="pos-product-item_price">
+            <!-- <div class="pos-product-item_price">
                 {{ ($product['selling_price']- \App\CPU\Helpers::discount_calculate($product, $product['selling_price'])) . ' ' . \App\CPU\Helpers::currency_symbol() }}
 
                 @if($product->discount > 0)
@@ -16,7 +16,7 @@
                         {{ $product['selling_price'] . ' ' . \App\CPU\Helpers::currency_symbol() }}
                     </span><br>
                 @endif
-            </div>
+            </div> -->
         </div>
     </a>
 </div>

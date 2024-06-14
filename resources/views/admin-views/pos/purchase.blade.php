@@ -198,7 +198,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="input-label text-capitalize" >
-                                            {{\App\CPU\translate('current_customer')}} :
+                                            {{\App\CPU\translate('current_supplier')}} :
                                             <span class="style-i4" id="current_customer"></span>
                                         </label>
                                     </div>

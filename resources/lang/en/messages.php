@@ -921,4 +921,11 @@
   'Supplier' => 'Supplier',
   'Supplier not found' => 'Supplier not found',
   'search_by_product_name' => 'Search by product name',
+  'transportation_information' => 'Transportation information',
+  'transportation_info' => 'Transportation info',
+  'transportation_Info' => 'Transportation Info',
+  'current_supplier' => 'Current supplier',
+  'car_driver_name' => 'Car driver name',
+  'car_id' => 'Car id',
+  'is_paid_for_car_fee' => 'Is paid for car fee',
 );
