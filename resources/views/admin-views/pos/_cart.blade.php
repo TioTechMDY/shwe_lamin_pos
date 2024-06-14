@@ -321,9 +321,9 @@
                 <form action="{{ route('admin.pos.order') }}" id='order_place' method="post">
                     @csrf
                     <div class="form-group">
-                        <label class="input-label" for="">{{ \App\CPU\translate('type') }}</label>
+                        <label class="input-label" for="" hidden>{{ \App\CPU\translate('type') }}</label>
                         <select class="payment-opp form-control" name="type" id="payment_opp"
-                                class="form-control select2" required>
+                            class="form-control select2" required hidden>
                             @foreach ($accounts as $account)
                                 @if ($account['id'] != 2 && $account['id'] != 3)
                                     <option value="{{ $account['id'] }}">{{ $account['account'] }}</option>
@@ -331,35 +331,52 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group d-none" id="balance">
+                    <div class="form-group d-none" id="balance" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('customer_balance') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
                         <input type="number" id="balance_customer" class="form-control" name="customer_balance"
-                               disabled>
+                            disabled>
                     </div>
-                    <div class="form-group d-none" id="remaining_balance">
+                    <div class="form-group d-none" id="remaining_balance" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('remaining_balance') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
-                        <input type="number" id="balance_remain" class="form-control" name="remaining_balance"
-                               value="" readonly>
+                        <input type="number" id="balance_remain" class="form-control" name="remaining_balance" value=""
+                            readonly>
                     </div>
-                    <div class="form-group d-none" id="transaction_ref">
+                    <div class="form-group d-none" id="transaction_ref" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('transaction_reference') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})
                             -({{ \App\CPU\translate('optional') }})</label>
                         <input type="text" id="tran_ref" class="form-control" name="transaction_reference">
                     </div>
-                    <div class="form-group" id="collected_cash">
+                    <div class="form-group" id="collected_cash" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('collected_cash') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
                         <input type="number" id="cash_amount" onkeyup="price_calculation();" class="form-control"
-                               name="collected_cash" step="0.01">
+                            name="collected_cash" step="0.01" value="0">
                     </div>
-                    <div class="form-group" id="returned_amount">
+                    <div class="form-group" id="returned_amount" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('returned_amount') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
-                        <input type="number" id="returned" class="form-control" name="returned_amount"
-                               value="" readonly>
+                        <input type="number" id="returned" class="form-control" name="returned_amount" value="0"
+                            readonly>
+                    </div>
+                    <div class="form-group" id="car_driver_name">
+                        <label class="input-label" for="">{{ \App\CPU\translate('car_driver_name') }}
+                        </label>
+                        <input type="text" id="car_driver" class="form-control" name="car_driver_name">
+                    </div>
+                    <div class="form-group" id="car_id">
+                        <label class="input-label" for="">{{ \App\CPU\translate('car_id') }}
+                        </label>
+                        <input type="text" id="car" class="form-control" name="car_id">
+                    </div>
+                    <div class="form-group" id="is_paid_for_car_fee">
+                        <label class="input-label">{{ \App\CPU\translate('is_paid_for_car_fee') }}</label><br>
+                        <label for="paid">Paid</label>
+                        <input type="radio" id="paid" name="is_paid_for_car_fee" value="1">
+                        <label for="unpaid">Unpaid</label>
+                        <input type="radio" id="unpaid" name="is_paid_for_car_fee" value="0">
                     </div>
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-sm btn-primary" id="order_complete"

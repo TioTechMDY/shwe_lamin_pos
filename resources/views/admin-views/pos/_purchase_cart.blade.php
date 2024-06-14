@@ -5,26 +5,26 @@
     <div class="table-responsive pos-cart-table border">
         <table class="table table-align-middle mb-0">
             <thead class="text-muted">
-            <tr>
-                <th>{{ \App\CPU\translate('item') }}</th>
-                <th>{{ \App\CPU\translate('qty') }}</th>
-                <th>{{ \App\CPU\translate('price') }}</th>
-                <th>{{ \App\CPU\translate('delete') }}</th>
-            </tr>
+                <tr>
+                    <th>{{ \App\CPU\translate('item') }}</th>
+                    <th>{{ \App\CPU\translate('qty') }}</th>
+                    <th>{{ \App\CPU\translate('price') }}</th>
+                    <th>{{ \App\CPU\translate('delete') }}</th>
+                </tr>
             </thead>
             <tbody>
-            <?php
-            $subtotal = 0;
-            $tax = 0;
-            $ext_discount = 0;
-            $ext_discount_type = 'amount';
-            $discount_on_product = 0;
-            $product_tax = 0;
-            $coupon_discount = 0;
+                <?php
+$subtotal = 0;
+$tax = 0;
+$ext_discount = 0;
+$ext_discount_type = 'amount';
+$discount_on_product = 0;
+$product_tax = 0;
+$coupon_discount = 0;
             ?>
 
-            @if (session()->has($cartId) && count(session($cartId)) > 0)
-                    <?php
+                @if (session()->has($cartId) && count(session($cartId)) > 0)
+                                <?php
                     $cart = session()->get($cartId);
                     if (isset($cart['tax'])) {
                         $tax = $cart['tax'];
@@ -36,43 +36,43 @@
                     if (isset($cart['coupon_discount'])) {
                         $coupon_discount = $cart['coupon_discount'];
                     }
-                    ?>
-                @foreach (session($cartId) as $key => $cartItem)
-                    @if (is_array($cartItem))
-                            <?php
-                            $product_subtotal = $cartItem['price'] * $cartItem['quantity'];
-                            $discount_on_product += $cartItem['discount'] * $cartItem['quantity'];
-                            $subtotal += $product_subtotal;
-                            $product_tax += $cartItem['tax'] * $cartItem['quantity'];
+                                    ?>
+                                @foreach (session($cartId) as $key => $cartItem)
+                                        @if (is_array($cartItem))
+                                                <?php
+                                            $product_subtotal = $cartItem['price'] * $cartItem['quantity'];
+                                            $discount_on_product += $cartItem['discount'] * $cartItem['quantity'];
+                                            $subtotal += $product_subtotal;
+                                            $product_tax += $cartItem['tax'] * $cartItem['quantity'];
 
-                            ?>
-                        <tr>
-                            <td class="media gap-2 align-items-center">
-                                <img class="avatar avatar-sm"
-                                     src="{{onErrorImage($cartItem['image'],asset('storage/app/public/product').'/' . $cartItem['image'],asset('public/assets/admin/img/160x160/img2.jpg') ,'product/')}}"
-                                     alt="{{ $cartItem['name'] }} {{\App\CPU\translate('image')}}">
-                                <div class="media-body">
-                                    <h5 class="text-hover-primary mb-0">{{ Str::limit($cartItem['name'], 10) }}</h5>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" data-key="{{ $key }}" class="form-control text-center qty-width"
-                                       value="{{ $cartItem['quantity'] }}" min="1"
-                                       onkeyup="updateQuantity('{{ $cartItem['id'] }}',this.value)">
-                            </td>
-                            <td>
-                                <div>
-                                    {{ $product_subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}
-                                </div>
-                            </td>
-                            <td>
-                                <a href="javascript:removeFromCart({{ $cartItem['id'] }})"
-                                   class="btn btn-sm btn-outline-danger square-btn"> <i class="tio-delete"></i></a>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            @endif
+                                                            ?>
+                                                <tr>
+                                                    <td class="media gap-2 align-items-center">
+                                                        <img class="avatar avatar-sm"
+                                                            src="{{onErrorImage($cartItem['image'], asset('storage/app/public/product') . '/' . $cartItem['image'], asset('public/assets/admin/img/160x160/img2.jpg'), 'product/')}}"
+                                                            alt="{{ $cartItem['name'] }} {{\App\CPU\translate('image')}}">
+                                                        <div class="media-body">
+                                                            <h5 class="text-hover-primary mb-0">{{ Str::limit($cartItem['name'], 10) }}</h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" data-key="{{ $key }}" class="form-control text-center qty-width"
+                                                            value="{{ $cartItem['quantity'] }}" min="1"
+                                                            onkeyup="updateQuantity('{{ $cartItem['id'] }}',this.value)">
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            {{ $product_subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a href="javascript:removeFromCart({{ $cartItem['id'] }})"
+                                                            class="btn btn-sm btn-outline-danger square-btn"> <i class="tio-delete"></i></a>
+                                                    </td>
+                                                </tr>
+                                        @endif
+                                @endforeach
+                @endif
             </tbody>
         </table>
     </div>
@@ -95,13 +95,13 @@
         <dt class="col-6">{{ \App\CPU\translate('extra_discount') }} :</dt>
         <dd class="col-6 text-right">
             <button id="extra_discount" class="btn btn-sm" type="button" data-toggle="modal"
-                    data-target="#add-discount"><i
-                    class="tio-edit"></i></button>{{ number_format($discount_amount, 2)}} {{ \App\CPU\Helpers::currency_symbol()  }}
+                data-target="#add-discount"><i class="tio-edit"></i></button>{{ number_format($discount_amount, 2)}}
+            {{ \App\CPU\Helpers::currency_symbol()  }}
         </dd>
         <dt class="col-6">{{ \App\CPU\translate('coupon_discount') }} :</dt>
         <dd class="col-6 text-right">
             <button id="coupon_discount" class="btn btn-sm" type="button" data-toggle="modal"
-                    data-target="#add-coupon-discount"><i
+                data-target="#add-coupon-discount"><i
                     class="tio-edit"></i></button>{{ $coupon_discount . ' ' . \App\CPU\Helpers::currency_symbol() }}
         </dd>
 
@@ -133,36 +133,37 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ \App\CPU\translate('add_new_customer') }}</h5>
+                <h5 class="modal-title">{{ \App\CPU\translate('add_new_supplier') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.customer.store') }}" method="post" id="product_form">
+                <form action="{{ route('admin.customer.store-supplier') }}" method="post" id="product_form">
                     @csrf
                     <input type="hidden" class="form-control" name="balance" value=0>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="input-label">{{ \App\CPU\translate('customer_name') }} <span
+                                <label class="input-label">{{ \App\CPU\translate('supplier_name') }} <span
                                         class="input-label-secondary text-danger">*</span></label>
                                 <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                                       placeholder="{{ \App\CPU\translate('customer_name') }}" required>
+                                    placeholder="{{ \App\CPU\translate('supplier_name') }}" required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="input-label">{{ \App\CPU\translate('mobile_no') }} <span
-                                        class="input-label-secondary text-danger">*</span></label>
+                                <label class="input-label">{{ \App\CPU\translate('mobile_no') }}
+                                    <!-- <span
+                                        class="input-label-secondary text-danger">*</span> -->
+                                </label>
                                 <input type="tel" id="mobile" name="mobile" class="form-control"
-                                       value="{{ old('mobile') }}"
-                                       pattern="[+0-9]+"
-                                       title="Please enter a valid phone number with only numbers and the plus sign (+)"
-                                       placeholder="{{ \App\CPU\translate('mobile_no') }}" required>
+                                    value="{{ old('mobile') }}" pattern="[+0-9]+"
+                                    title="Please enter a valid phone number with only numbers and the plus sign (+)"
+                                    placeholder="{{ \App\CPU\translate('mobile_no') }}" required>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="form-group">
                                 <label class="input-label">{{ \App\CPU\translate('email') }}</label>
                                 <input type="email" name="email" class="form-control"
@@ -199,12 +200,12 @@
                                        value="{{ old('address') }}"
                                        placeholder="{{ \App\CPU\translate('address') }}">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="d-flex justify-content-end">
                         <button type="submit" id="submit_new_customer"
-                                class="btn btn-primary">{{ \App\CPU\translate('submit') }}</button>
+                            class="btn btn-primary">{{ \App\CPU\translate('submit') }}</button>
                     </div>
                 </form>
             </div>
@@ -243,7 +244,7 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-sm btn-primary extra-discount"
-                            type="submit">{{ \App\CPU\translate('submit') }}</button>
+                        type="submit">{{ \App\CPU\translate('submit') }}</button>
                 </div>
             </div>
         </div>
@@ -265,7 +266,8 @@
                     <input type="text" id="coupon_code" class="form-control" name="coupon_code">
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-sm btn-primary coupon-discount" type="submit">{{ \App\CPU\translate('submit') }}</button>
+                    <button class="btn btn-sm btn-primary coupon-discount"
+                        type="submit">{{ \App\CPU\translate('submit') }}</button>
                 </div>
             </div>
         </div>
@@ -290,8 +292,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        <button class="btn btn-sm btn-primary"
-                                type="submit">{{ \App\CPU\translate('submit') }}</button>
+                        <button class="btn btn-sm btn-primary" type="submit">{{ \App\CPU\translate('submit') }}</button>
                     </div>
                 </form>
             </div>
@@ -303,14 +304,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ \App\CPU\translate('payment') }} </h5>
+                <h5 class="modal-title">{{ \App\CPU\translate('transportation_Info') }} </h5>
                 <button id="payment_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <span class="style-three-cart">{{ \App\CPU\translate('total') }}</span>
+                <!-- <span class="style-three-cart">{{ \App\CPU\translate('total') }}</span>
                 <h4 class="mb-0" id="total_balance"><span class="style-four-cart"> = </span>
                     {{ round($total + $total_tax_amount - $coupon_discount, 2) }}
-                    {{ \App\CPU\Helpers::currency_symbol() }}</h4>
+                    {{ \App\CPU\Helpers::currency_symbol() }}</h4> -->
             </div>
             @php
                 $accounts = \App\Models\Account::orderBy('id')->get();
@@ -319,9 +320,9 @@
                 <form action="{{ route('admin.pos.purchase') }}" id='order_place' method="post">
                     @csrf
                     <div class="form-group">
-                        <label class="input-label" for="">{{ \App\CPU\translate('type') }}</label>
+                        <label class="input-label" for="" hidden>{{ \App\CPU\translate('type') }}</label>
                         <select class="payment-opp form-control" name="type" id="payment_opp"
-                                class="form-control select2" required>
+                            class="form-control select2" required hidden>
                             @foreach ($accounts as $account)
                                 @if ($account['id'] != 2 && $account['id'] != 3)
                                     <option value="{{ $account['id'] }}">{{ $account['account'] }}</option>
@@ -329,39 +330,56 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group d-none" id="balance">
+                    <div class="form-group d-none" id="balance" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('customer_balance') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
                         <input type="number" id="balance_customer" class="form-control" name="customer_balance"
-                               disabled>
+                            disabled>
                     </div>
-                    <div class="form-group d-none" id="remaining_balance">
+                    <div class="form-group d-none" id="remaining_balance" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('remaining_balance') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
-                        <input type="number" id="balance_remain" class="form-control" name="remaining_balance"
-                               value="" readonly>
+                        <input type="number" id="balance_remain" class="form-control" name="remaining_balance" value=""
+                            readonly>
                     </div>
-                    <div class="form-group d-none" id="transaction_ref">
+                    <div class="form-group d-none" id="transaction_ref" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('transaction_reference') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})
                             -({{ \App\CPU\translate('optional') }})</label>
                         <input type="text" id="tran_ref" class="form-control" name="transaction_reference">
                     </div>
-                    <div class="form-group" id="collected_cash">
+                    <div class="form-group" id="collected_cash" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('collected_cash') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
                         <input type="number" id="cash_amount" onkeyup="price_calculation();" class="form-control"
-                               name="collected_cash" step="0.01">
+                            name="collected_cash" step="0.01" value="0">
                     </div>
-                    <div class="form-group" id="returned_amount">
+                    <div class="form-group" id="returned_amount" hidden>
                         <label class="input-label" for="">{{ \App\CPU\translate('returned_amount') }}
                             ({{ \App\CPU\Helpers::currency_symbol() }})</label>
-                        <input type="number" id="returned" class="form-control" name="returned_amount"
-                               value="" readonly>
+                        <input type="number" id="returned" class="form-control" name="returned_amount" value="0"
+                            readonly>
+                    </div>
+                    <div class="form-group" id="car_driver_name">
+                        <label class="input-label" for="">{{ \App\CPU\translate('car_driver_name') }}
+                        </label>
+                        <input type="text" id="car_driver" class="form-control" name="car_driver_name">
+                    </div>
+                    <div class="form-group" id="car_id">
+                        <label class="input-label" for="">{{ \App\CPU\translate('car_id') }}
+                        </label>
+                        <input type="text" id="car" class="form-control" name="car_id">
+                    </div>
+                    <div class="form-group" id="is_paid_for_car_fee">
+                        <label class="input-label">{{ \App\CPU\translate('is_paid_for_car_fee') }}</label><br>
+                        <label for="paid">Paid</label>
+                        <input type="radio" id="paid" name="is_paid_for_car_fee" value="1">
+                        <label for="unpaid">Unpaid</label>
+                        <input type="radio" id="unpaid" name="is_paid_for_car_fee" value="0">
                     </div>
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-sm btn-primary" id="order_complete"
-                                type="submit">{{ \App\CPU\translate('submit') }}</button>
+                            type="submit">{{ \App\CPU\translate('submit') }}</button>
                     </div>
                 </form>
             </div>
@@ -399,27 +417,27 @@
 <script>
     "use strict";
 
-    $(".empty-cart").on('click', function(){
+    $(".empty-cart").on('click', function () {
         emptyCart();
     });
 
-    $(".submit-order").on('click', function(){
+    $(".submit-order").on('click', function () {
         submit_order();
     });
 
-    $(".coupon-discount").on('click', function(){
+    $(".coupon-discount").on('click', function () {
         coupon_discount();
     });
 
-    $(".extra-discount").on('click', function(){
+    $(".extra-discount").on('click', function () {
         extra_discount();
     });
 
-    $('.type_ext_dis').on('change', function() {
+    $('.type_ext_dis').on('change', function () {
         limit(this);
     });
 
-    $('.payment-opp').on('change', function() {
+    $('.payment-opp').on('change', function () {
         payment_option_purchase(this);
     });
 </script>

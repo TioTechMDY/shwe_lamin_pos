@@ -917,6 +917,10 @@ class POSController extends Controller
         $order->transaction_reference = $request->transaction_reference ?? null;
         $order->is_purchase_record = 0;
 
+        $order->car_driver_name = $request->car_driver_name ?? '';
+        $order->car_id = $request->car_id ?? '';
+        $order->is_paid_for_car_fee = $request->is_paid_for_car_fee ?? 0;
+
         $order->created_at = now();
         $order->updated_at = now();
 
@@ -1132,6 +1136,10 @@ class POSController extends Controller
         $order->payment_id = $request->type;
         $order->transaction_reference = $request->transaction_reference ?? null;
         $order->is_purchase_record = 1;
+
+        $order->car_driver_name = $request->car_driver_name ?? '';
+        $order->car_id = $request->car_id ?? '';
+        $order->is_paid_for_car_fee = $request->is_paid_for_car_fee ?? 0;
 
         $order->created_at = now();
         $order->updated_at = now();
