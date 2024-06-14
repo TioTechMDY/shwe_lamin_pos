@@ -133,6 +133,8 @@ Route::group(['namespace'=>'Admin', 'as' => 'admin.', 'prefix'=>'admin'] ,functi
 
 
             Route::get('customers', 'POSController@getCustomers')->name('customers');
+            Route::get('suppliers', 'POSController@getSuppliers')->name('suppliers');
+
                             // no need to change coz of no effective
 
             Route::get('customer-balance', 'POSController@customerBalance')->name('customer-balance');

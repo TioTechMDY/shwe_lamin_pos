@@ -186,7 +186,7 @@
                                             <select id='customer' name="customer_id"
                                                     class="form-control js-data-example-ajax customer-change">
                                                 <option>{{\App\CPU\translate('--select-supplier--')}}</option>
-                                                <option value="0">{{\App\CPU\translate('walking_customer')}}</option>
+                                                <!-- <option value="0">{{\App\CPU\translate('walking_customer')}}</option> -->
                                             </select>
                                         </div>
                                         <div class="">
@@ -815,7 +815,7 @@
 
     $('.js-data-example-ajax').select2({
         ajax: {
-            url: '{{route('admin.pos.customers')}}',
+            url: '{{route('admin.pos.suppliers')}}',
             data: function (params) {
                 return {
                     q: params.term,

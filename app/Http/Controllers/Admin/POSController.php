@@ -1686,7 +1686,22 @@ class POSController extends Controller
                     $q->orWhere('name', 'like', "%{$value}%")
                         ->orWhere('mobile', 'like', "%{$value}%");
                 }
-            })->limit(6)
+            })->limit(6)->where('is_customer',0)
+            ->get([DB::raw('id, IF(id <> "0",CONCAT(name,  " (", mobile ,")"), name) as text')]);
+
+        return response()->json($data);
+    }
+
+    public function getSuppliers(Request $request): JsonResponse
+    {
+        $key = explode(' ', $request['q']);
+        $data = DB::table('customers')
+            ->where(function ($q) use ($key) {
+                foreach ($key as $value) {
+                    $q->orWhere('name', 'like', "%{$value}%")
+                        ->orWhere('mobile', 'like', "%{$value}%");
+                }
+            })->limit(6)->where('is_customer',1)
             ->get([DB::raw('id, IF(id <> "0",CONCAT(name,  " (", mobile ,")"), name) as text')]);
 
         return response()->json($data);

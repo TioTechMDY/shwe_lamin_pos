@@ -153,16 +153,18 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="input-label">{{ \App\CPU\translate('mobile_no') }} <span
-                                        class="input-label-secondary text-danger">*</span></label>
+                                <label class="input-label">{{ \App\CPU\translate('mobile_no') }} 
+                                    <!-- <span
+                                        class="input-label-secondary text-danger">*</span> -->
+                                    </label>
                                 <input type="tel" id="mobile" name="mobile" class="form-control"
                                        value="{{ old('mobile') }}"
                                        pattern="[+0-9]+"
                                        title="Please enter a valid phone number with only numbers and the plus sign (+)"
-                                       placeholder="{{ \App\CPU\translate('mobile_no') }}" required>
+                                       placeholder="{{ \App\CPU\translate('mobile_no') }}" >
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="form-group">
                                 <label class="input-label">{{ \App\CPU\translate('email') }}</label>
                                 <input type="email" name="email" class="form-control"
@@ -199,7 +201,7 @@
                                        value="{{ old('address') }}"
                                        placeholder="{{ \App\CPU\translate('address') }}">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="d-flex justify-content-end">
