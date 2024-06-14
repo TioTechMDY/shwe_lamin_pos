@@ -57,10 +57,10 @@
                                 <th>{{\App\CPU\translate('#')}}</th>
                                 <th>{{\App\CPU\translate('name')}}</th>
                                 <th >{{\App\CPU\translate('image')}}</th>
-                                <th>{{ \App\CPU\translate('supplier_name/mobile') }}</th>
-                                <th>{{\App\CPU\translate('product_code')}}</th>
-                                <th>{{\App\CPU\translate('purchase_price')}}</th>
-                                <th>{{\App\CPU\translate('selling_price')}}</th>
+                                <!-- <th>{{ \App\CPU\translate('supplier_name/mobile') }}</th> -->
+                                <!-- <th>{{\App\CPU\translate('product_code')}}</th> -->
+                                <!-- <th>{{\App\CPU\translate('purchase_price')}}</th> -->
+                                <!-- <th>{{\App\CPU\translate('selling_price')}}</th> -->
                                 <th>{{\App\CPU\translate('quantity')}}</th>
                                 <th>{{ \App\CPU\translate('orders') }}</th>
                             </tr>
@@ -78,16 +78,16 @@
                                     <td>
                                         <img class="img-one-sto" src="{{$product['image_fullpath']}}">
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         {{ $product->supplier?$product->supplier->name:\App\CPU\translate('not_found') }} <br>
                                         {{ $product->supplier?$product->supplier->mobile:\App\CPU\translate('not_found')  }}
-                                    </td>
-                                    <td>{{ $product['product_code'] }}</td>
+                                    </td> -->
+                                    <!-- <td>{{ $product['product_code'] }}</td>
                                     <td>{{$product['purchase_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td>
-                                    <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td>
+                                    <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td> -->
                                     <td>{{ $product['quantity'] }}
-                                        <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
-                                            <i class="tio-add-circle"></i>
+                                        <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
+                                            <i class="tio-add-circle"></i> -->
                                         </button>
                                     </td>
                                     <td>{{ $product->order_count??0 }}</td>

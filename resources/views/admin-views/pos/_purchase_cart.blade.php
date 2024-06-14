@@ -8,7 +8,7 @@
                 <tr>
                     <th>{{ \App\CPU\translate('item') }}</th>
                     <th>{{ \App\CPU\translate('qty') }}</th>
-                    <th>{{ \App\CPU\translate('price') }}</th>
+                    <th hidden>{{ \App\CPU\translate('price') }}</th>
                     <th>{{ \App\CPU\translate('delete') }}</th>
                 </tr>
             </thead>
@@ -56,11 +56,11 @@ $coupon_discount = 0;
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <input type="number" data-key="{{ $key }}" class="form-control text-center qty-width"
+                                                        <input type="number" data-key="{{ $key }}" class="form-control text-center"
                                                             value="{{ $cartItem['quantity'] }}" min="1"
                                                             onkeyup="updateQuantity('{{ $cartItem['id'] }}',this.value)">
                                                     </td>
-                                                    <td>
+                                                    <td hidden> 
                                                         <div>
                                                             {{ $product_subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}
                                                         </div>
@@ -84,7 +84,7 @@ $coupon_discount = 0;
     $total_tax_amount = $product_tax;
 @endphp
 <div class="box p-3">
-    <dl class="row">
+    <dl class="row" hidden>
         <dt class="col-6">{{ \App\CPU\translate('sub_total') }} :</dt>
         <dd class="col-6 text-right">{{ $subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
 

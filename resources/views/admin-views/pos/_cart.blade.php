@@ -8,7 +8,7 @@
             <tr>
                 <th>{{ \App\CPU\translate('item') }}</th>
                 <th>{{ \App\CPU\translate('qty') }}</th>
-                <th>{{ \App\CPU\translate('price') }}</th>
+                <th hidden>{{ \App\CPU\translate('price') }}</th>
                 <th>{{ \App\CPU\translate('delete') }}</th>
             </tr>
             </thead>
@@ -56,11 +56,11 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" data-key="{{ $key }}" class="form-control text-center qty-width"
+                                <input type="number" data-key="{{ $key }}" class="form-control text-center "
                                        value="{{ $cartItem['quantity'] }}" min="1"
                                        onkeyup="updateQuantity('{{ $cartItem['id'] }}',this.value)">
                             </td>
-                            <td>
+                            <td hidden>
                                 <div>
                                     {{ $product_subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}
                                 </div>
@@ -85,30 +85,30 @@
 @endphp
 <div class="box p-3">
     <dl class="row">
-        <dt class="col-6">{{ \App\CPU\translate('sub_total') }} :</dt>
-        <dd class="col-6 text-right">{{ $subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
+        <dt class="col-6" hidden>{{ \App\CPU\translate('sub_total') }} :</dt>
+        <dd class="col-6 text-right" hidden>{{ $subtotal . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
 
-        <dt class="col-6">{{ \App\CPU\translate('product_discount') }} :</dt>
-        <dd class="col-6 text-right">{{ round($discount_on_product, 2) . ' ' . \App\CPU\Helpers::currency_symbol() }}
+        <dt class="col-6" hidden>{{ \App\CPU\translate('product_discount') }} :</dt>
+        <dd class="col-6 text-right" hidden>{{ round($discount_on_product, 2) . ' ' . \App\CPU\Helpers::currency_symbol() }}
         </dd>
 
-        <dt class="col-6">{{ \App\CPU\translate('extra_discount') }} :</dt>
-        <dd class="col-6 text-right">
+        <dt class="col-6" hidden>{{ \App\CPU\translate('extra_discount') }} :</dt>
+        <dd class="col-6 text-right" hidden>
             <button id="extra_discount" class="btn btn-sm" type="button" data-toggle="modal"
                     data-target="#add-discount"><i
                     class="tio-edit"></i></button>{{ number_format($discount_amount, 2)}} {{ \App\CPU\Helpers::currency_symbol()  }}
         </dd>
-        <dt class="col-6">{{ \App\CPU\translate('coupon_discount') }} :</dt>
-        <dd class="col-6 text-right">
+        <dt class="col-6" hidden>{{ \App\CPU\translate('coupon_discount') }} :</dt>
+        <dd class="col-6 text-right" hidden>
             <button id="coupon_discount" class="btn btn-sm" type="button" data-toggle="modal"
                     data-target="#add-coupon-discount"><i
                     class="tio-edit"></i></button>{{ $coupon_discount . ' ' . \App\CPU\Helpers::currency_symbol() }}
         </dd>
 
-        <dt class="col-6">{{ \App\CPU\translate('tax') }} :</dt>
-        <dd class="col-6 text-right">{{ round($total_tax_amount, 2) . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
-        <dt class="col-6">{{ \App\CPU\translate('total') }} :</dt>
-        <dd class="col-6 text-right h4 b">
+        <dt class="col-6" hidden>{{ \App\CPU\translate('tax') }} :</dt>
+        <dd class="col-6 text-right" hidden>{{ round($total_tax_amount, 2) . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
+        <dt class="col-6" hidden>{{ \App\CPU\translate('total') }} :</dt>
+        <dd class="col-6 text-right h4 b" hidden>
             <span id="total_price">{{ round($total + $total_tax_amount - $coupon_discount, 2) }}</span>
             {{ \App\CPU\Helpers::currency_symbol() }}
         </dd>

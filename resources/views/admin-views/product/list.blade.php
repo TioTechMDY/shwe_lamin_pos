@@ -99,9 +99,9 @@
                                     <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td> -->
                                     <td>
                                         {{ $product['quantity'] }}
-                                        <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
+                                        <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
                                             <i class="tio-add-circle"></i>
-                                        </button>
+                                        </button> -->
                                     </td>
                                     <td>{{ $product->order_count??0 }}</td>
                                     <td>

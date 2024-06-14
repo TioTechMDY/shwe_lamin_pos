@@ -763,7 +763,8 @@
     }
 
     function updateQuantity(id,qty) {
-        $.ajaxSetup({
+        setTimeout(function(){
+            $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
@@ -804,6 +805,7 @@
                 $('#loading').addClass('d-none');
             }
         });
+        },5000);
 
 
 
