@@ -1651,7 +1651,7 @@ class POSController extends Controller
             $orders = $this->order->latest()->where('is_purchase_record',0)->paginate(Helpers::pagination_limit())->appends($search);
         }
 
-        return view('admin-views.pos.order.list-purchase', compact('orders', 'search'));
+        return view('admin-views.pos.order.list', compact('orders', 'search'));
     }
 
     public function purchaseRecordList(Request $request): Factory|View|Application
@@ -1664,7 +1664,7 @@ class POSController extends Controller
             $orders = $this->order->latest()->where('is_purchase_record','1')->paginate(Helpers::pagination_limit())->appends($search);
         }
 
-        return view('admin-views.pos.order.list', compact('orders', 'search'));
+        return view('admin-views.pos.order.list-purchase', compact('orders', 'search'));
     } //added BY PSP 
 
     /**

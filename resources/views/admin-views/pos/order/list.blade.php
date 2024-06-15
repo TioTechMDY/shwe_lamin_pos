@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-@section('title', \App\CPU\translate('Purchase Record List'))
+@section('title', \App\CPU\translate('Sale Record List'))
 @push('css_or_js')
     <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css" />
 @endpush
@@ -9,7 +9,7 @@
     <div class="">
         <div class="row align-items-center mb-3">
             <div class="col-sm">
-                <h1 class="page-header-title text-capitalize">{{\App\CPU\translate('Purchase')}}
+                <h1 class="page-header-title text-capitalize">{{\App\CPU\translate('Sale')}}
                     {{\App\CPU\translate('Records')}}
                     <span class="badge badge-soft-dark ml-2">{{$orders->total()}}</span>
                 </h1>
@@ -45,7 +45,7 @@
                         <th class="">{{\App\CPU\translate('#')}}</th>
                         <th class="table-column-pl-0">{{\App\CPU\translate('order')}}</th>
                         <th>{{\App\CPU\translate('date')}}</th>
-                        <th>{{\App\CPU\translate('supplier')}}</th>
+                        <th>{{\App\CPU\translate('customer')}}</th>
 
 
                         <th>{{\App\CPU\translate('car_driver_name')}}</th>
@@ -73,7 +73,11 @@
                                 <a class="text-primary print-invoice" href="#" data-id="{{$order->id}}">{{$order['id']}}</a>
                             </td>
                             <td>{{date('d M Y', strtotime($order['created_at']))}}</td>
-                            <td> Unknown</td>
+                            @if ($order->customer)
+                                <td> {{ $order->customer->name}}</td>
+                            @else
+                                <td> Unknown</td>
+                            @endif
 
                             @if ($order->car_driver_name == '')
                                 <td> Unknown</td>
@@ -99,15 +103,15 @@
 
 
                             <!-- <td>
-                                        {{ ($order->payment_id != 0) ? ($order->account ? $order->account->account : \App\CPU\translate('account_deleted')): \App\CPU\translate('Customer balance') }}
-                                    </td>
-                                    <td>
-                                        {{ $order->order_amount . ' ' . \App\CPU\Helpers::currency_symbol()}}
-                                    </td>
-                                    <td>{{$order['total_tax'] . ' ' . \App\CPU\Helpers::currency_symbol()}}</td>
-                                    <td>{{ $order->extra_discount?$order->extra_discount .' '.\App\CPU\Helpers::currency_symbol():0 .' '.\App\CPU\Helpers::currency_symbol() }}</td>
-                                    <td>{{ $order->coupon_discount_amount?$order->coupon_discount_amount .' '.\App\CPU\Helpers::currency_symbol():0 .' '.\App\CPU\Helpers::currency_symbol() }}</td>
-                                    <td>{{ $order->order_amount + $order->total_tax - $order->extra_discount - $order->coupon_discount_amount .' '.\App\CPU\Helpers::currency_symbol()}}</td> -->
+                                                    {{ ($order->payment_id != 0) ? ($order->account ? $order->account->account : \App\CPU\translate('account_deleted')): \App\CPU\translate('Customer balance') }}
+                                                </td>
+                                                <td>
+                                                    {{ $order->order_amount . ' ' . \App\CPU\Helpers::currency_symbol()}}
+                                                </td>
+                                                <td>{{$order['total_tax'] . ' ' . \App\CPU\Helpers::currency_symbol()}}</td>
+                                                <td>{{ $order->extra_discount?$order->extra_discount .' '.\App\CPU\Helpers::currency_symbol():0 .' '.\App\CPU\Helpers::currency_symbol() }}</td>
+                                                <td>{{ $order->coupon_discount_amount?$order->coupon_discount_amount .' '.\App\CPU\Helpers::currency_symbol():0 .' '.\App\CPU\Helpers::currency_symbol() }}</td>
+                                                <td>{{ $order->order_amount + $order->total_tax - $order->extra_discount - $order->coupon_discount_amount .' '.\App\CPU\Helpers::currency_symbol()}}</td> -->
                             <td>
                                 <button class="btn btn-sm btn-white print-invoice" target="_blank" type="button"
                                     data-id="{{$order->id}}"><i class="tio-download"></i> {{\App\CPU\translate('invoice')}}
