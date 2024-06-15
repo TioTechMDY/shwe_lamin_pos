@@ -928,4 +928,12 @@
   'car_driver_name' => 'Car driver name',
   'car_id' => 'Car id',
   'is_paid_for_car_fee' => 'Is paid for car fee',
+  'Sale Record List' => 'Sale Record List',
+  'Sale' => 'Sale',
+  'Records' => 'Records',
+  'Purchase Record List' => 'Purchase Record List',
+  'car_Id' => 'Car Id',
+  'Paid/Unpaid' => 'Paid/Unpaid',
+  'paid/unpaid' => 'Paid/unpaid',
+  'unkown' => 'Unkown',
 );
