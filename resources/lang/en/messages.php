@@ -936,4 +936,8 @@
   'Paid/Unpaid' => 'Paid/Unpaid',
   'paid/unpaid' => 'Paid/unpaid',
   'unkown' => 'Unkown',
+  'Transoprted by' => 'Transoprted by',
+  'Car Id' => 'Car Id',
+  'Transported by' => 'Transported by',
+  'Customer' => 'Customer',
 );

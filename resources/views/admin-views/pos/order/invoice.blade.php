@@ -38,7 +38,7 @@
                 <th>{{ \App\CPU\translate('SL') }}</th>
                 <th>{{ \App\CPU\translate('DESC') }}</th>
                 <th>{{ \App\CPU\translate('QTY') }}</th>
-                <th>{{ \App\CPU\translate('Price') }}</th>
+                <th hidden>{{ \App\CPU\translate('Price') }}</th>
             </tr>
         </thead>
 
@@ -47,35 +47,37 @@
             @php($total_tax = 0)
             @php($total_dis_on_pro = 0)
             @foreach ($order->details as $key => $detail)
-                @if ($detail->product_details)
-                    @php($product = json_decode($detail->product_details, true))
-                    <tr>
-                        <td>
-                            {{ $key + 1 }}
-                        </td>
-                        <td>
-                            <span class="style-inthree">{{ $product['name'] }}</span><br />
+            @if ($detail->product_details)
+            @php($product = json_decode($detail->product_details, true))
+            <tr>
+                <td>
+                    {{ $key + 1 }}
+                </td>
+                <td>
+                    <span class="style-inthree">{{ $product['name'] }}</span>
+                    <!-- <br />
                             {{ \App\CPU\translate('price') }} :
-                            {{ $detail['price'] . ' ' . \App\CPU\Helpers::currency_symbol() }} <br>
+                            {{ $detail['price'] . ' ' . \App\CPU\Helpers::currency_symbol() }}
+                             <br>
                             {{ \App\CPU\translate('discount') }} :
-                            {{ $detail['discount_on_product'] * $detail['quantity'] . ' ' . \App\CPU\Helpers::currency_symbol() }}
-                        </td>
-                        <td class="">
-                            {{ $detail['quantity'] }}
-                        </td>
-                        <td>
-                            @php($amount = ($detail['price'] - $detail['discount_on_product']) * $detail['quantity'])
-                            {{ $amount . ' ' . \App\CPU\Helpers::currency_symbol() }}
-                        </td>
-                    </tr>
-                    @php($sub_total += $amount)
-                    @php($total_tax += $detail['tax_amount'] * $detail['quantity'])
-                @endif
+                            {{ $detail['discount_on_product'] * $detail['quantity'] . ' ' . \App\CPU\Helpers::currency_symbol() }} -->
+                </td>
+                <td class="">
+                    {{ $detail['quantity'] }}
+                </td>
+                <td hidden>
+                    @php($amount = ($detail['price'] - $detail['discount_on_product']) * $detail['quantity'])
+                    {{ $amount . ' ' . \App\CPU\Helpers::currency_symbol() }}
+                </td>
+            </tr>
+            @php($sub_total += $amount)
+            @php($total_tax += $detail['tax_amount'] * $detail['quantity'])
+            @endif
             @endforeach
         </tbody>
     </table>
     <hr class="line-dot">
-    <dl class="row text-black-50">
+    <dl class="row text-black-50" hidden>
         <dt class="col-7">{{ \App\CPU\translate('items_price') }}:</dt>
         <dd class="col-5 text-right">{{ $sub_total . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
         <dt class="col-7">{{ \App\CPU\translate('Tax_/_VAT') }}:</dt>
@@ -84,17 +86,20 @@
         <dd class="col-5 text-right">{{ $sub_total + $total_tax . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
         <dt class="col-7">{{ \App\CPU\translate('extra_discount') }}:</dt>
         <dd class="col-5 text-right">
-            {{ $order['extra_discount'] ? number_format($order['extra_discount'], 2) . ' ' . \App\CPU\Helpers::currency_symbol() : 0 . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
+            {{ $order['extra_discount'] ? number_format($order['extra_discount'], 2) . ' ' . \App\CPU\Helpers::currency_symbol() : 0 . ' ' . \App\CPU\Helpers::currency_symbol() }}
+        </dd>
         <dt class="col-7">{{ \App\CPU\translate('coupon_discount') }}:</dt>
         <dd class="col-5 text-right">
-            {{ $order['coupon_discount_amount'] . ' ' . \App\CPU\Helpers::currency_symbol() }}</dd>
+            {{ $order['coupon_discount_amount'] . ' ' . \App\CPU\Helpers::currency_symbol() }}
+        </dd>
         <dt class="col-7 total">{{ \App\CPU\translate('total') }}:</dt>
         <dd class="col-5 text-right total">
-            {{ $sub_total + $total_tax  - ($order['coupon_discount_amount'] + $order['extra_discount']) }} {{  \App\CPU\Helpers::currency_symbol()  }}
+            {{ $sub_total + $total_tax - ($order['coupon_discount_amount'] + $order['extra_discount']) }}
+            {{  \App\CPU\Helpers::currency_symbol()  }}
         </dd>
     </dl>
 
-    <div class="d-flex flex-wrap justify-content-between border-top pt-3">
+    <!-- <div class="d-flex flex-wrap justify-content-between border-top pt-3">
         <div class="mr-1">
             {{ \App\CPU\translate('Paid_by') }}: {{ ($order->payment_id != 0) ? ($order->account ? $order->account->account : \App\CPU\translate('account_deleted')): 'Customer balance' }}
         </div>
@@ -106,6 +111,42 @@
                 {{ \App\CPU\Helpers::currency_symbol() }}
             </div>
         @endif
+    </div> -->
+    <div class="d-flex flex-wrap justify-content-between border-top pt-3">
+        <div class="mr-1">
+            <b>{{ \App\CPU\translate('Transported by')}}:</b>
+            {{$order->car_driver_name == '' ? 'Unknown' : $order->car_driver_name}}
+        </div>
+        <div class="mr-1"><b>{{ \App\CPU\translate('Car Id') }}:</b>
+            {{$order->car_id == '' ? 'Unknown' : $order->car_id}}
+        </div>
+        @if($order->is_purchase_record == 0)
+            <v class="mr-1"><b>{{ \App\CPU\translate('Customer') }}:</b>
+                @if ($order->customer)
+                    {{ $order->customer->name}}
+                @else
+                    Unknown
+                @endif  
+
+
+          @else
+                <div class="mr-1"><b>{{ \App\CPU\translate('Supplier') }}:</b>
+                    @if ($order->customer)
+                        {{ $order->customer->name}}
+                    @else
+                        Unknown
+                    @endif  
+              </div>
+        @endif
+
+    </div>
+    <div class="d-flex flex-wrap justify-content-between border-top pt-3">
+        <div class="mr-1">
+            <b>{{ \App\CPU\translate('Paid/Unpaid')}}:</b>
+            {{$order->is_paid_for_car_fee == 0 ? 'Unpaid' : 'Paid'}}
+        </div>
+
+
     </div>
     <hr class="line-dot">
     <h5 class="text-center">
