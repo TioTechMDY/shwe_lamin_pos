@@ -245,6 +245,116 @@
                             </a>
                         </li>
                         @endif
+                        <?php
+                        $modules = ['coupon_section', 'account_section'];
+                        ?>
+                        @if (collect($modules)->contains(fn($module) => \App\CPU\Helpers::module_permission_check($module)))
+                        <li class="nav-item">
+                            <small
+                                class="nav-subtitle">{{\App\CPU\translate('business_section')}}</small>
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+                        @endif
+                        @if (\App\CPU\Helpers::module_permission_check('coupon_section'))
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/coupon*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                               href="{{route('admin.coupon.add-new')}}">
+                                <i class="tio-gift nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{\App\CPU\translate('coupons')}}</span>
+                            </a>
+                        </li>
+                        @endif
+                        @if (\App\CPU\Helpers::module_permission_check('account_section'))
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/account*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
+                                <i class="tio-wallet nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    {{\App\CPU\translate('account_management')}}
+                                </span>
+                            </a>
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub {{Request::is('admin/account*')?'d-block':''}}">
+                                <li class="nav-item {{Request::is('admin/account/add')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.add')}}"
+                                       title="{{\App\CPU\translate('add_new_account')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('add_new_account')}}</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item {{Request::is('admin/account/list')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list')}}"
+                                       title="{{\App\CPU\translate('account_list')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('accounts')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/add-expense')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.add-expense')}}"
+                                       title="{{\App\CPU\translate('add_new_expense')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('add_new_expense')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-expense')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-expense')}}"
+                                       title="{{\App\CPU\translate('expense_list')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('expense_list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/add-income')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.add-income')}}"
+                                       title="{{\App\CPU\translate('add_new_income')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('Add_New_Income')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-income')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-income')}}"
+                                       title="{{\App\CPU\translate('income_list')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('income_list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/add-transfer')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.add-transfer')}}"
+                                       title="{{\App\CPU\translate('add_new_transfer')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('add_new_transfer')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-transfer')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-transfer')}}"
+                                       title="{{\App\CPU\translate('transfer_list')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('transfer_list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-transection')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-transection')}}"
+                                       title="{{\App\CPU\translate('list_of_transection')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('transection_list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-paylable')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-paylable')}}"
+                                       title="{{\App\CPU\translate('list_of_paylable')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('paylable_list')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{Request::is('admin/account/list-recievable')?'active':''}}">
+                                    <a class="nav-link " href="{{route('admin.account.list-recievable')}}"
+                                       title="{{\App\CPU\translate('list_of_recievable')}}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{\App\CPU\translate('recievable_list')}}</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        @endif
                         
                         <?php
                         $modules = ['employee_role_section', 'employee_section'];
