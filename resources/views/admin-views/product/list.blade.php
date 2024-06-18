@@ -68,6 +68,12 @@
                                 <!-- <th>{{\App\CPU\translate('purchase_price')}}</th> -->
                                 <!-- <th>{{\App\CPU\translate('selling_price')}}</th> -->
                                 <th>{{\App\CPU\translate('quantity')}}</th>
+                                <th>{{\App\CPU\translate('absolue_quantity')}}</th>
+                                <th>{{\App\CPU\translate('gained_quantity')}}</th>
+
+                                <th>{{\App\CPU\translate('lost_quantity')}}</th>
+
+
                                 <th>{{ \App\CPU\translate('orders') }}</th>
                                 <th>{{\App\CPU\translate('action')}}</th>
                             </tr>
@@ -99,6 +105,24 @@
                                     <td>{{$product['selling_price'] ." ".\App\CPU\Helpers::currency_symbol()}}</td> -->
                                     <td>
                                         {{ $product['quantity'] }}
+                                        <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
+                                            <i class="tio-add-circle"></i>
+                                        </button> -->
+                                    </td>
+                                    <td>
+                                        {{ $product['absolute'] }}
+                                        <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
+                                            <i class="tio-add-circle"></i>
+                                        </button> -->
+                                    </td>
+                                    <td>
+                                        {{ $product['gain'] }}
+                                        <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
+                                            <i class="tio-add-circle"></i>
+                                        </button> -->
+                                    </td>
+                                    <td>
+                                        {{ $product['lost'] }}
                                         <!-- <button class="btn btn-sm update-quantity-btn" data-product-id="{{ $product->id }}" id="{{ $product->id }}" type="button" data-toggle="modal" data-target="#update-quantity">
                                             <i class="tio-add-circle"></i>
                                         </button> -->

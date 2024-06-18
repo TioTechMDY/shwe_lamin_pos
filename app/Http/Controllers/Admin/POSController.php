@@ -34,7 +34,8 @@ class POSController extends Controller
         private Account $account,
         private OrderDetail $orderDetails,
         private Customer $customer
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -49,7 +50,7 @@ class POSController extends Controller
 
         $products = $this->product->where('quantity', '>', 0)->active()
             ->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
-                $query->whereJsonContains('category_ids', [['id' => (string)$request['category_id']]]);
+                $query->whereJsonContains('category_ids', [['id' => (string) $request['category_id']]]);
             })->latest()->paginate(Helpers::pagination_limit());
 
         $cartId = 'wc-' . rand(10, 1000);
@@ -82,7 +83,7 @@ class POSController extends Controller
         $products = $this->product->active()
 
             ->when($request->has('category_id') && $request['category_id'] != 0, function ($query) use ($request) {
-                $query->whereJsonContains('category_ids', [['id' => (string)$request['category_id']]]);
+                $query->whereJsonContains('category_ids', [['id' => (string) $request['category_id']]]);
             })->latest()->paginate(Helpers::pagination_limit());
 
         $cartId = 'wc-' . rand(10, 1000);
@@ -354,7 +355,7 @@ class POSController extends Controller
      * @return JsonResponse
      */
     public function updateQuantity(Request $request): JsonResponse
-    {  
+    {
         $cartId = session('current_user');
         $userId = 0;
         $userType = 'wc';
@@ -402,7 +403,7 @@ class POSController extends Controller
     }
 
     public function updateQuantityPurchase(Request $request): JsonResponse
-    {  
+    {
         $cartId = session('current_user');
         $userId = 0;
         $userType = 'wc';
@@ -1166,6 +1167,15 @@ class POSController extends Controller
                     $orderDetails[] = $orD;
 
                     $product->quantity = $product->quantity + $c['quantity'];
+
+                    if($request->is_increased == 0){
+                        $product->absolute = $product->absolute + $c['quantity'] - $request->changed_quantity;
+                        $product->lost = $product->lost + $request->changed_quantity;
+                    }else{
+
+                        $product->absolute = $product->absolute + $c['quantity'] + $request->changed_quantity;
+                        $product->gain = $product->gain + $request->changed_quantity;
+                    }
                     $product->order_count++;
                     $product->save();
                 }
@@ -1646,9 +1656,9 @@ class POSController extends Controller
         $queryParam = [];
         $search = $request['search'];
         if ($request->has('search')) {
-            $orders = $this->order->latest()->where('id', 'like', "%{$search}%")->where('is_purchase_record',0)->paginate(Helpers::pagination_limit())->appends($search);
+            $orders = $this->order->latest()->where('id', 'like', "%{$search}%")->where('is_purchase_record', 0)->paginate(Helpers::pagination_limit())->appends($search);
         } else {
-            $orders = $this->order->latest()->where('is_purchase_record',0)->paginate(Helpers::pagination_limit())->appends($search);
+            $orders = $this->order->latest()->where('is_purchase_record', 0)->paginate(Helpers::pagination_limit())->appends($search);
         }
 
         return view('admin-views.pos.order.list', compact('orders', 'search'));
@@ -1659,9 +1669,9 @@ class POSController extends Controller
         $queryParam = [];
         $search = $request['search'];
         if ($request->has('search')) {
-            $orders = $this->order->latest()->where('id', 'like', "%{$search}%")->where('is_purchase_record','1')->paginate(Helpers::pagination_limit())->appends($search);
+            $orders = $this->order->latest()->where('id', 'like', "%{$search}%")->where('is_purchase_record', '1')->paginate(Helpers::pagination_limit())->appends($search);
         } else {
-            $orders = $this->order->latest()->where('is_purchase_record','1')->paginate(Helpers::pagination_limit())->appends($search);
+            $orders = $this->order->latest()->where('is_purchase_record', '1')->paginate(Helpers::pagination_limit())->appends($search);
         }
 
         return view('admin-views.pos.order.list-purchase', compact('orders', 'search'));
@@ -1694,7 +1704,7 @@ class POSController extends Controller
                     $q->orWhere('name', 'like', "%{$value}%")
                         ->orWhere('mobile', 'like', "%{$value}%");
                 }
-            })->limit(6)->where('is_customer',0)
+            })->limit(6)->where('is_customer', 0)
             ->get([DB::raw('id, IF(id <> "0",CONCAT(name,  " (", mobile ,")"), name) as text')]);
 
         return response()->json($data);
@@ -1709,7 +1719,7 @@ class POSController extends Controller
                     $q->orWhere('name', 'like', "%{$value}%")
                         ->orWhere('mobile', 'like', "%{$value}%");
                 }
-            })->limit(6)->where('is_customer',1)
+            })->limit(6)->where('is_customer', 1)
             ->get([DB::raw('id, IF(id <> "0",CONCAT(name,  " (", mobile ,")"), name) as text')]);
 
         return response()->json($data);

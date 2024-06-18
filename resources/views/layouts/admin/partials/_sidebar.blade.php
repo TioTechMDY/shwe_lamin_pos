@@ -249,14 +249,14 @@
                         $modules = ['coupon_section', 'account_section'];
                         ?>
                         @if (collect($modules)->contains(fn($module) => \App\CPU\Helpers::module_permission_check($module)))
-                        <li class="nav-item">
+                        <li class="nav-item" hidden>
                             <small
                                 class="nav-subtitle">{{\App\CPU\translate('business_section')}}</small>
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
                         @endif
                         @if (\App\CPU\Helpers::module_permission_check('coupon_section'))
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/coupon*')?'active':''}}">
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/coupon*')?'active':''}}" hidden>
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                href="{{route('admin.coupon.add-new')}}">
                                 <i class="tio-gift nav-icon"></i>
@@ -265,7 +265,7 @@
                         </li>
                         @endif
                         @if (\App\CPU\Helpers::module_permission_check('account_section'))
-                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/account*')?'active':''}}">
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/account*')?'active':''}}" hidden>
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
                                 <i class="tio-wallet nav-icon"></i>
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">

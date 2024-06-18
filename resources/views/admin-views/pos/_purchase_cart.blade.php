@@ -299,6 +299,7 @@ $coupon_discount = 0;
         </div>
     </div>
 </div>
+<!-- C G Am Em F C Dm G -->
 
 <div class="modal fade" id="paymentModal" tabindex="-1">
     <div class="modal-dialog">
@@ -371,11 +372,23 @@ $coupon_discount = 0;
                         <input type="text" id="car" class="form-control" name="car_id">
                     </div>
                     <div class="form-group" id="is_paid_for_car_fee">
-                        <label class="input-label">{{ \App\CPU\translate('is_paid_for_car_fee') }}</label><br>
+                        <label class="input-label">{{ \App\CPU\translate('is_paid_for_car_fee') }}?</label><br>
                         <label for="paid">Paid</label>
                         <input type="radio" id="paid" name="is_paid_for_car_fee" value="1">
                         <label for="unpaid">Unpaid</label>
                         <input type="radio" id="unpaid" name="is_paid_for_car_fee" value="0">
+                    </div>
+                    <div class="form-group" id="is_increased">
+                        <label class="input-label">{{ \App\CPU\translate('is_increased') }}?</label><br>
+                        <label for="increased">Increased</label>
+                        <input type="radio" id="increased" name="is_increased" value="1">
+                        <label for="decreased">Decreased</label>
+                        <input type="radio" id="decreased" name="is_increased" value="0">
+                    </div>
+                    <div class="form-group" id="changed_quantity">
+                        <label class="input-label" for="changed_quantity">{{ \App\CPU\translate('changed_quantity') }}
+                        </label>
+                        <input type="number" id="changed_quantity" class="form-control" name="changed_quantity">
                     </div>
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-sm btn-primary" id="order_complete"

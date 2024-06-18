@@ -940,4 +940,9 @@
   'Car Id' => 'Car Id',
   'Transported by' => 'Transported by',
   'Customer' => 'Customer',
+  'is_increased' => 'Is increased',
+  'changed_quantity' => 'Changed quantity',
+  'absolue_quantity' => 'Absolue quantity',
+  'gained_quantity' => 'Gained quantity',
+  'lost_quantity' => 'Lost quantity',
 );
