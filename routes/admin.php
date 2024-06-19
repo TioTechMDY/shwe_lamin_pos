@@ -86,6 +86,24 @@ Route::group(['namespace'=>'Admin', 'as' => 'admin.', 'prefix'=>'admin'] ,functi
             Route::get('remove-image/{id}/{name}', 'ProductController@remove_image')->name('remove-image');
         });
 
+        Route::group(['prefix' => 'tank', 'as' => 'tank.', 'middleware' => ['module:product_section']], function () {
+            Route::get('add', 'TankController@index')->name('add');
+            Route::post('store', 'TankController@store')->name('store');
+            Route::get('list', 'TankController@list')->name('list');
+            Route::get('edit/{id}', 'TankController@edit')->name('edit');
+            Route::post('update/{id}', 'TankController@update')->name('update');
+            Route::delete('delete/{id}', 'TankController@delete')->name('delete');
+            Route::get('barcode-generate/{id}', 'TankController@barcodeGenerate')->name('barcode-generate');
+            Route::get('barcode/{id}', 'TankController@barcode')->name('barcode');
+            Route::get('bulk-import', 'TankController@bulkImportIndex')->name('bulk-import');
+            Route::post('bulk-import', 'TankController@bulkImportData');
+            Route::get('bulk-export', 'TankController@bulkExportData')->name('bulk-export');
+
+            //ajax request
+            Route::get('get-categories', 'TankController@getCategories')->name('get-categories');
+            Route::get('remove-image/{id}/{name}', 'TankController@remove_image')->name('remove-image');
+        });
+
         Route::group(['prefix' => 'pos', 'as' => 'pos.', 'middleware' => ['module:pos_section']], function () {
             Route::get('/', 'POSController@index')->name('index');
             Route::get('purchase', 'POSController@purchase')->name('purchase');//added BY PSP

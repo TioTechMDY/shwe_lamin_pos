@@ -259,7 +259,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        $product = $this->product->find($id);
         $request->validate([
             'name' => 'required|unique:products,name,'.$product->id,
             // 'product_code'=> 'required|unique:products,product_code,'.$product->id,
