@@ -245,6 +245,17 @@
                             </a>
                         </li>
                         @endif
+                        @if (\App\CPU\Helpers::module_permission_check('stock_section'))
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/tank*')?'active':''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link"
+                               href="{{route('admin.tank.list')}}">
+                                <i class="tio-warning nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    {{\App\CPU\translate('tank_list')}}
+                                </span>
+                            </a>
+                        </li>
+                        @endif
                         <?php
                         $modules = ['coupon_section', 'account_section'];
                         ?>
@@ -255,7 +266,7 @@
                             <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                         </li>
                         @endif
-                        @if (\App\CPU\Helpers::module_permission_check('coupon_section'))
+                        <!-- @if (\App\CPU\Helpers::module_permission_check('coupon_section'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/coupon*')?'active':''}}" hidden>
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                href="{{route('admin.coupon.add-new')}}">
@@ -263,8 +274,8 @@
                                 <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{\App\CPU\translate('coupons')}}</span>
                             </a>
                         </li>
-                        @endif
-                        @if (\App\CPU\Helpers::module_permission_check('account_section'))
+                        @endif -->
+                        <!-- @if (\App\CPU\Helpers::module_permission_check('account_section'))
                         <li class="navbar-vertical-aside-has-menu {{Request::is('admin/account*')?'active':''}}" hidden>
                             <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
                                 <i class="tio-wallet nav-icon"></i>
@@ -354,7 +365,7 @@
 
                             </ul>
                         </li>
-                        @endif
+                        @endif -->
                         
                         <?php
                         $modules = ['employee_role_section', 'employee_section'];

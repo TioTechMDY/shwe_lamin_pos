@@ -59,6 +59,20 @@
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label class="input-label"
+                                        for="exampleFormControlInput1">{{\App\CPU\translate('maximun_quantity')}}
+                                        <span class="input-label-secondary">*</span>
+                                    </label>
+                                    <input type="number" min="0" name="maximun" class="form-control"
+                                        value="{{ $tank['maximun'] }}" placeholder="{{\App\CPU\translate('maximun_quantity')}}"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pl-2">
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label class="input-label"
                                         for="exampleFormControlInput1">{{\App\CPU\translate('select_product')}}</label>
                                     <select class="form-control js-select2-custom" name="product_id" id="product_id">
                                         <option value="">---{{\App\CPU\translate('select')}}---</option>

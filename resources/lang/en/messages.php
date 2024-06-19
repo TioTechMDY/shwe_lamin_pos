@@ -955,4 +955,5 @@
   'Want to delete this tank' => 'Want to delete this tank',
   'Tank removed' => 'Tank removed',
   'update_tank' => 'Update tank',
+  'maximun_quantity' => 'Maximun quantity',
 );

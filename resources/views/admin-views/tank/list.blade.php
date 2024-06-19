@@ -38,6 +38,7 @@
                                 <th>{{\App\CPU\translate('name')}}</th>
                                 <th>{{\App\CPU\translate('image')}}</th>
                                 <th>{{\App\CPU\translate('quantity')}}</th>
+                                <th>{{\App\CPU\translate('maximun_quantity')}}</th>
                                 <th>{{ \App\CPU\translate('product') }}</th>
                                 <th>{{\App\CPU\translate('action')}}</th>
                             </tr>
@@ -56,7 +57,10 @@
                                     </td>
                                     <td>
                                         {{ $tank['quantity'] }}
-                                    </td>>
+                                    </td>
+                                    <td>
+                                        {{ $tank['maximun'] }}
+                                    </td>
                                     @if ($tank->product)
                                         <td> {{ $tank->product->name}}</td>
                                     @else

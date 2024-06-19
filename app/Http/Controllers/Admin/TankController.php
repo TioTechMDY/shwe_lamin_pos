@@ -109,6 +109,8 @@ class TankController extends Controller
         $tanks = $this->tank;
         $tanks->name = $request->name;
         $tanks->description = $request->description;
+        $tanks->maximun = $request->maximun;
+
 
         $tanks->image = Helpers::upload('tank/', 'png', $request->file('image'));
         $tanks->quantity = $request->quantity;
@@ -174,6 +176,7 @@ class TankController extends Controller
         $tank->description = $request->description;
 
         $tank->quantity = $request->quantity;
+        $tank->maximun = $request->maximun;
 
         $tank->image = $request->has('image') ? Helpers::update('tank/', $tank->image, 'png', $request->file('image')) : $tank->image;
         $tank->product_id = $request->product_id;
