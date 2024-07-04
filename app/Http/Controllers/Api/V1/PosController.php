@@ -63,7 +63,7 @@ class PosController extends Controller
             'total' => $productNews->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'products' => $productNews->items(),
+            'productnews' => $productNews->items(),
         ];
         return response()->json($data, 200);
     }
@@ -602,7 +602,7 @@ class PosController extends Controller
                 'total' => $productNews->total(),
                 'limit' => $limit,
                 'offset' => $offset,
-                'products' => $productNews->items(),
+                'productnews' => $productNews->items(),
             ];
         } else {
             $data = [
