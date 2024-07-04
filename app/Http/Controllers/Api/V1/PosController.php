@@ -6,6 +6,7 @@ use App\CPU\Helpers;
 use App\Models\Order;
 use App\Models\Account;
 use App\Models\Product;
+use App\Models\ProductNew;
 use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\Transection;
@@ -15,6 +16,8 @@ use App\Models\BusinessSetting;
 use function App\CPU\translate;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductsResource;
+use App\Http\Resources\ProductNewsResource;
+
 use Illuminate\Support\Facades\Validator;
 
 class PosController extends Controller
@@ -23,6 +26,7 @@ class PosController extends Controller
         private Order $order,
         private Account $account,
         private Product $product,
+        private ProductNew $productNew,
         private Customer $customer,
         private OrderDetail $order_detail,
         private Transection $transection,
@@ -45,6 +49,21 @@ class PosController extends Controller
             'limit' => $limit,
             'offset' => $offset,
             'products' => $products->items(),
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function getProductNewIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $productNew = $this->productNew->latest()->paginate($limit, ['*'], 'page', $offset);
+        $productNews = ProductNewsResource::collection($productNew);
+        $data = [
+            'total' => $productNews->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'products' => $productNews->items(),
         ];
         return response()->json($data, 200);
     }
@@ -382,6 +401,44 @@ class PosController extends Controller
         ], 200);
     }
 
+    public function storeProductNew(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:products',
+            'quantity' => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+
+        
+
+        $productNews = $this->productNew;
+        $productNews->name = $request->name;
+
+       
+
+        // $products->category_ids = json_encode($category);
+        // $products->purchase_price = $request->purchase_price;
+        // $products->selling_price = $request->selling_price;
+        // $products->unit_type = $request->unit_type;
+        // $products->unit_value = $request->unit_value;
+        // $products->brand = $request->brand;
+        // $products->discount_type = $request->discount_type;
+        // $products->discount = $request->discount ?? 0;
+        // $products->tax = $request->tax ?? 0;
+        // $products->order_count = 0;
+        $productNews->quantity = $request->quantity;
+        $productNews->image = Helpers::upload('product/', 'png', $request->file('image'));
+        // $products->supplier_id = $request->supplier_id;
+        $productNews->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Product saved successfully'),
+        ], 200);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -451,6 +508,54 @@ class PosController extends Controller
             'message' => translate('Product updated successfully'),
         ], 200);
     }
+    public function productNewUpdate(Request $request): JsonResponse
+    {
+        $productNew = $this->productNew->find($request->id);
+        $request->validate([
+            'id' => 'required',
+            'name' => 'required|unique:products,name,' . $productNew->id,
+            'quantity' => 'required|numeric|min:0',
+        ], [
+            'name.required' => translate('Product name is required'),
+        ]);
+
+        
+        $productNew->name = $request->name;
+        // $product->product_code = $request->product_code;
+
+        // $category = [];
+        // if ($request->category_id != null) {
+        //     $category[] = [
+        //         'id' => $request->category_id,
+        //         'position' => 1,
+        //     ];
+        // }
+        // if ($request->sub_category_id != null) {
+        //     $category[] = [
+        //         'id' => $request->sub_category_id,
+        //         'position' => 2,
+        //     ];
+        // }
+
+        // $product->category_ids = json_encode($category);
+
+        // $product->purchase_price = $request->purchase_price;
+        // $product->selling_price = $request->selling_price;
+        // $product->unit_type = $request->unit_type;
+        // $product->unit_value = $request->unit_value;
+        // $product->brand = $request->brand;
+        // $product->discount_type = $request->discount_type;
+        // $product->discount = $request->discount ?? 0;
+        // $product->tax = $request->tax ?? 0;
+        $productNew->quantity = $request->quantity;
+        $productNew->image = $request->has('image') ? Helpers::update('product/', $productNew->image, 'png', $request->file('image')) : $productNew->image;
+        // $product->supplier_id = $request->supplier_id;
+        $productNew->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Product updated successfully'),
+        ], 200);
+    }
 
     /**
      * @param Request $request
@@ -483,6 +588,32 @@ class PosController extends Controller
         }
         return response()->json($data, 200);
     }
+    public function getSearchNew(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $search = $request->name;
+        $stock_limit = $this->business_setting->where('key', 'stock_limit')->first()->value;
+
+        if (!empty($search)) {
+            $result = $this->productNew->latest()->paginate($limit, ['*'], 'page', $offset);
+            $productNews = ProductNewsResource::collection($result);
+            $data = [
+                'total' => $productNews->total(),
+                'limit' => $limit,
+                'offset' => $offset,
+                'products' => $productNews->items(),
+            ];
+        } else {
+            $data = [
+                'total' => 0,
+                'limit' => $limit,
+                'offset' => $offset,
+                'products' => [],
+            ];
+        }
+        return response()->json($data, 200);
+    }
 
     /**
      * @param Request $request
@@ -496,6 +627,27 @@ class PosController extends Controller
             $image_path = public_path('/storage/app/public/product/') . $product->image;
             if (!is_null($image_path)) {
                 $product->delete();
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'message' => translate('Product deleted successfully'),
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            return redirect()->back()->with('success', 'Product not deleted!');
+        }
+    }
+
+    public function deleteNew(Request $request): JsonResponse
+    {
+        try {
+            $productNew = $this->productNew->findOrFail($request->id);
+            $image_path = public_path('/storage/app/public/product/') . $productNew->image;
+            if (!is_null($image_path)) {
+                $productNew->delete();
                 if (file_exists($image_path)) {
                     unlink($image_path);
                 }

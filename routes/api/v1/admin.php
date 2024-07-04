@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\V1\IncomeController;
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\ExpenseController;
 use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ProductNewController;
+
 use App\Http\Controllers\Api\V1\SettingController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CustomerController;
@@ -184,6 +186,22 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('sort', [ProductController::class, 'productSort']);
             Route::get('popular/filter', [ProductController::class, 'popularProductSort']);
             Route::get('supplier/wise', [ProductController::class, 'supplierWiseProduct']);
+        });
+        Route::group(['prefix' => 'productnew'], function () {
+            Route::get('list', [PosController::class, 'getProductNewIndex']);
+            Route::post('store', [PosController::class, 'storeProductNew']);
+            Route::post('update', [PosController::class, 'productNewUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchNew']);
+            Route::get('code/search',  [ProductNewController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'deleteNew']);
+            Route::post('import', [ProductNewController::class, 'bulkImportData']); // will check later
+            Route::get('export', [ProductNewController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [ProductNewController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [ProductNewController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [ProductNewController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [ProductNewController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [ProductNewController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [ProductNewController::class, 'supplierWiseProduct']); // will check later
         });
     });
 });
