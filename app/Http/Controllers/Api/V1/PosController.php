@@ -6,6 +6,7 @@ use App\CPU\Helpers;
 use App\Models\Order;
 use App\Models\Account;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Models\ProductNew;
 use App\Models\Customer;
 use App\Models\OrderDetail;
@@ -16,6 +17,7 @@ use App\Models\BusinessSetting;
 use function App\CPU\translate;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductsResource;
+use App\Http\Resources\ShopsResource;
 use App\Http\Resources\ProductNewsResource;
 
 use Illuminate\Support\Facades\Validator;
@@ -26,6 +28,7 @@ class PosController extends Controller
         private Order $order,
         private Account $account,
         private Product $product,
+        private Shop $shop,
         private ProductNew $productNew,
         private Customer $customer,
         private OrderDetail $order_detail,
@@ -49,6 +52,20 @@ class PosController extends Controller
             'limit' => $limit,
             'offset' => $offset,
             'products' => $products->items(),
+        ];
+        return response()->json($data, 200);
+    }
+    public function getShopIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $shop = $this->shop->latest()->paginate($limit, ['*'], 'page', $offset);
+        $shops = ShopsResource::collection($shop);
+        $data = [
+            'total' => $shops->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'shops' => $shops->items(),
         ];
         return response()->json($data, 200);
     }
@@ -404,7 +421,7 @@ class PosController extends Controller
     public function storeProductNew(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:products',
+            'name' => 'required|unique:product_news',
             'quantity' => 'required|numeric|min:0',
         ]);
 
@@ -436,6 +453,31 @@ class PosController extends Controller
         return response()->json([
             'success' => true,
             'message' => translate('Product saved successfully'),
+        ], 200);
+    }
+
+    public function storeShop(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:shops',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+
+        
+
+        $shops = $this->shop;
+        $shops->name = $request->name;
+        $shops->phonenumber = $request->phonenumber ?? '';
+        $shops->description = $request->description ?? '';
+
+        $shops->image = Helpers::upload('product/', 'png', $request->file('image'));
+        $shops->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Shop saved successfully'),
         ], 200);
     }
 
@@ -557,6 +599,31 @@ class PosController extends Controller
         ], 200);
     }
 
+    public function shopUpdate(Request $request): JsonResponse
+    {
+        $shop = $this->shop->find($request->id);
+        $request->validate([
+            'id' => 'required',
+            'name' => 'required|unique:shops,name,' . $shop->id,
+        ], [
+            'name.required' => translate('Shop name is required'),
+        ]);
+
+        
+        $shop->name = $request->name;
+        
+        $shop->phonenumber = $request->phonenumber??'';
+        $shop->description = $request->description??'';
+
+
+        $shop->image = $request->has('image') ? Helpers::update('product/', $shop->image, 'png', $request->file('image')) : $shop->image;
+        $shop->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Shop updated successfully'),
+        ], 200);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -609,7 +676,33 @@ class PosController extends Controller
                 'total' => 0,
                 'limit' => $limit,
                 'offset' => $offset,
-                'products' => [],
+                'productnews' => [],
+            ];
+        }
+        return response()->json($data, 200);
+    }
+    public function getSearchShop(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $search = $request->name;
+        $stock_limit = $this->business_setting->where('key', 'stock_limit')->first()->value;
+
+        if (!empty($search)) {
+            $result = $this->productNew->latest()->paginate($limit, ['*'], 'page', $offset);
+            $shops = ShopsResource::collection($result);
+            $data = [
+                'total' => $shops->total(),
+                'limit' => $limit,
+                'offset' => $offset,
+                'shops' => $shops->items(),
+            ];
+        } else {
+            $data = [
+                'total' => 0,
+                'limit' => $limit,
+                'offset' => $offset,
+                'shops' => [],
             ];
         }
         return response()->json($data, 200);
@@ -659,6 +752,27 @@ class PosController extends Controller
         } catch (\Throwable $th) {
             throw $th;
             return redirect()->back()->with('success', 'Product not deleted!');
+        }
+    }
+
+    public function deleteShop(Request $request): JsonResponse
+    {
+        try {
+            $shop = $this->shop->findOrFail($request->id);
+            $image_path = public_path('/storage/app/public/product/') . $shop->image;
+            if (!is_null($image_path)) {
+                $shop->delete();
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'message' => translate('Shop deleted successfully'),
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            return redirect()->back()->with('success', 'Shop not deleted!');
         }
     }
 
