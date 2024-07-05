@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\ExpenseController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProductNewController;
 use App\Http\Controllers\Api\V1\ShopController;
+use App\Http\Controllers\Api\V1\TankController;
+
 
 use App\Http\Controllers\Api\V1\SettingController;
 use App\Http\Controllers\Api\V1\CategoryController;
@@ -207,8 +209,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'shop'], function () {
             Route::get('list', [PosController::class, 'getShopIndex']);
             Route::post('store', [PosController::class, 'storeShop']);
-            Route::post('update', [PosController::class, '
-            ']);
+            Route::post('update', [PosController::class, 'shopUpdate']);
             Route::get('search',  [PosController::class, 'getSearchShop']);
             Route::get('code/search',  [ShopController::class, 'codeSearch']);
             Route::get('delete', [PosController::class, 'deleteShop']);
@@ -220,6 +221,23 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('sort', [ShopController::class, 'productSort']); // will check later
             Route::get('popular/filter', [ShopController::class, 'popularProductSort']); // will check later
             Route::get('supplier/wise', [ShopController::class, 'supplierWiseProduct']); // will check later
+        });
+
+        Route::group(['prefix' => 'tank'], function () {
+            Route::get('list', [PosController::class, 'getTankIndex']);
+            Route::post('store', [PosController::class, 'storeTank']);
+            Route::post('update', [PosController::class, 'tankUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchTank']);
+            Route::get('code/search',  [TankController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'deleteTank']);
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
         });
     });
 });

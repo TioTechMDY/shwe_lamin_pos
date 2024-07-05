@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Tank;
+
 use App\Models\ProductNew;
 use App\Models\Customer;
 use App\Models\OrderDetail;
@@ -18,6 +20,8 @@ use function App\CPU\translate;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductsResource;
 use App\Http\Resources\ShopsResource;
+use App\Http\Resources\TanksResource;
+
 use App\Http\Resources\ProductNewsResource;
 
 use Illuminate\Support\Facades\Validator;
@@ -29,6 +33,7 @@ class PosController extends Controller
         private Account $account,
         private Product $product,
         private Shop $shop,
+        private Tank $tank,
         private ProductNew $productNew,
         private Customer $customer,
         private OrderDetail $order_detail,
@@ -66,6 +71,21 @@ class PosController extends Controller
             'limit' => $limit,
             'offset' => $offset,
             'shops' => $shops->items(),
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function getTankIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $tank = $this->tank->latest()->paginate($limit, ['*'], 'page', $offset);
+        $tanks = TanksResource::collection($tank);
+        $data = [
+            'total' => $tanks->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'tanks' => $tanks->items(),
         ];
         return response()->json($data, 200);
     }
@@ -481,6 +501,34 @@ class PosController extends Controller
         ], 200);
     }
 
+
+    public function storeTank(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            // 'name' => 'required|unique:tanks',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+
+        
+
+        $tanks = $this->tank;
+        $tanks->name = $request->name;
+        $tanks->total_quantity = $request->total_quantity ?? 0;
+        $tanks->description = $request->description ?? '';
+        $tanks->is_car = false;
+    
+
+        $tanks->image = Helpers::upload('product/', 'png', $request->file('image'));
+        $tanks->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Tank saved successfully'),
+        ], 200);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -555,7 +603,7 @@ class PosController extends Controller
         $productNew = $this->productNew->find($request->id);
         $request->validate([
             'id' => 'required',
-            'name' => 'required|unique:products,name,' . $productNew->id,
+            'name' => 'required|unique:product_news,name,' . $productNew->id,
             'quantity' => 'required|numeric|min:0',
         ], [
             'name.required' => translate('Product name is required'),
@@ -621,6 +669,30 @@ class PosController extends Controller
         return response()->json([
             'success' => true,
             'message' => translate('Shop updated successfully'),
+        ], 200);
+    }
+
+
+    public function tankUpdate(Request $request): JsonResponse
+    {
+        $tank = $this->tank->find($request->id);
+        $request->validate([
+            'id' => 'required',
+            // 'name' => 'required|unique:shops,name,' . $shop->id,
+        ], [
+            // 'name.required' => translate('Shop name is required'),
+        ]);
+
+        
+        $tank->name = $request->name;
+        $tank->total_quantity = $request->total_quantity??0;
+        $tank->description = $request->description??'';
+        $tank->is_car = false;
+        $tank->image = $request->has('image') ? Helpers::update('product/', $tank->image, 'png', $request->file('image')) : $tank->image;
+        $tank->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Tank updated successfully'),
         ], 200);
     }
 
@@ -708,6 +780,33 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
+    public function getSearchTank(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $search = $request->name;
+        $stock_limit = $this->business_setting->where('key', 'stock_limit')->first()->value;
+
+        if (!empty($search)) {
+            $result = $this->tank->latest()->paginate($limit, ['*'], 'page', $offset);
+            $tanks = TanksResource::collection($result);
+            $data = [
+                'total' => $tanks->total(),
+                'limit' => $limit,
+                'offset' => $offset,
+                'tanks' => $tanks->items(),
+            ];
+        } else {
+            $data = [
+                'total' => 0,
+                'limit' => $limit,
+                'offset' => $offset,
+                'tanks' => [],
+            ];
+        }
+        return response()->json($data, 200);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -773,6 +872,27 @@ class PosController extends Controller
         } catch (\Throwable $th) {
             throw $th;
             return redirect()->back()->with('success', 'Shop not deleted!');
+        }
+    }
+
+    public function deleteTank(Request $request): JsonResponse
+    {
+        try {
+            $tank = $this->tank->findOrFail($request->id);
+            $image_path = public_path('/storage/app/public/product/') . $tank->image;
+            if (!is_null($image_path)) {
+                $tank->delete();
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'message' => translate('Tank deleted successfully'),
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            return redirect()->back()->with('success', 'Tank not deleted!');
         }
     }
 
