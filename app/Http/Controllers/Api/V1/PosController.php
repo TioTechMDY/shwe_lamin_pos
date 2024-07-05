@@ -79,13 +79,27 @@ class PosController extends Controller
     {
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
-        $tank = $this->tank->latest()->paginate($limit, ['*'], 'page', $offset);
+        $tank = $this->tank->where('is_car',0)->latest()->paginate($limit, ['*'], 'page', $offset);
         $tanks = TanksResource::collection($tank);
         $data = [
             'total' => $tanks->total(),
             'limit' => $limit,
             'offset' => $offset,
             'tanks' => $tanks->items(),
+        ];
+        return response()->json($data, 200);
+    }
+    public function getCarIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $tank = $this->tank->where('is_car',1)->latest()->paginate($limit, ['*'], 'page', $offset);
+        $tanks = TanksResource::collection($tank);
+        $data = [
+            'total' => $tanks->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'cars' => $tanks->items(),
         ];
         return response()->json($data, 200);
     }
@@ -529,6 +543,39 @@ class PosController extends Controller
         ], 200);
     }
 
+    public function storeCar(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            // 'name' => 'required|unique:tanks',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+        }
+
+        
+
+        $tanks = $this->tank;
+        $tanks->name = $request->name;
+
+        $tanks->car_series = $request->car_series??'';
+        $tanks->car_type = $request->car_type?? '';
+        $tanks->driver_name = $request->driver_name ?? '';
+        $tanks->driver_phone_number = $request->driver_phone_number ?? '';
+
+        $tanks->total_quantity = $request->total_quantity ?? 0;
+        $tanks->description = $request->description ?? '';
+        $tanks->is_car = true;
+    
+
+        $tanks->image = Helpers::upload('product/', 'png', $request->file('image'));
+        $tanks->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Car saved successfully'),
+        ], 200);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse
@@ -688,6 +735,40 @@ class PosController extends Controller
         $tank->total_quantity = $request->total_quantity??0;
         $tank->description = $request->description??'';
         $tank->is_car = false;
+        $tank->image = $request->has('image') ? Helpers::update('product/', $tank->image, 'png', $request->file('image')) : $tank->image;
+        $tank->save();
+        return response()->json([
+            'success' => true,
+            'message' => translate('Tank updated successfully'),
+        ], 200);
+    }
+
+    public function carUpdate(Request $request): JsonResponse
+    {
+        $tank = $this->tank->find($request->id);
+        $request->validate([
+            'id' => 'required',
+            // 'name' => 'required|unique:shops,name,' . $shop->id,
+        ], [
+            // 'name.required' => translate('Shop name is required'),
+        ]);
+
+        
+        $tank->name = $request->name;
+        
+        $tank->car_series = $request->car_series??'';
+        $tank->car_type = $request->car_type??'';
+        $tank->driver_name = $request->driver_name??'';
+        $tank->driver_phone_number = $request->driver_phone_number??'';
+
+
+
+
+        
+
+        $tank->total_quantity = $request->total_quantity??0;
+        $tank->description = $request->description??'';
+        $tank->is_car = true;
         $tank->image = $request->has('image') ? Helpers::update('product/', $tank->image, 'png', $request->file('image')) : $tank->image;
         $tank->save();
         return response()->json([
@@ -889,6 +970,27 @@ class PosController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => translate('Tank deleted successfully'),
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+            return redirect()->back()->with('success', 'Tank not deleted!');
+        }
+    }
+
+    public function deleteCar(Request $request): JsonResponse
+    {
+        try {
+            $tank = $this->tank->findOrFail($request->id);
+            $image_path = public_path('/storage/app/public/product/') . $tank->image;
+            if (!is_null($image_path)) {
+                $tank->delete();
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'message' => translate('Car deleted successfully'),
             ], 200);
         } catch (\Throwable $th) {
             throw $th;
