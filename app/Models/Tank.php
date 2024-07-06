@@ -21,6 +21,11 @@ class Tank extends Model
         }
         return $path;
     }
+
+    public function product_news()
+    {
+        return $this->belongsToMany(ProductNew::class)->withPivot('quantity');
+    }
     /**
      * Get the user that owns the Product
      *
