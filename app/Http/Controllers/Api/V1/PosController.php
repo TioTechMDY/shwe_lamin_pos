@@ -99,7 +99,7 @@ class PosController extends Controller
             'total' => $tanks->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'cars' => $tanks->items(),
+            'tanks' => $tanks->items(),
         ];
         return response()->json($data, 200);
     }
