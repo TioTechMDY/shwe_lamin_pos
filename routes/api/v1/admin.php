@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\ProductNewController;
 use App\Http\Controllers\Api\V1\ShopController;
 use App\Http\Controllers\Api\V1\TankController;
+use App\Http\Controllers\Api\V1\TransactionNewController;
 
 
 use App\Http\Controllers\Api\V1\SettingController;
@@ -25,6 +26,8 @@ use App\Http\Controllers\Api\V1\EmployeeController;
 use App\Http\Controllers\Api\V1\CustomRoleController;
 use App\Http\Controllers\Api\V1\SubCategoryController;
 use App\Http\Controllers\Api\V1\TransactionController;
+
+
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'adminLogin']);
@@ -258,7 +261,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'transactionnew'], function () {
             Route::get('list', [PosController::class, 'getCarIndex']);//done
-            Route::post('store', [PosController::class, 'createTransaction']); //done
+            Route::post('store', [TransactionController::class, 'createTransaction']); //done
             Route::post('update', [PosController::class, 'carUpdate']); 
             Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
             Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
