@@ -256,6 +256,24 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
         });
 
+        Route::group(['prefix' => 'transactionnew'], function () {
+            Route::get('list', [PosController::class, 'getCarIndex']);//done
+            Route::post('store', [PosController::class, 'createTransaction']); //done
+            Route::post('update', [PosController::class, 'carUpdate']); 
+            Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
+            Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
+            Route::get('delete', [PosController::class, 'deleteCar']); //done
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
+        });
+
+
 
 
     });
