@@ -21,11 +21,14 @@ class Shop extends Model
         }
         return $path;
     }
+    // public function product_news()
+    // {
+    //     return $this->belongsToMany(ProductNew::class)->withPivot('quantity');
+    // }
     public function product_news()
     {
-        return $this->belongsToMany(ProductNew::class)->withPivot('quantity');
+        return $this->belongsToMany(ProductNew::class)->withPivot('quantity', 'transaction_id');
     }
-
 
 
     /**

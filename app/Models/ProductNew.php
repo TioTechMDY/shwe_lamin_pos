@@ -24,13 +24,23 @@ class ProductNew extends Model
 
     public function shops()
     {
-        return $this->belongsToMany(Shop::class)->withPivot('quantity');
+        return $this->belongsToMany(Shop::class)->withPivot('quantity', 'transaction_id');
     }
 
     public function tanks()
     {
-        return $this->belongsToMany(Tank::class)->withPivot('quantity');
+        return $this->belongsToMany(Tank::class)->withPivot('quantity', 'transaction_id');
     }
+
+    // public function shops()
+    // {
+    //     return $this->belongsToMany(Shop::class)->withPivot('quantity');
+    // }
+
+    // public function tanks()
+    // {
+    //     return $this->belongsToMany(Tank::class)->withPivot('quantity');
+    // }
     /**
      * Get the user that owns the Product
      *

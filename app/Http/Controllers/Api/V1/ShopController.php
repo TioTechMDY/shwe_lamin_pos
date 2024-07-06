@@ -29,6 +29,16 @@ class ShopController extends Controller
         private BusinessSetting $businessSetting
     ){}
 
+    public function getProducts($shopId)
+    {
+        // Retrieve the shop with its related products and their quantities
+        $shop = Shop::with(['product_news' => function($query) {
+            $query->select('product_news.id', 'product_news.name')
+                  ->withPivot('quantity');
+        }])->findOrFail($shopId);
+
+        return response()->json($shop->products, 200);
+    }
     /**
      * @param Request $request
      * @return JsonResponse
