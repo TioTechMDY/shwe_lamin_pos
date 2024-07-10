@@ -245,7 +245,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'car'], function () {
             Route::get('list', [PosController::class, 'getCarIndex']);//done
             Route::post('store', [PosController::class, 'storeCar']); //done
-            Route::post('update', [PosController::class, 'carUpdate']); 
+            Route::post('update', [PosController::class, 'carUpdate']);
             Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
             Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
             Route::get('delete', [PosController::class, 'deleteCar']); //done
@@ -261,8 +261,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'transactionnew'], function () {
             Route::get('list', [PosController::class, 'getCarIndex']);//done
-            Route::post('store', [TransactionController::class, 'createTransaction']); //done
-            Route::post('update', [PosController::class, 'carUpdate']); 
+            Route::post('store', [TransactionNewController::class, 'createTransaction']); //done
+            Route::post('update', [PosController::class, 'carUpdate']);
             Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
             Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
             Route::get('delete', [PosController::class, 'deleteCar']); //done
