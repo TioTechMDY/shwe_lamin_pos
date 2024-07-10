@@ -28,7 +28,12 @@ class TransactionNewController extends Controller
     ){}
     public function createTransaction(Request $request)
     {
-        $products = $request->input('products');
+
+        $productRaw = $request->input('products');
+        $products = json_decode($productRaw, true);
+        if (!is_array($products)) {
+            return response()->json(['error' => $products], 400);
+        }
 
         // Create a new transaction
         $transactionNew = TransactionNew::create(['tag' => 'PO']);
@@ -38,9 +43,9 @@ class TransactionNewController extends Controller
             $productNew = ProductNew::find($item['product_id']);
 
             // Check if the product is already attached to the shop
-            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
+            if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {
                 // Retrieve the current quantity
-                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
+                $currentQuantity = $shop->product_news()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
 
                 // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $item['quantity'];
@@ -52,7 +57,7 @@ class TransactionNewController extends Controller
                 ]);
             } else {
                 // If the product is not attached, attach it with the specified quantity
-                $shop->products()->attach($productNew->id, [
+                $shop->product_news()->attach($productNew->id, [
                     'quantity' => $item['quantity'],
                     'transaction_new_id' => $transactionNew->id
                 ]);
