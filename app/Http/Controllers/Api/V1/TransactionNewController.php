@@ -19,7 +19,7 @@ use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use function App\CPU\translate;
 
-class TransactionController extends Controller
+class TransactionNewController extends Controller
 {
     public function __construct(
         private TransactionNew $transactionNew,
