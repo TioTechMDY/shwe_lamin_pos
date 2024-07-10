@@ -26,263 +26,93 @@ class TransactionController extends Controller
         private ProductNew $productNew,
         private Tank $tank,
     ){}
-
-
     public function createTransaction(Request $request)
     {
-        // Example request structure
-        // {
-        //     "products": [
-        //         {
-        //             "shop_id": 2,
-        //             "product_id": 1,
-        //             "quantity": 10
-        //         },
-        //         {
-        //             "shop_id": 3,
-        //             "product_id": 1,
-        //             "quantity": 5
-        //         }
-        //     ]
-        // }
-
         $products = $request->input('products');
 
         // Create a new transaction
-        $transaction = TransactionNew::create(['tag' => 'PO']);
+        $transactionNew = TransactionNew::create(['tag' => 'PO']);
 
         foreach ($products as $item) {
             $shop = Shop::find($item['shop_id']);
-            $product = ProductNew::find($item['product_id']);
+            $productNew = ProductNew::find($item['product_id']);
 
             // Check if the product is already attached to the shop
-            if ($shop->products()->where('product_id', $product->id)->exists()) {
+            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
                 // Retrieve the current quantity
-                $currentQuantity = $shop->products()->where('product_id', $product->id)->first()->pivot->quantity;
+                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
 
                 // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $item['quantity'];
 
                 // Update the pivot table
-                $shop->products()->updateExistingPivot($product->id, [
+                $shop->product_news()->updateExistingPivot($productNew->id, [
                     'quantity' => $newQuantity,
-                    'transaction_id' => $transaction->id
+                    'transaction_new_id' => $transactionNew->id
                 ]);
             } else {
                 // If the product is not attached, attach it with the specified quantity
-                $shop->products()->attach($product->id, [
+                $shop->products()->attach($productNew->id, [
                     'quantity' => $item['quantity'],
-                    'transaction_id' => $transaction->id
+                    'transaction_new_id' => $transactionNew->id
                 ]);
             }
         }
 
-        return response()->json($transaction->load('shopProducts'), 200);
+        return response()->json($transactionNew->load('shopProducts'), 200);
     }
-    // public function getIndex(Request $request)
-    // {
-    //     $transactions = $this->transection->latest()->paginate($request['limit'], ['*'], 'page', $request['offset']);
-    //     $data = [
-    //         'total' => $transactions->total(),
-    //         'limit' => $request['limit'],
-    //         'offset' => $request['offset'],
-    //         'transactions' => $transactions
-    //     ];
-    //     return response()->json($data, 200);
-    // }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param Request $request
-    //  * @param Transection $transaction
-    //  * @return JsonResponse
-    //  */
-    // public function storeExpenses(Request $request, Transection $transaction): JsonResponse
-    // {
-    //     $request->validate([
-    //         'account_id' => 'required',
-    //         'description' => 'required',
-    //         'amount' => 'required|min:1',
-    //     ]);
-    //     try {
-    //         $account = $this->account->find($request->account_id);
-    //         if ($account->balance < $request->amount) {
-    //             return response()->json(['success' => false, 'message' => translate('You do not have sufficient balance')], 400);
-    //         }
-    //         $transaction->tran_type = "Expense";
-    //         $transaction->account_id = $request->account_id;
-    //         $transaction->amount = $request->amount;
-    //         $transaction->description = $request->description;
-    //         $transaction->debit = 0;
-    //         $transaction->credit = 0;
-    //         $transaction->date = $request->date;
-    //         $transaction->save();
+//    public function createTransaction(Request $request)
+//    {
+//        // Example request structure
+//        // {
+//        //     "products": [
+//        //         {
+//        //             "shop_id": 2,
+//        //             "product_id": 1,
+//        //             "quantity": 10
+//        //         },
+//        //         {
+//        //             "shop_id": 3,
+//        //             "product_id": 1,
+//        //             "quantity": 5
+//        //         }
+//        //     ]
+//        // }
+//
+//        $products = $request->input('products');
+//
+//        // Create a new transaction
+//        $transactionNew = TransactionNew::create(['tag' => 'PO']);
+//
+//        foreach ($products as $item) {
+//            $shop = Shop::find($item['shop_id']);
+//            $productNew = ProductNew::find($item['product_id']);
+//
+//            // Check if the product is already attached to the shop
+//            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
+//                // Retrieve the current quantity
+//                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
+//
+//                // Increment the quantity by the specified amount
+//                $newQuantity = $currentQuantity + $item['quantity'];
+//
+//                // Update the pivot table
+//                $shop->product_news()->updateExistingPivot($productNew->id, [
+//                    'quantity' => $newQuantity,
+//                    'transaction_new_id' => $transactionNew->id
+//                ]);
+//            } else {
+//                // If the product is not attached, attach it with the specified quantity
+//                $shop->products()->attach($productNew->id, [
+//                    'quantity' => $item['quantity'],
+//                    'transaction_new_id' => $transactionNew->id
+//                ]);
+//            }
+//        }
+//
+//        return response()->json($transactionNew->load('shopProducts'), 200);
+//    }
 
-    //         $account->total_out = $account->total_out + $request->amount;
-    //         $account->balance = $account->balance - $request->amount;
-    //         $account->save();
 
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => translate('Expenses saved successfully'),
-    //         ], 200);
-    //     } catch (\Throwable $th) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => translate('Expenses not saved')
-    //         ], 403);
-    //     }
-    // }
-
-    // /**
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  */
-    // public function fundTransfer(Request $request): JsonResponse
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'account_from_id' => 'required',
-    //         'account_to_id' => 'required',
-    //         'description' => 'required',
-    //         'amount' => 'required|min:1',
-    //         'date' => 'required',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['errors' => Helpers::error_processor($validator)], 403);
-    //     }
-
-    //     $accountFrom = Account::find($request->account_from_id);
-    //     if ($accountFrom->balance < $request->amount) {
-    //         return response()->json([
-    //             'message' => translate('You have not sufficient balance'),
-    //         ], 203);
-    //     }
-    //     $transaction = new Transection();
-    //     $transaction->tran_type = 'Transfer';
-    //     $transaction->account_id = $request->account_from_id;
-    //     $transaction->amount = $request->amount;
-    //     $transaction->description = $request->description;
-    //     $transaction->debit = 1;
-    //     $transaction->credit = 0;
-    //     $transaction->balance = $accountFrom->balance - $request->amount;
-    //     $transaction->date = $request->date;
-    //     $transaction->save();
-
-    //     $accountFrom->total_out = $accountFrom->total_out + $request->amount;
-    //     $accountFrom->balance = $accountFrom->balance - $request->amount;
-    //     $accountFrom->save();
-
-    //     $accountTo = Account::find($request->account_to_id);
-    //     $transaction = new Transection();
-    //     $transaction->tran_type = 'Transfer';
-    //     $transaction->account_id = $request->account_to_id;
-    //     $transaction->amount = $request->amount;
-    //     $transaction->description = $request->description;
-    //     $transaction->debit = 0;
-    //     $transaction->credit = 1;
-    //     $transaction->balance = $accountTo->balance + $request->amount;
-    //     $transaction->date = $request->date;
-    //     $transaction->save();
-
-    //     $accountTo->total_in = $accountTo->total_in + $request->amount;
-    //     $accountTo->balance = $accountTo->balance + $request->amount;
-    //     $accountTo->save();
-
-    //     return response()->json([
-    //         'message' => translate('New Deposit Added successfully'),
-    //     ], 200);
-    // }
-
-    // /**
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  */
-    // public function transactionFilter(Request $request): JsonResponse
-    // {
-    //     $limit = $request['limit'] ?? 10;
-    //     $offset = $request['offset'] ?? 1;
-    //     $transactions = $this->transection->when($request->has('account_id'), function ($query) use ($request) {
-    //         $query->where('account_id', $request->account_id);
-    //     })->when($request->has('tran_type'), function ($query) use ($request) {
-    //         $query->where('tran_type', $request->tran_type);
-    //     })->when($request->has('from') && $request->has('to'), function ($query) use ($request) {
-    //         $query->whereBetween('date', [$request->from . ' 00:00:00', $request->to . ' 23:59:59']);
-    //     })->latest()->paginate($request['limit'], ['*'], 'page', $request['offset']);
-    //     $data = [
-    //         'total' => $transactions->total(),
-    //         'limit' => $limit,
-    //         'offset' => $offset,
-    //         'transfers' => $transactions->items()
-    //     ];
-    //     return response()->json($data, 200);
-    // }
-
-    // /**
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  */
-    // public function transferAccounts(Request $request): JsonResponse
-    // {
-
-    //     $limit = $request['limit'] ?? 10;
-    //     $offset = $request['offset'] ?? 1;
-    //     if (isset($request->customer_balance)) {
-    //         $accounts = $this->account->orderBy('id')->where('id', '!=', 2)->where('id', '!=', 3)->paginate($request['limit'], ['*'], 'page', $request['offset']);
-    //         $data = [
-    //             'limit' => $limit,
-    //             'offset' => $offset,
-    //             'accounts' => $accounts->items(),
-    //             'customer_balance' => [
-    //                 'id' => 0,
-    //                 'account' => 'Customer Balance'
-    //             ]
-    //         ];
-    //     } else {
-    //         $accounts = $this->account->orderBy('id')->where('id', '!=', 2)->where('id', '!=', 3)->latest()->paginate($request['limit'], ['*'], 'page', $request['offset']);
-    //         $data = [
-    //             'total' => $accounts->total(),
-    //             'limit' => $limit,
-    //             'offset' => $offset,
-    //             'accounts' => $accounts->items(),
-    //         ];
-    //     }
-    //     return response()->json($data, 200);
-    // }
-
-    // /**
-    //  * @param Request $request
-    //  * @return string|StreamedResponse
-    //  * @throws IOException
-    //  * @throws InvalidArgumentException
-    //  * @throws UnsupportedTypeException
-    //  * @throws WriterNotOpenedException
-    //  */
-    // public function transferListExport(Request $request): StreamedResponse|string
-    // {
-    //     if ($request->account_id) {
-    //         $transactions = $this->transection->where('account_id', $request->account_id)->latest()->get();
-    //     } elseif ($request->transaction_type) {
-    //         $transactions = $this->transection->where('tran_type', $request->transaction_type)->latest()->get();
-    //     } elseif ($request->from && $request->to) {
-    //         $transactions = $this->transection->whereBetween('date', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->latest()->get();
-    //     } else {
-    //         $transactions = $this->transection->where('tran_type', 'Transfer')->get();
-    //     }
-    //     return (new FastExcel($transactions))->download('transactions_list.xlsx');
-    // }
-
-    // /**
-    //  * @param Request $request
-    //  * @return JsonResponse
-    //  */
-    // public function transactionTypes(Request $request): JsonResponse
-    // {
-    //     $types = $this->transection->select('id', 'tran_type')->groupBy('tran_type')->get();
-    //     $data = [
-    //         'types' => $types
-    //     ];
-    //     return response()->json($data, 200);
-    // }
 }

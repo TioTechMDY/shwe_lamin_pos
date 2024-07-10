@@ -13,6 +13,6 @@ class TransactionNew extends Model
 
     public function shopProductNews()
     {
-        return $this->hasManyThrough(ProductNew::class, Shop::class, 'transaction_id', 'product_id', 'id', 'id');
+        return $this->hasManyThrough(ProductNew::class, Shop::class, 'transaction_new_id', 'product_new_id', 'id', 'id');
     }
 }

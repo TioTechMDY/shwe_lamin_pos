@@ -24,12 +24,12 @@ class ProductNew extends Model
 
     public function shops()
     {
-        return $this->belongsToMany(Shop::class)->withPivot('quantity', 'transaction_id');
+        return $this->belongsToMany(Shop::class)->withPivot('quantity', 'transaction_new_id');
     }
 
     public function tanks()
     {
-        return $this->belongsToMany(Tank::class)->withPivot('quantity', 'transaction_id');
+        return $this->belongsToMany(Tank::class)->withPivot('quantity', 'transaction_new_id');
     }
 
     // public function shops()
