@@ -36,7 +36,10 @@ class TransactionNewController extends Controller
         }
 
         // Create a new transaction
-        $transactionNew = TransactionNew::create(['tag' => 'PO']);
+        $tag = $request->input('tag'); // Get the tag from the request
+
+
+        $transactionNew = TransactionNew::create(['tag' => $tag]);
 
         foreach ($products as $item) {
             $shop = Shop::find($item['shop_id']);
