@@ -24,7 +24,7 @@ class Tank extends Model
 
     public function product_news()
     {
-        return $this->belongsToMany(ProductNew::class)->withPivot('quantity');
+        return $this->belongsToMany(ProductNew::class)->withPivot('quantity','absolute','transaction_new_id');
     }
     /**
      * Get the user that owns the Product
