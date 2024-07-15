@@ -46,6 +46,7 @@ class TransactionNewController extends Controller
             $productNew = ProductNew::find($item['product_id']);
             $shop->product_news()->attach($productNew->id, [
                 'quantity' => $item['quantity'],
+                'absolute' => $item['quantity'],
                 'transaction_new_id' => $transactionNew->id
             ]);
 
