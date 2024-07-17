@@ -62,7 +62,7 @@ class TransactionNewsResource extends JsonResource
                         ->first();
 
                     return [
-                        'id' => $productNew->pivot->id,
+                        'id' => $this->id,
                         'product_new_id' => $productNew->id,
                         'product_new_title' => $productNew->name,
                         'shop_id' => $shop->shop_id,
