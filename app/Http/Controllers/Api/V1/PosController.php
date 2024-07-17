@@ -115,13 +115,14 @@ class PosController extends Controller
 //        $transactionNews = TransactionNewsResource::collection($transactionNew);
 
 
-        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate(10);
+        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit);
+        $transactionNewsCollections = TransactionNewsResource::collection($transactionNews);
 //        return new TransactionNewsResource($transactionNews);
         $data = [
             'total' => $transactionNews->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'transactionNews' => $transactionNews->items(),
+            'transactionNews' => $transactionNewsCollections->items(),
         ];
         return response()->json($data, 200);
     }
