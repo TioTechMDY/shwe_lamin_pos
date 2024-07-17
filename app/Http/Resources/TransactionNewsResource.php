@@ -26,6 +26,27 @@ class TransactionNewsResource extends JsonResource
 //            }),
 //        ];
 //    }
+//    public function toArray($request)
+//    {
+//        return [
+//            'id' => $this->id,
+//            'name' => $this->tag,
+//            'details' => $this->whenLoaded('productNews', function () {
+//                return $this->productNews->map(function ($productNew) {
+//                    return [
+//                        'id' => $productNew->pivot->id,
+//                        'product_new_id' => $productNew->id,
+//                        'product_new_title' => $productNew->name,
+//                        'shop_id' => $productNew->pivot->shop_id,
+//                        'shop_title' => $this->shops->firstWhere('id', $productNew->pivot->shop_id)->name,
+//                        'quantity' => $productNew->pivot->quantity,
+//                        'absolute' => $productNew->pivot->absolute,
+//                    ];
+//                });
+//            }),
+//        ];
+//    }
+
     public function toArray($request)
     {
         return [

@@ -111,8 +111,12 @@ class PosController extends Controller
     {
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
-        $transactionNew = $this->transactionNew->latest()->paginate($limit, ['*'], 'page', $offset);
-        $transactionNews = TransactionNewsResource::collection($transactionNew);
+//        $transactionNew = $this->transactionNew->latest()->paginate($limit, ['*'], 'page', $offset);
+//        $transactionNews = TransactionNewsResource::collection($transactionNew);
+
+
+        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate(10);
+//        return new TransactionNewsResource($transactionNews);
         $data = [
             'total' => $transactionNews->total(),
             'limit' => $limit,
