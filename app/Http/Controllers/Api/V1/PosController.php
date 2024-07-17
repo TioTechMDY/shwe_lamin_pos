@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\CPU\Helpers;
+use App\Http\Resources\TransactionNewsResource;
 use App\Models\Order;
 use App\Models\Account;
 use App\Models\Product;
@@ -12,6 +13,7 @@ use App\Models\Tank;
 use App\Models\ProductNew;
 use App\Models\Customer;
 use App\Models\OrderDetail;
+use App\Models\TransactionNew;
 use App\Models\Transection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,10 +37,11 @@ class PosController extends Controller
         private Shop $shop,
         private Tank $tank,
         private ProductNew $productNew,
+        private TransactionNew $transactionNew,
         private Customer $customer,
         private OrderDetail $order_detail,
         private Transection $transection,
-        private BusinessSetting $business_setting
+        private BusinessSetting $business_setting,
     ){}
     /**
      * Display a listing of the resource.
@@ -100,6 +103,21 @@ class PosController extends Controller
             'limit' => $limit,
             'offset' => $offset,
             'tanks' => $tanks->items(),
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function getTransactionIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $transactionNew = $this->transactionNew->latest()->paginate($limit, ['*'], 'page', $offset);
+        $transactionNews = TransactionNewsResource::collection($transactionNew);
+        $data = [
+            'total' => $transactionNews->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'transactionNews' => $transactionNews->items(),
         ];
         return response()->json($data, 200);
     }
@@ -463,12 +481,12 @@ class PosController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        
+
 
         $productNews = $this->productNew;
         $productNews->name = $request->name;
 
-       
+
 
         // $products->category_ids = json_encode($category);
         // $products->purchase_price = $request->purchase_price;
@@ -500,7 +518,7 @@ class PosController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        
+
 
         $shops = $this->shop;
         $shops->name = $request->name;
@@ -526,14 +544,14 @@ class PosController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        
+
 
         $tanks = $this->tank;
         $tanks->name = $request->name;
         $tanks->total_quantity = $request->total_quantity ?? 0;
         $tanks->description = $request->description ?? '';
         $tanks->is_car = false;
-    
+
 
         $tanks->image = Helpers::upload('product/', 'png', $request->file('image'));
         $tanks->save();
@@ -553,7 +571,7 @@ class PosController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        
+
 
         $tanks = $this->tank;
         $tanks->name = $request->name;
@@ -566,7 +584,7 @@ class PosController extends Controller
         $tanks->total_quantity = $request->total_quantity ?? 0;
         $tanks->description = $request->description ?? '';
         $tanks->is_car = true;
-    
+
 
         $tanks->image = Helpers::upload('product/', 'png', $request->file('image'));
         $tanks->save();
@@ -656,7 +674,7 @@ class PosController extends Controller
             'name.required' => translate('Product name is required'),
         ]);
 
-        
+
         $productNew->name = $request->name;
         // $product->product_code = $request->product_code;
 
@@ -704,9 +722,9 @@ class PosController extends Controller
             'name.required' => translate('Shop name is required'),
         ]);
 
-        
+
         $shop->name = $request->name;
-        
+
         $shop->phonenumber = $request->phonenumber??'';
         $shop->description = $request->description??'';
 
@@ -730,7 +748,7 @@ class PosController extends Controller
             // 'name.required' => translate('Shop name is required'),
         ]);
 
-        
+
         $tank->name = $request->name;
         $tank->total_quantity = $request->total_quantity??0;
         $tank->description = $request->description??'';
@@ -753,9 +771,9 @@ class PosController extends Controller
             // 'name.required' => translate('Shop name is required'),
         ]);
 
-        
+
         $tank->name = $request->name;
-        
+
         $tank->car_series = $request->car_series??'';
         $tank->car_type = $request->car_type??'';
         $tank->driver_name = $request->driver_name??'';
@@ -764,7 +782,7 @@ class PosController extends Controller
 
 
 
-        
+
 
         $tank->total_quantity = $request->total_quantity??0;
         $tank->description = $request->description??'';

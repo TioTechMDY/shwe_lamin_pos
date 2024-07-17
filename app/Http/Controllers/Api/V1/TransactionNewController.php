@@ -72,7 +72,11 @@ class TransactionNewController extends Controller
 //            }
         }
 
-        return response()->json($transactionNew->load('shopProducts'), 200);
+//        return response()->json($transactionNew->load('shopProductNews'), 200);
+        return response()->json([
+            'success' => true,
+            'message' => translate('Expenses saved successfully'),
+        ], 200);
     }
 
 //    public function createTransaction(Request $request)
