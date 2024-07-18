@@ -115,7 +115,9 @@ class PosController extends Controller
 //        $transactionNews = TransactionNewsResource::collection($transactionNew);
 
 
-        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit);
+//        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit);
+        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit, ['*'], 'page', $offset);
+
         $transactionNewsCollections = TransactionNewsResource::collection($transactionNews);
 //        return new TransactionNewsResource($transactionNews);
         $data = [
