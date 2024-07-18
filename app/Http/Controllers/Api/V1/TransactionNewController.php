@@ -46,6 +46,7 @@ class TransactionNewController extends Controller
             $productNew = ProductNew::find($item['product_id']);
             $shop->product_news()->attach($productNew->id, [
                 'quantity' => $item['quantity'],
+                'absolute' => $item['quantity'],
                 'transaction_new_id' => $transactionNew->id
             ]);
 
@@ -71,7 +72,11 @@ class TransactionNewController extends Controller
 //            }
         }
 
-        return response()->json($transactionNew->load('shopProducts'), 200);
+//        return response()->json($transactionNew->load('shopProductNews'), 200);
+        return response()->json([
+            'success' => true,
+            'message' => translate('Expenses saved successfully'),
+        ], 200);
     }
 
 //    public function createTransaction(Request $request)
