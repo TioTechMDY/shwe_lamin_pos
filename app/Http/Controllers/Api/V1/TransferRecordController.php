@@ -54,7 +54,11 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
         }
 
-        return response()->json($transferRecord->load('productNews'), 201);
+//        return response()->json($transferRecord->load('productNews'), 201);
+        return response()->json([
+            'success' => true,
+            'message' => translate('Transfer Record saved successfully'),
+        ], 200);
     }
 
 
