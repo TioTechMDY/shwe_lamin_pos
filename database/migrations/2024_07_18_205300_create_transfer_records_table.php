@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('transfer_records', function (Blueprint $table) {
             $table->id();
-            $table->int('from_id');
-            $table->int('to_id');
-            $table->int('from_type');
-            $table->int('to_type');
+            $table->integer('from_id');
+            $table->integer('to_id');
+            $table->integer('from_type');
+            $table->integer('to_type');
             $table->timestamps();
         });
     }
