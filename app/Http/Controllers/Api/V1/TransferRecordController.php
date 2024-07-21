@@ -6,7 +6,7 @@ use App\CPU\Helpers;
 use App\Models\ProductNew;
 use App\Models\Shop;
 use App\Models\Tank;
-use App\Models\TransactionNew;
+use App\Models\TransferRecord;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
@@ -22,7 +22,7 @@ use function App\CPU\translate;
 class TransferRecordController extends Controller
 {
     public function __construct(
-        private TransactionNew $transactionNew,
+        private TransferRecord $transferRecord,
         private ProductNew $productNew,
         private Tank $tank,
     ){}
