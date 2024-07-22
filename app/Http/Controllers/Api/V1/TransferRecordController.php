@@ -31,10 +31,10 @@ class TransferRecordController extends Controller
     {
 
 //        {
-//            "sender": "John Doe",
-//    "receiver": "Jane Doe",
-//    "sender_type": "PO",
-//    "receiver_type": "Car",
+//            "from_id": 2,
+//    "to_id": 1,
+//    "from_type": 1,
+//    "to_type": 2,
 //    "product_news": [
 //        {
 //            "product_new_id": 1,

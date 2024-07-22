@@ -279,7 +279,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         Route::group(['prefix' => 'transferrecord'], function () {
-            Route::get('list', [PosController::class, 'getTransactionIndex']);//done
+            Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
             Route::post('store', [TransferRecordController::class, 'createTransferRecord']); //done
             Route::post('update', [PosController::class, 'carUpdate']);
             Route::get('search',  [PosController::class, 'getSearchCar']); // will get later

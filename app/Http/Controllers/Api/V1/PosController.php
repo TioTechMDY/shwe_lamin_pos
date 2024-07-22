@@ -15,6 +15,7 @@ use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\TransactionNew;
 use App\Models\Transection;
+use App\Models\TransferRecord;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\BusinessSetting;
@@ -38,6 +39,7 @@ class PosController extends Controller
         private Tank $tank,
         private ProductNew $productNew,
         private TransactionNew $transactionNew,
+        private TransferRecord $transferRecord,
         private Customer $customer,
         private OrderDetail $order_detail,
         private Transection $transection,
@@ -129,6 +131,43 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
+//    public function getTransferRecordIndex(Request $request): JsonResponse
+//    {
+//        $limit = $request['limit'] ?? 10;
+//        $offset = $request['offset'] ?? 1;
+//
+//
+//        $transferRecord= TransactionNew::with(['productNews', 'shops'])->paginate($limit, ['*'], 'page', $offset);
+//
+//        $transferRecordsCollections = TransactionNewsResource::collection($transferRecord);
+////        return new TransactionNewsResource($transactionNews);
+//        $data = [
+//            'total' => $transferRecord->total(),
+//            'limit' => $limit,
+//            'offset' => $offset,
+//            'transactionNews' => $transferRecordsCollections->items(),
+//        ];
+//        return response()->json($data, 200);
+//    }
+
+    public function getTransferRecordIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+
+//        $transferRecords = $this->transferRecord->with('productNews')->paginate($limit, ['*'], 'page', $offset);
+
+        $transferRecords = TransferRecord::with(['productNews'])->paginate($limit, ['*'], 'page', $offset);
+
+        $transferRecordsCollections = TransferRecordResource::collection($transferRecords);
+        $data = [
+            'total' => $transferRecords->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'transferRecords' => $transferRecordsCollections->items(),
+        ];
+        return response()->json($data, 200);
+    }
     public function getProductNewIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
