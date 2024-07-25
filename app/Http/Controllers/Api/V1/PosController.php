@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\CPU\Helpers;
-use App\Http\Resources\TransactionNewsResource;
 use App\Models\Order;
 use App\Models\Account;
 use App\Models\Product;
@@ -24,6 +23,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductsResource;
 use App\Http\Resources\ShopsResource;
 use App\Http\Resources\TanksResource;
+use App\Http\Resources\TransactionNewsResource;
+
+use App\Http\Resources\TransferRecordResource;
 
 use App\Http\Resources\ProductNewsResource;
 
@@ -85,6 +87,20 @@ class PosController extends Controller
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
         $tank = $this->tank->where('is_car',0)->latest()->paginate($limit, ['*'], 'page', $offset);
+        $tanks = TanksResource::collection($tank);
+        $data = [
+            'total' => $tanks->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'tanks' => $tanks->items(),
+        ];
+        return response()->json($data, 200);
+    }
+    public function getAllTankIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+        $tank = $this->tank->latest()->paginate($limit, ['*'], 'page', $offset);
         $tanks = TanksResource::collection($tank);
         $data = [
             'total' => $tanks->total(),

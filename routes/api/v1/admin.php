@@ -230,6 +230,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'tank'], function () {
             Route::get('list', [PosController::class, 'getTankIndex']);
+            Route::get('alllist', [PosController::class, 'getAllTankIndex']);
             Route::post('store', [PosController::class, 'storeTank']);
             Route::post('update', [PosController::class, 'tankUpdate']);
             Route::get('search',  [PosController::class, 'getSearchTank']);
