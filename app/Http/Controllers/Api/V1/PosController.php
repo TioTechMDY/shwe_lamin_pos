@@ -143,7 +143,7 @@ class PosController extends Controller
                     'title' => $product->name,
                     'quantity' => $product->pivot->quantity,
                 ];
-            }),
+            })>unique('product_new_id')->values(),
         ];
 
         return response()->json($data);

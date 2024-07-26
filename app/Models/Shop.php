@@ -30,6 +30,13 @@ class Shop extends Model
         return $this->belongsToMany(ProductNew::class)->withPivot('quantity','absolute', 'transaction_new_id');
     }
 
+    public function productNews()
+    {
+        return $this->belongsToMany(ProductNew::class, 'product_news_shop')
+            ->withPivot('quantity')
+            ->orderBy('id', 'desc')
+            ->withTimestamps();
+    }
 
     /**
      * Get the user that owns the Product
