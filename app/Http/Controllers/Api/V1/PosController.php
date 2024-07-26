@@ -137,13 +137,13 @@ class PosController extends Controller
         $data = [
             'id' => $shop->id,
             'title' => $shop->name,
-            'productnews' => $shop->productNews->map(function ($product) {
+            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($product) {
                 return [
                     'id' => $product->id,
                     'title' => $product->name,
                     'quantity' => $product->pivot->quantity,
                 ];
-            })>unique('product_new_id')->values(),
+            })->values(),
         ];
 
         return response()->json($data);
