@@ -125,10 +125,36 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
+//    public function getShopWithProducts(Request $request)
+//    {
+//        $shop_id = $request->input('shop_id');
+//        $shop = Shop::with('productNews')->find($shop_id);
+//
+//        if (!$shop) {
+//            return response()->json(['message' => 'Shop not found'], 404);
+//        }
+//
+//        $data = [
+//            'id' => $shop->id,
+//            'title' => $shop->name,
+//            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($product) {
+//                return [
+//                    'id' => $product->id,
+//                    'title' => $product->name,
+//                    'quantity' => $product->pivot->quantity,
+//                ];
+//            })->values(),
+//        ];
+//
+//        return response()->json($data);
+//    }
+
+
     public function getShopWithProducts(Request $request)
     {
         $shop_id = $request->input('shop_id');
         $shop = Shop::with('productNews')->find($shop_id);
+
 
         if (!$shop) {
             return response()->json(['message' => 'Shop not found'], 404);
@@ -137,11 +163,12 @@ class PosController extends Controller
         $data = [
             'id' => $shop->id,
             'title' => $shop->name,
-            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($product) {
+            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
+                $latestProduct = $products->last();
                 return [
-                    'id' => $product->id,
-                    'title' => $product->name,
-                    'quantity' => $product->pivot->quantity,
+                    'id' => $latestProduct->id,
+                    'title' => $latestProduct->name,
+                    'quantity' => $latestProduct->pivot->absolute,
                 ];
             })->values(),
         ];

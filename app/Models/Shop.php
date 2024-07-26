@@ -33,7 +33,7 @@ class Shop extends Model
     public function productNews()
     {
         return $this->belongsToMany(ProductNew::class, 'product_new_shop')
-            ->withPivot('quantity')
+            ->withPivot('quantity','absolute')
             ->orderBy('id', 'desc')
             ->withTimestamps();
     }
