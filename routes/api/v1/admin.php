@@ -213,6 +213,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
         Route::group(['prefix' => 'shop'], function () {
             Route::get('list', [PosController::class, 'getShopIndex']);
+            Route::get('product', [PosController::class, 'getShopWithProducts']);
             Route::post('store', [PosController::class, 'storeShop']);
             Route::post('update', [PosController::class, 'shopUpdate']);
             Route::get('search',  [PosController::class, 'getSearchShop']);

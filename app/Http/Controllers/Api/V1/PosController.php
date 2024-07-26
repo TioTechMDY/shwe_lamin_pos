@@ -125,6 +125,30 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
+    public function getShopWithProducts(Request $request)
+    {
+        $shop_id = $request->input('shop_id');
+        $shop = Shop::with('productNews')->find($shop_id);
+
+        if (!$shop) {
+            return response()->json(['message' => 'Shop not found'], 404);
+        }
+
+        $data = [
+            'id' => $shop->id,
+            'title' => $shop->name,
+            'productnews' => $shop->productNews->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->name,
+                    'quantity' => $product->pivot->quantity,
+                ];
+            }),
+        ];
+
+        return response()->json($data);
+    }
+
     public function getTransactionIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
