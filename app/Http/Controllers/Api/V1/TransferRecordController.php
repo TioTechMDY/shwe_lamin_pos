@@ -51,9 +51,22 @@ class TransferRecordController extends Controller
         if (!is_array($products)) {
             return response()->json(['error' => $products], 400);
         }
+        $fromId = $request->input('from_id'); // Get the tag from the request
+        $fromType = $request->input('from_type');
+
+        $toId = $request->input('to_id'); // Get the tag from the request
+        $toType = $request->input('to_type');
 
 
-        $transferRecord = TransferRecord::create();
+        $transferRecord = TransferRecord::create(
+            [
+                'from_id' => $fromId,
+                'from_type'=>$fromType,
+                'to_id'=>$toId,
+                'to_type'=>$toType
+
+            ]
+        );
 
         foreach ($products as $product_new) {
             $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
