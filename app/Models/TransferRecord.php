@@ -20,7 +20,7 @@ class TransferRecord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['from', 'to', 'from_type', 'to_type'];
+    protected $fillable = ['from_id', 'to_id', 'from_type', 'to_type'];
 
     public function productNews()
     {

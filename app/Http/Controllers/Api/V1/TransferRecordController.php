@@ -60,11 +60,15 @@ class TransferRecordController extends Controller
 
         $transferRecord = TransferRecord::create(
             [
-                'from_id' => $fromId,
-                'from_type'=>$fromType,
-                'to_id'=>$toId,
-                'to_type'=>$toType
+//                'from_id' => $fromId,
+//                'from_type'=>$fromType,
+//                'to_id'=>$toId,
+//                'to_type'=>$toType
 
+                'from_id' => 1,
+                'from_type'=>1,
+                'to_id'=>1,
+                'to_type'=>2
             ]
         );
 
