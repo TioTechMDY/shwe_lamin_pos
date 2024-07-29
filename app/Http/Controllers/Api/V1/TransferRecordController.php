@@ -89,21 +89,16 @@ class TransferRecordController extends Controller
         foreach ($products as $product_new) {
             $productNew = ProductNew::find($product_new['product_new_id']);
 
-//            $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
-            if ($tank->product_news()->where('product_new_id', $product_new->id)->exists()) {
-                // Retrieve the current quantity
-                $currentQuantity = $tank->products()->where('product_new_id', $product_new->id)->first()->pivot->quantity;
+            if ($tank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                $currentQuantity = $tank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
 
-                // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $product_new['quantity'];
 
-                // Update the pivot table
-                $tank->product_news()->updateExistingPivot($product_new->id, [
+                $tank->productNews()->updateExistingPivot($product_new['product_new_id'], [
                     'quantity' => $newQuantity,
                 ]);
             } else {
-                // If the product is not attached, attach it with the specified quantity
-            $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+                $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
             }
         }
 
