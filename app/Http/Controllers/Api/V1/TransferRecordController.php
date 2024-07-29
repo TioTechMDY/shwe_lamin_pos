@@ -87,7 +87,7 @@ class TransferRecordController extends Controller
 
 
         foreach ($products as $product_new) {
-            $productNew = ProductNew::find($product_new['product_id']);
+            $productNew = ProductNew::find($product_new['product_new_id']);
 
 //            $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
             if ($tank->product_news()->where('product_new_id', $productNew->id)->exists()) {
