@@ -52,23 +52,29 @@ class TransferRecordController extends Controller
             return response()->json(['error' => $products], 400);
         }
         $fromId = $request->input('from_id'); // Get the tag from the request
-        $fromType = $request->input('from_type');
-
+        $from = $request->input('from_type');
         $toId = $request->input('to_id'); // Get the tag from the request
-        $toType = $request->input('to_type');
+
+        $to = $request->input('to_type');
+        if($from == 'shop'){
+            $fromType = 1;
+        }else{
+            $fromType = 2;
+        }
+        if($to == 'shop'){
+            $toType = 1;
+        }else{
+            $toType = 2;
+        }
+
 
 
         $transferRecord = TransferRecord::create(
             [
-//                'from_id' => $fromId,
-//                'from_type'=>$fromType,
-//                'to_id'=>$toId,
-//                'to_type'=>$toType
-
-                'from_id' => 1,
-                'from_type'=>1,
-                'to_id'=>1,
-                'to_type'=>2
+                'from_id' => intval($fromId),
+                'from_type'=> $fromType,
+                'to_id'=>intval($toId),
+                'to_type'=>$toType
             ]
         );
 
@@ -76,7 +82,31 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
         }
 
-//        return response()->json($transferRecord->load('productNews'), 201);
+
+        $tank = Tank::find($toId);
+
+
+        foreach ($products as $product_new) {
+            $productNew = ProductNew::find($product_new['product_id']);
+
+//            $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+            if ($tank->product_news()->where('product_new_id', $productNew->id)->exists()) {
+                // Retrieve the current quantity
+                $currentQuantity = $tank->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
+
+                // Increment the quantity by the specified amount
+                $newQuantity = $currentQuantity + $product_new['quantity'];
+
+                // Update the pivot table
+                $tank->product_news()->updateExistingPivot($productNew->id, [
+                    'quantity' => $newQuantity,
+                ]);
+            } else {
+                // If the product is not attached, attach it with the specified quantity
+            $tank->productNews()->attach($productNew['product_new_id'], ['quantity' => $productNew['quantity']]);
+            }
+        }
+
         return response()->json([
             'success' => true,
             'message' => translate('Transfer Record saved successfully'),

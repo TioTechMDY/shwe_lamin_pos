@@ -79,57 +79,57 @@ class TransactionNewController extends Controller
         ], 200);
     }
 
-//    public function createTransaction(Request $request)
-//    {
-//        // Example request structure
-//        // {
-//        //     "products": [
-//        //         {
-//        //             "shop_id": 2,
-//        //             "product_id": 1,
-//        //             "quantity": 10
-//        //         },
-//        //         {
-//        //             "shop_id": 3,
-//        //             "product_id": 1,
-//        //             "quantity": 5
-//        //         }
-//        //     ]
-//        // }
-//
-//        $products = $request->input('products');
-//
-//        // Create a new transaction
-//        $transactionNew = TransactionNew::create(['tag' => 'PO']);
-//
-//        foreach ($products as $item) {
-//            $shop = Shop::find($item['shop_id']);
-//            $productNew = ProductNew::find($item['product_id']);
-//
-//            // Check if the product is already attached to the shop
-//            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
-//                // Retrieve the current quantity
-//                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
-//
-//                // Increment the quantity by the specified amount
-//                $newQuantity = $currentQuantity + $item['quantity'];
-//
-//                // Update the pivot table
-//                $shop->product_news()->updateExistingPivot($productNew->id, [
-//                    'quantity' => $newQuantity,
-//                    'transaction_new_id' => $transactionNew->id
-//                ]);
-//            } else {
-//                // If the product is not attached, attach it with the specified quantity
-//                $shop->products()->attach($productNew->id, [
-//                    'quantity' => $item['quantity'],
-//                    'transaction_new_id' => $transactionNew->id
-//                ]);
-//            }
-//        }
-//
-//        return response()->json($transactionNew->load('shopProducts'), 200);
-//    }
+    public function createTransaction1(Request $request)
+    {
+        // Example request structure
+        // {
+        //     "products": [
+        //         {
+        //             "shop_id": 2,
+        //             "product_id": 1,
+        //             "quantity": 10
+        //         },
+        //         {
+        //             "shop_id": 3,
+        //             "product_id": 1,
+        //             "quantity": 5
+        //         }
+        //     ]
+        // }
+
+        $products = $request->input('products');
+
+        // Create a new transaction
+        $transactionNew = TransactionNew::create(['tag' => 'PO']);
+
+        foreach ($products as $item) {
+            $shop = Shop::find($item['shop_id']);
+            $productNew = ProductNew::find($item['product_id']);
+
+            // Check if the product is already attached to the shop
+            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
+                // Retrieve the current quantity
+                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->quantity;
+
+                // Increment the quantity by the specified amount
+                $newQuantity = $currentQuantity + $item['quantity'];
+
+                // Update the pivot table
+                $shop->product_news()->updateExistingPivot($productNew->id, [
+                    'quantity' => $newQuantity,
+                    'transaction_new_id' => $transactionNew->id
+                ]);
+            } else {
+                // If the product is not attached, attach it with the specified quantity
+                $shop->products()->attach($productNew->id, [
+                    'quantity' => $item['quantity'],
+                    'transaction_new_id' => $transactionNew->id
+                ]);
+            }
+        }
+
+        return response()->json($transactionNew->load('shopProducts'), 200);
+    }
 
 
 }
