@@ -176,6 +176,33 @@ class PosController extends Controller
         return response()->json($data);
     }
 
+
+    public function getTankWithProducts(Request $request)
+    {
+        $tank_id = $request->input('tank_id');
+        $tank = Tank::with('productNews')->find($tank_id);
+
+
+        if (!$tank) {
+            return response()->json(['message' => 'Tank not found'], 404);
+        }
+
+        $data = [
+            'id' => $tank->id,
+            'name' => $tank->name,
+            'productnews' => $tank->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
+                $latestProduct = $products->last();
+                return [
+                    'id' => $latestProduct->id,
+                    'title' => $latestProduct->name,
+                    'quantity' => $latestProduct->pivot->quantity,
+                ];
+            })->values(),
+        ];
+
+        return response()->json($data);
+    }
+
     public function getTransactionIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
