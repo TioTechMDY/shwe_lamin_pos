@@ -160,23 +160,11 @@ class PosController extends Controller
             return response()->json(['message' => 'Shop not found'], 404);
         }
 
-//        $data = [
-//            'id' => $shop->id,
-//            'title' => $shop->name,
-//            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
-//                $latestProduct = $products->last();
-//                return [
-//                    'id' => $latestProduct->id,
-//                    'title' => $latestProduct->name,
-//                    'quantity' => $latestProduct->pivot->absolute,
-//                ];
-//            })->values(),
-//        ];
         $data = [
             'id' => $shop->id,
             'title' => $shop->name,
             'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
-                $latestProduct = $products->first();
+                $latestProduct = $products->last();
                 return [
                     'id' => $latestProduct->id,
                     'title' => $latestProduct->name,
