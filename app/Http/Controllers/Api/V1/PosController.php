@@ -164,7 +164,7 @@ class PosController extends Controller
             'id' => $shop->id,
             'title' => $shop->name,
             'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
-                $latestProduct = $products->last();
+                $latestProduct = $products->orderBy('pivot.transaction_new_id', 'desc')->last();
                 return [
                     'id' => $latestProduct->id,
                     'title' => $latestProduct->name,

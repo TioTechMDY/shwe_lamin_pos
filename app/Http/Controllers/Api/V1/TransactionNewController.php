@@ -45,9 +45,9 @@ class TransactionNewController extends Controller
             $shop = Shop::find($item['shop_id']);
             $productNew = ProductNew::find($item['product_id']);
 
-            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
+            if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {
                 // Retrieve the current quantity
-                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->absolute;
+                $currentQuantity = $shop->product_news()->where('product_new_id', $productNew->id)->orderBy('transaction_new_id', 'desc')->first()->pivot->absolute;
 
                 // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $item['quantity'];
