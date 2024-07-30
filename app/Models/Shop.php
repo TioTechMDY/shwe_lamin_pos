@@ -27,7 +27,7 @@ class Shop extends Model
     // }
     public function product_news()
     {
-        return $this->belongsToMany(ProductNew::class)->withPivot('quantity','absolute', 'transaction_new_id')->withTimestamps();
+        return $this->belongsToMany(ProductNew::class)->withPivot('quantity','absolute', 'transaction_new_id','transaction_id')->withTimestamps();
     }
 
     public function productNews()

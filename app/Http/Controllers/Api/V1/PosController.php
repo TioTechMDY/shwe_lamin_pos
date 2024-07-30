@@ -163,7 +163,7 @@ class PosController extends Controller
         $data = [
             'id' => $shop->id,
             'title' => $shop->name,
-            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
+            'productnews' => $shop->productNews->where('transaction_id',1)->groupBy('pivot.product_new_id')->map(function ($products) {
                 $latestProduct = $products->first();
                 return [
                     'id' => $latestProduct->id,
