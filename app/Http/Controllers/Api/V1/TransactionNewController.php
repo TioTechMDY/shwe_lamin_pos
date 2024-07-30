@@ -56,14 +56,16 @@ class TransactionNewController extends Controller
                 $shop->product_news()->attach($productNew->id, [
                     'quantity' => $item['quantity'],
                     'absolute' => $newQuantity,
-                    'transaction_new_id' => $transactionNew->id
+                    'transaction_new_id' => $transactionNew->id,
+                    'created_at' => now(),
                 ]);
             } else {
                 // If the product is not attached, attach it with the specified quantity
                 $shop->product_news()->attach($productNew->id, [
                     'quantity' => $item['quantity'],
                     'absolute' => $item['quantity'],
-                    'transaction_new_id' => $transactionNew->id
+                    'transaction_new_id' => $transactionNew->id,
+                    'created_at' => now(),
                 ]);
             }
 //            $shop->product_news()->attach($productNew->id, [
