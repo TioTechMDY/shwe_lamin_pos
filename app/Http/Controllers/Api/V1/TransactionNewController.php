@@ -51,6 +51,9 @@ class TransactionNewController extends Controller
 
                 // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $item['quantity'];
+                $shop->product_news()->updateExistingPivot($productNew->id, [
+                    'transaction_id' => 0,
+                ]);
 
                 // Update the pivot table
                 $shop->product_news()->attach($productNew->id, [
@@ -58,6 +61,7 @@ class TransactionNewController extends Controller
                     'absolute' => $newQuantity,
                     'transaction_new_id' => $transactionNew->id,
                     'created_at' => now(),
+                    'transaction_id'=>1,
                 ]);
             } else {
                 // If the product is not attached, attach it with the specified quantity
@@ -66,6 +70,7 @@ class TransactionNewController extends Controller
                     'absolute' => $item['quantity'],
                     'transaction_new_id' => $transactionNew->id,
                     'created_at' => now(),
+                    'transaction_id'=>1,
                 ]);
             }
 //            $shop->product_news()->attach($productNew->id, [
