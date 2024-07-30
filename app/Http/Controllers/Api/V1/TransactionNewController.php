@@ -44,11 +44,33 @@ class TransactionNewController extends Controller
         foreach ($products as $item) {
             $shop = Shop::find($item['shop_id']);
             $productNew = ProductNew::find($item['product_id']);
-            $shop->product_news()->attach($productNew->id, [
-                'quantity' => $item['quantity'],
-                'absolute' => $item['quantity'],
-                'transaction_new_id' => $transactionNew->id
-            ]);
+
+            if ($shop->products()->where('product_new_id', $productNew->id)->exists()) {
+                // Retrieve the current quantity
+                $currentQuantity = $shop->products()->where('product_new_id', $productNew->id)->first()->pivot->absolute;
+
+                // Increment the quantity by the specified amount
+                $newQuantity = $currentQuantity + $item['quantity'];
+
+                // Update the pivot table
+                $shop->product_news()->attach($productNew->id, [
+                    'quantity' => $item['quantity'],
+                    'absolute' => $newQuantity,
+                    'transaction_new_id' => $transactionNew->id
+                ]);
+            } else {
+                // If the product is not attached, attach it with the specified quantity
+                $shop->product_news()->attach($productNew->id, [
+                    'quantity' => $item['quantity'],
+                    'absolute' => $item['quantity'],
+                    'transaction_new_id' => $transactionNew->id
+                ]);
+            }
+//            $shop->product_news()->attach($productNew->id, [
+//                'quantity' => $item['quantity'],
+//                'absolute' => $item['quantity'],
+//                'transaction_new_id' => $transactionNew->id
+//            ]);
 
             // Check if the product is already attached to the shop
 //            if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {

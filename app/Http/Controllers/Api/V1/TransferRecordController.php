@@ -58,8 +58,10 @@ class TransferRecordController extends Controller
         $to = $request->input('to_type');
         if($from == 'shop'){
             $fromType = 1;
+            $fromShop = Shop::find($fromId);
         }else{
             $fromType = 2;
+            $fromTank = Tank::find($fromId);
         }
         if($to == 'shop'){
             $toType = 1;
@@ -83,23 +85,41 @@ class TransferRecordController extends Controller
         }
 
 
-        $tank = Tank::find($toId);
+        $toTank = Tank::find($toId);
 
 
         foreach ($products as $product_new) {
-            $productNew = ProductNew::find($product_new['product_new_id']);
 
-            if ($tank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
-                $currentQuantity = $tank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+            if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
 
-                $newQuantity = $currentQuantity + $product_new['quantity'];
+                $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
 
-                $tank->productNews()->updateExistingPivot($product_new['product_new_id'], [
-                    'quantity' => $newQuantity,
+                $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                    'quantity' => $newRecieverQuantity,
                 ]);
             } else {
-                $tank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+                $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
             }
+            if($from == 'shop'){
+//                $senderCurrentQuantity = $fromShop->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+                $senderCurrentQuantity = $fromShop->products()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->absolute;
+                $newQuantity = $senderCurrentQuantity - $product_new['quantity'];
+                $fromShop->product_news()->updateExistingPivot($product_new['product_new_id'], [
+                    'absolute' => $newQuantity,
+                ]);
+              
+                
+
+
+            }else{
+                $senderCurrentQuantity = $fromTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+                $newSenderQuantity = $senderCurrentQuantity - $product_new['quantity'];
+                $fromTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                    'quantity' => $newSenderQuantity,
+                ]);
+            }
+
         }
 
         return response()->json([
