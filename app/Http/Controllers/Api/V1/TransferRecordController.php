@@ -51,6 +51,12 @@ class TransferRecordController extends Controller
         if (!is_array($products)) {
             return response()->json(['error' => $products], 400);
         }
+
+        $extraProductRaw = $request->input('extra_product_news');
+        $extraProducts = json_decode($extraProductRaw, true);
+        if (!is_array($extraProducts)) {
+            return response()->json(['error' => $extraProducts], 400);
+        }
         $fromId = $request->input('from_id'); // Get the tag from the request
         $from = $request->input('from_type');
         $toId = $request->input('to_id'); // Get the tag from the request
@@ -81,7 +87,11 @@ class TransferRecordController extends Controller
         );
 
         foreach ($products as $product_new) {
-            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']], ['isExtra' => 0]);
+        }
+
+        foreach ($extraProducts as $product_new) {
+            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']], ['isExtra' => 1]);
         }
 
 
@@ -121,6 +131,23 @@ class TransferRecordController extends Controller
             }
 
         }
+
+        foreach ($extraProducts as $extra_product_new) {
+
+            if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
+                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
+
+                $newRecieverQuantity = $recieverCurrentQuantity + $extra_product_new['quantity'];
+
+                $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
+                    'quantity' => $newRecieverQuantity,
+                ]);
+            } else {
+                $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => $extra_product_new['quantity']]);
+            }
+
+        }
+
 
         return response()->json([
             'success' => true,
