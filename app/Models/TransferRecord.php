@@ -24,7 +24,7 @@ class TransferRecord extends Model
 
     public function productNews()
     {
-        return $this->belongsToMany(ProductNew::class, 'transfer_record_product_new', 'transfer_record_id', 'product_new_id','isExtra')
-            ->withPivot('quantity');
+        return $this->belongsToMany(ProductNew::class, 'transfer_record_product_new', 'transfer_record_id', 'product_new_id')
+            ->withPivot('quantity','isExtra');
     }
 }
