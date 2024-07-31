@@ -103,13 +103,13 @@ class TransferRecordController extends Controller
             }
             if($from == 'shop'){
 //                $senderCurrentQuantity = $fromShop->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
-                $senderCurrentQuantity = $fromShop->products()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->absolute;
-                $newQuantity = $senderCurrentQuantity - $product_new['quantity'];
+                $senderCurrentQuantity = $fromShop->product_news()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->absolute;
+                $newQuantity = intval($senderCurrentQuantity) - intval($product_new['quantity']);
                 $fromShop->product_news()->updateExistingPivot($product_new['product_new_id'], [
                     'absolute' => $newQuantity,
                 ]);
-              
-                
+
+
 
 
             }else{
