@@ -87,13 +87,12 @@ class TransferRecordController extends Controller
         );
 
         foreach ($products as $product_new) {
-            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']], ['isExtra' => 0]);
+            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 0]);
         }
 
         foreach ($extraProducts as $product_new) {
-            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']], ['isExtra' => 1]);
+            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 1]);
         }
-
 
         $toTank = Tank::find($toId);
 
