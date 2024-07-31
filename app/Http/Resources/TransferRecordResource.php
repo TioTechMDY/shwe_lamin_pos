@@ -75,7 +75,7 @@ class TransferRecordResource extends JsonResource
                         'quantity' => $productNew->pivot->quantity,
                     ];
                 });
-            }),
+            })->values(),
             'extraProductDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
                     return $productNew->pivot->isExtra == 1;
@@ -87,7 +87,7 @@ class TransferRecordResource extends JsonResource
                         'quantity' => $productNew->pivot->quantity,
                     ];
                 });
-            }),
+            })->values,
         ];
     }
 
