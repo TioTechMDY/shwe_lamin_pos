@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 use App\Models\Brand;
 use App\Models\Supplier;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB; // Add this line
+
 
 class ProductNewsResource extends JsonResource
 {
