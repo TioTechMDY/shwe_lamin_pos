@@ -60,6 +60,7 @@ class TransferRecordController extends Controller
         $fromId = $request->input('from_id'); // Get the tag from the request
         $from = $request->input('from_type');
         $toId = $request->input('to_id'); // Get the tag from the request
+        $isFinal = $request->input('isFinal'); // Get the tag from the request
 
         $to = $request->input('to_type');
         if($from == 'shop'){
@@ -82,7 +83,8 @@ class TransferRecordController extends Controller
                 'from_id' => intval($fromId),
                 'from_type'=> $fromType,
                 'to_id'=>intval($toId),
-                'to_type'=>$toType
+                'to_type'=>$toType,
+                'isFinal'=>intval($isFinal),
             ]
         );
 
@@ -99,27 +101,40 @@ class TransferRecordController extends Controller
 
         foreach ($products as $product_new) {
 
-            if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
-                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+            if(intval($isFinal) == 0){
+                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
 
-                $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
+                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
 
-                $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
-                    'quantity' => $newRecieverQuantity,
-                ]);
-            } else {
-                $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+                }
+            }
+            else{
+                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+
+//                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
+                    $newRecieverQuantity = $recieverCurrentQuantity + 0;
+
+
+                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => 0]);
+                }
             }
             if($from == 'shop'){
-//                $senderCurrentQuantity = $fromShop->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
                 $senderCurrentQuantity = $fromShop->product_news()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->absolute;
                 $newQuantity = intval($senderCurrentQuantity) - intval($product_new['quantity']);
                 $fromShop->product_news()->updateExistingPivot($product_new['product_new_id'], [
                     'absolute' => $newQuantity,
                 ]);
-
-
-
 
             }else{
                 $senderCurrentQuantity = $fromTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
@@ -133,16 +148,31 @@ class TransferRecordController extends Controller
 
         foreach ($extraProducts as $extra_product_new) {
 
-            if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
-                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
+            if(intval($isFinal)){
+                if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
 
-                $newRecieverQuantity = $recieverCurrentQuantity + $extra_product_new['quantity'];
+                    $newRecieverQuantity = $recieverCurrentQuantity + $extra_product_new['quantity'];
 
-                $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
-                    'quantity' => $newRecieverQuantity,
-                ]);
-            } else {
-                $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => $extra_product_new['quantity']]);
+                    $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => $extra_product_new['quantity']]);
+                }
+            }else{
+                if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
+
+                    $newRecieverQuantity = $recieverCurrentQuantity + 0;
+
+                    $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => 0]);
+                }
+
             }
 
         }

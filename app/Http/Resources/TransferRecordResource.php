@@ -64,6 +64,7 @@ class TransferRecordResource extends JsonResource
             'to_id' => $this->to_id,
             'from_type' => $this->from_type,
             'to_type' => $this->to_type,
+            'isFinal' => $this->isFinal,
             'productDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
                     return $productNew->pivot->isExtra == 0;
