@@ -88,7 +88,7 @@ class TransferRecordResource extends JsonResource
                         'quantity' => $productNew->pivot->quantity,
                     ];
                 });
-            })->values,
+            })->values(),
         ];
     }
 
