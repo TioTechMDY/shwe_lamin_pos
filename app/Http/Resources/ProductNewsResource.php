@@ -16,10 +16,13 @@ class ProductNewsResource extends JsonResource
     public function toArray($request)
     {
         //return parent::toArray($request);
+        $totalQuantity = DB::table('product_new_shop')->where('product_new_id', $this->id)->where('transaction_id',1)->sum('absolute')
+            + DB::table('product_new_tank')->where('product_new_id', $this->id)->sum('quantity');
         return [
             'id' => $this->id,
             'title' => $this->name,
-            'quantity' => $this->quantity,
+//            'quantity' => $this->quantity,
+            'quantity' => $totalQuantity,
             'image' => $this->image,
           ];
     }

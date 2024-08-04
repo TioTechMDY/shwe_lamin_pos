@@ -67,6 +67,8 @@ class PosController extends Controller
         ];
         return response()->json($data, 200);
     }
+
+
     public function getShopIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;

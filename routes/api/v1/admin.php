@@ -197,6 +197,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
         Route::group(['prefix' => 'productnew'], function () {
             Route::get('list', [PosController::class, 'getProductNewIndex']);
+            Route::get('alllist', [PosController::class, 'getProductNewList']);
             Route::post('store', [PosController::class, 'storeProductNew']);
             Route::post('update', [PosController::class, 'productNewUpdate']);
             Route::get('search',  [PosController::class, 'getSearchNew']);
