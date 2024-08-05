@@ -30,22 +30,6 @@ class TransferRecordController extends Controller
     public function createTransferRecord(Request $request)
     {
 
-//        {
-//            "from_id": 2,
-//    "to_id": 1,
-//    "from_type": 1,
-//    "to_type": 2,
-//    "product_news": [
-//        {
-//            "product_new_id": 1,
-//            "quantity": 10
-//        },
-//        {
-//            "product_new_id": 2,
-//            "quantity": 5
-//        }
-//    ]
-//}
         $productRaw = $request->input('product_news');
         $products = json_decode($productRaw, true);
         if (!is_array($products)) {
@@ -85,6 +69,7 @@ class TransferRecordController extends Controller
                 'to_id'=>intval($toId),
                 'to_type'=>$toType,
                 'isFinal'=>intval($isFinal),
+                'status' => 'pending',
             ]
         );
 
@@ -181,6 +166,35 @@ class TransferRecordController extends Controller
         return response()->json([
             'success' => true,
             'message' => translate('Transfer Record saved successfully'),
+        ], 200);
+    }
+
+    public function update(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'id'=> 'required',
+            'status' => 'required|string',
+        ]);
+        $id = intval($request->id);
+
+        // Find the transfer record by its id
+        $transferRecord = TransferRecord::findOrFail($id);
+
+        // Update the status
+        $transferRecord->status = $request->status;
+        $transferRecord->save();
+
+        // Update the related product news
+        foreach ($request->actualProductNews as $productNews) {
+            $transferRecord->productNews()->updateExistingPivot($productNews['product_new_id'], [
+                'quantity' => $productNews['quantity'],
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transfer record updated successfully',
         ], 200);
     }
 

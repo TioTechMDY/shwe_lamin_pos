@@ -65,6 +65,7 @@ class TransferRecordResource extends JsonResource
             'from_type' => $this->from_type,
             'to_type' => $this->to_type,
             'isFinal' => $this->isFinal,
+            'status' => $this->status,
             'productDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
                     return $productNew->pivot->isExtra == 0;
@@ -86,6 +87,18 @@ class TransferRecordResource extends JsonResource
                         'product_new_id' => $productNew->id,
                         'product_new_title' => $productNew->name,
                         'quantity' => $productNew->pivot->quantity,
+                    ];
+                });
+            })->values(),
+            'actualProductDetails' => $this->whenLoaded('productNews', function () {
+                return $this->productNews->filter(function ($productNew) {
+                    return $productNew->pivot->isExtra == 0;
+                })->map(function ($productNew) {
+                    return [
+                        'id' => $this->id,
+                        'product_new_id' => $productNew->id,
+                        'product_new_title' => $productNew->name,
+                        'quantity' => $productNew->pivot->actual_quantity,
                     ];
                 });
             })->values(),
