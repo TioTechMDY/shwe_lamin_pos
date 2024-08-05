@@ -58,12 +58,21 @@ class TransferRecordResource extends JsonResource
     }
     public function toArray($request)
     {
+        $toTitle = DB::table('tanks')->where('id', $this->to_id)->value('name');
+        if($this->from_type == 1){
+            $fromTitle = DB::table('shops')->where('id', $this->from_id)->value('name');
+        }else{
+            $fromTitle = DB::table('tanks')->where('id', $this->from_id)->value('name');
+        }
+
         return [
             'id' => $this->id,
             'from_id' => $this->from_id,
             'to_id' => $this->to_id,
             'from_type' => $this->from_type,
+            'from_title' => $fromTitle,
             'to_type' => $this->to_type,
+            'to_title' => $toTitle,
             'isFinal' => $this->isFinal,
             'status' => $this->status,
             'productDetails' => $this->whenLoaded('productNews', function () {
