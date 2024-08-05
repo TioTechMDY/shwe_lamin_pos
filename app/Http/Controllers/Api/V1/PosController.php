@@ -243,24 +243,6 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
-//    public function getTransferRecordIndex(Request $request): JsonResponse
-//    {
-//        $limit = $request['limit'] ?? 10;
-//        $offset = $request['offset'] ?? 1;
-//
-//
-//        $transferRecord= TransactionNew::with(['productNews', 'shops'])->paginate($limit, ['*'], 'page', $offset);
-//
-//        $transferRecordsCollections = TransactionNewsResource::collection($transferRecord);
-////        return new TransactionNewsResource($transactionNews);
-//        $data = [
-//            'total' => $transferRecord->total(),
-//            'limit' => $limit,
-//            'offset' => $offset,
-//            'transactionNews' => $transferRecordsCollections->items(),
-//        ];
-//        return response()->json($data, 200);
-//    }
 
     public function getTransferRecordIndex(Request $request): JsonResponse
     {
@@ -269,7 +251,7 @@ class PosController extends Controller
 
 //        $transferRecords = $this->transferRecord->with('productNews')->paginate($limit, ['*'], 'page', $offset);
 
-        $transferRecords = TransferRecord::with(['productNews'])->paginate($limit, ['*'], 'page', $offset);
+        $transferRecords = TransferRecord::with(['productNews'])->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
 
         $transferRecordsCollections = TransferRecordResource::collection($transferRecords);
         $data = [
