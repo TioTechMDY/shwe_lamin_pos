@@ -86,34 +86,6 @@ class TransferRecordController extends Controller
 
         foreach ($products as $product_new) {
 
-            if(intval($isFinal) == 0){
-                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
-                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
-
-                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
-
-                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
-                        'quantity' => $newRecieverQuantity,
-                    ]);
-                } else {
-                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
-                }
-            }
-            else{
-                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
-                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
-
-//                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
-                    $newRecieverQuantity = $recieverCurrentQuantity + 0;
-
-
-                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
-                        'quantity' => $newRecieverQuantity,
-                    ]);
-                } else {
-                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => 0]);
-                }
-            }
             if($from == 'shop'){
                 $senderCurrentQuantity = $fromShop->product_news()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->absolute;
                 $newQuantity = intval($senderCurrentQuantity) - intval($product_new['quantity']);
@@ -176,21 +148,67 @@ class TransferRecordController extends Controller
             'id'=> 'required',
             'status' => 'required|string',
         ]);
+        $actualProductRaw = $request->input('actual_product_news');
+        $actualProducts = json_decode($actualProductRaw, true);
+        if (!is_array($actualProducts)) {
+            return response()->json(['error' => $actualProducts], 400);
+        }
+        $isFinal = $request->input('isFinal'); // Get the tag from the request
+
         $id = intval($request->id);
+        $toId = $request->input('to_id'); // Get the tag from the request
+        $toTank = Tank::find($toId);
+
 
         // Find the transfer record by its id
         $transferRecord = TransferRecord::findOrFail($id);
+        foreach ($actualProducts as $product_new) {
+            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 2]);
+        }
+
+        foreach ($actualProducts as $product_new) {
+
+
+            if(intval($isFinal) == 0){
+            if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+
+                $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
+
+                $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                    'quantity' => $newRecieverQuantity,
+                ]);
+            } else {
+                $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity']]);
+            }
+        }
+        else{
+            if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+
+//                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
+                $newRecieverQuantity = $recieverCurrentQuantity + 0;
+
+
+                $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                    'quantity' => $newRecieverQuantity,
+                ]);
+            } else {
+                $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => 0]);
+            }
+        }
+        }
 
         // Update the status
         $transferRecord->status = $request->status;
         $transferRecord->save();
 
         // Update the related product news
-        foreach ($request->actualProductNews as $productNews) {
-            $transferRecord->productNews()->updateExistingPivot($productNews['product_new_id'], [
-                'quantity' => $productNews['quantity'],
-            ]);
-        }
+//        foreach ($request->actualProductNews as $productNews) {
+//            $transferRecord->productNews()->updateExistingPivot($productNews['product_new_id'], [
+//                'quantity' => $productNews['quantity'],
+//            ]);
+//        }
 
         return response()->json([
             'success' => true,

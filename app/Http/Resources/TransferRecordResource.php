@@ -92,13 +92,13 @@ class TransferRecordResource extends JsonResource
             })->values(),
             'actualProductDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
-                    return $productNew->pivot->isExtra == 0;
+                    return $productNew->pivot->isExtra == 2;
                 })->map(function ($productNew) {
                     return [
                         'id' => $this->id,
                         'product_new_id' => $productNew->id,
                         'product_new_title' => $productNew->name,
-                        'quantity' => $productNew->pivot->actual_quantity,
+                        'quantity' => $productNew->pivot->quantity,
                     ];
                 });
             })->values(),
