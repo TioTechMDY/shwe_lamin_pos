@@ -127,29 +127,6 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 
-//    public function getShopWithProducts(Request $request)
-//    {
-//        $shop_id = $request->input('shop_id');
-//        $shop = Shop::with('productNews')->find($shop_id);
-//
-//        if (!$shop) {
-//            return response()->json(['message' => 'Shop not found'], 404);
-//        }
-//
-//        $data = [
-//            'id' => $shop->id,
-//            'title' => $shop->name,
-//            'productnews' => $shop->productNews->groupBy('pivot.product_new_id')->map(function ($product) {
-//                return [
-//                    'id' => $product->id,
-//                    'title' => $product->name,
-//                    'quantity' => $product->pivot->quantity,
-//                ];
-//            })->values(),
-//        ];
-//
-//        return response()->json($data);
-//    }
 
 
     public function getShopWithProducts(Request $request)
@@ -225,15 +202,11 @@ class PosController extends Controller
     {
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
-//        $transactionNew = $this->transactionNew->latest()->paginate($limit, ['*'], 'page', $offset);
-//        $transactionNews = TransactionNewsResource::collection($transactionNew);
 
 
-//        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit);
         $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit, ['*'], 'page', $offset);
 
         $transactionNewsCollections = TransactionNewsResource::collection($transactionNews);
-//        return new TransactionNewsResource($transactionNews);
         $data = [
             'total' => $transactionNews->total(),
             'limit' => $limit,
@@ -249,7 +222,6 @@ class PosController extends Controller
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
 
-//        $transferRecords = $this->transferRecord->with('productNews')->paginate($limit, ['*'], 'page', $offset);
 
         $transferRecords = TransferRecord::with(['productNews'])->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
 
@@ -626,21 +598,8 @@ class PosController extends Controller
         $productNews = $this->productNew;
         $productNews->name = $request->name;
 
-
-
-        // $products->category_ids = json_encode($category);
-        // $products->purchase_price = $request->purchase_price;
-        // $products->selling_price = $request->selling_price;
-        // $products->unit_type = $request->unit_type;
-        // $products->unit_value = $request->unit_value;
-        // $products->brand = $request->brand;
-        // $products->discount_type = $request->discount_type;
-        // $products->discount = $request->discount ?? 0;
-        // $products->tax = $request->tax ?? 0;
-        // $products->order_count = 0;
         $productNews->quantity = $request->quantity;
         $productNews->image = Helpers::upload('product/', 'png', $request->file('image'));
-        // $products->supplier_id = $request->supplier_id;
         $productNews->save();
         return response()->json([
             'success' => true,
@@ -664,8 +623,10 @@ class PosController extends Controller
         $shops->name = $request->name;
         $shops->phonenumber = $request->phonenumber ?? '';
         $shops->description = $request->description ?? '';
+        if ($request->hasFile('image')) {
+            $shops->image = Helpers::upload('product/', 'png', $request->file('image'));
+        }
 
-        $shops->image = Helpers::upload('product/', 'png', $request->file('image'));
         $shops->save();
         return response()->json([
             'success' => true,
@@ -704,7 +665,6 @@ class PosController extends Controller
     public function storeCar(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            // 'name' => 'required|unique:tanks',
         ]);
 
         if ($validator->fails()) {
@@ -816,35 +776,10 @@ class PosController extends Controller
 
 
         $productNew->name = $request->name;
-        // $product->product_code = $request->product_code;
 
-        // $category = [];
-        // if ($request->category_id != null) {
-        //     $category[] = [
-        //         'id' => $request->category_id,
-        //         'position' => 1,
-        //     ];
-        // }
-        // if ($request->sub_category_id != null) {
-        //     $category[] = [
-        //         'id' => $request->sub_category_id,
-        //         'position' => 2,
-        //     ];
-        // }
 
-        // $product->category_ids = json_encode($category);
-
-        // $product->purchase_price = $request->purchase_price;
-        // $product->selling_price = $request->selling_price;
-        // $product->unit_type = $request->unit_type;
-        // $product->unit_value = $request->unit_value;
-        // $product->brand = $request->brand;
-        // $product->discount_type = $request->discount_type;
-        // $product->discount = $request->discount ?? 0;
-        // $product->tax = $request->tax ?? 0;
         $productNew->quantity = $request->quantity;
         $productNew->image = $request->has('image') ? Helpers::update('product/', $productNew->image, 'png', $request->file('image')) : $productNew->image;
-        // $product->supplier_id = $request->supplier_id;
         $productNew->save();
         return response()->json([
             'success' => true,

@@ -81,7 +81,6 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 1]);
         }
 
-//        $toTank = Tank::find($toId);
 
 
         foreach ($products as $product_new) {
@@ -103,36 +102,6 @@ class TransferRecordController extends Controller
 
         }
 
-//        foreach ($extraProducts as $extra_product_new) {
-//
-//            if(intval($isFinal)){
-//                if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
-//                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
-//
-//                    $newRecieverQuantity = $recieverCurrentQuantity + $extra_product_new['quantity'];
-//
-//                    $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
-//                        'quantity' => $newRecieverQuantity,
-//                    ]);
-//                } else {
-//                    $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => $extra_product_new['quantity']]);
-//                }
-//            }else{
-//                if ($toTank->product_news()->where('product_new_id', $extra_product_new['product_new_id'])->exists()) {
-//                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $extra_product_new['product_new_id'])->first()->pivot->quantity;
-//
-//                    $newRecieverQuantity = $recieverCurrentQuantity + 0;
-//
-//                    $toTank->productNews()->updateExistingPivot($extra_product_new['product_new_id'], [
-//                        'quantity' => $newRecieverQuantity,
-//                    ]);
-//                } else {
-//                    $toTank->productNews()->attach($extra_product_new['product_new_id'], ['quantity' => 0]);
-//                }
-//
-//            }
-//
-//        }
 
 
         return response()->json([
@@ -159,7 +128,6 @@ class TransferRecordController extends Controller
         $toTank = Tank::find($toId);
 
 
-        // Find the transfer record by its id
         $transferRecord = TransferRecord::findOrFail($id);
         foreach ($actualProducts as $product_new) {
             $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 2]);
@@ -198,16 +166,9 @@ class TransferRecordController extends Controller
         }
         }
 
-        // Update the status
         $transferRecord->status = 'confirmed';
         $transferRecord->save();
 
-        // Update the related product news
-//        foreach ($request->actualProductNews as $productNews) {
-//            $transferRecord->productNews()->updateExistingPivot($productNews['product_new_id'], [
-//                'quantity' => $productNews['quantity'],
-//            ]);
-//        }
 
         return response()->json([
             'success' => true,
