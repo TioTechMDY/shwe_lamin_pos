@@ -139,18 +139,6 @@ class PosController extends Controller
             return response()->json(['message' => 'Shop not found'], 404);
         }
 
-//        $data = [
-//            'id' => $shop->id,
-//            'title' => $shop->name,
-//            'productnews' => $shop->productNews->map(function ($products) {
-//                $latestProduct = $products->first();
-//                return [
-//                    'id' => $latestProduct->id,
-//                    'title' => $latestProduct->name,
-//                    'quantity' => $latestProduct->pivot->absolute,
-//                ];
-//            })->values(),
-//        ];
         $productNews = $shop->productNews()
             ->wherePivot('transaction_id', 1)
             ->get()
@@ -158,6 +146,7 @@ class PosController extends Controller
                 return [
                     'id' => $product->id,
                     'title' => $product->name,
+                    'image' => $product->image,
                     'quantity' => $product->pivot->absolute,
                 ];
             });
@@ -191,6 +180,7 @@ class PosController extends Controller
                     'id' => $latestProduct->id,
                     'title' => $latestProduct->name,
                     'quantity' => $latestProduct->pivot->quantity,
+                    'image' => $latestProduct->image,
                 ];
             })->values(),
         ];
