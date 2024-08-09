@@ -21,9 +21,17 @@ class ProductNewsResource extends JsonResource
         // I want to filter tank or car quantity. The value of tank or car is is_car in tank table, The tank id is a foreign key in product_new_tank table
 
 
-        $tankQuantity = DB::table('product_new_tank')->where('product_new_id', $this->id)->where('is_car',0)->sum('quantity');
-        $carQuantity = DB::table('product_new_tank')->where('product_new_id', $this->id)->where('is_car',1)->sum('quantity');
+$tankQuantity = DB::table('product_new_tank')
+    ->join('tanks', 'product_new_tank.tank_id', '=', 'tanks.id')
+    ->where('product_new_tank.product_new_id', $this->id)
+    ->where('tanks.is_car', 0)
+    ->sum('product_new_tank.quantity');
 
+$carQuantity = DB::table('product_new_tank')
+    ->join('tanks', 'product_new_tank.tank_id', '=', 'tanks.id')
+    ->where('product_new_tank.product_new_id', $this->id)
+    ->where('tanks.is_car', 1)
+    ->sum('product_new_tank.quantity');
 
         $totalQuantity = DB::table('product_new_shop')->where('product_new_id', $this->id)->where('transaction_id',1)->sum('absolute')
             + DB::table('product_new_tank')->where('product_new_id', $this->id)->sum('quantity');
@@ -34,6 +42,7 @@ class ProductNewsResource extends JsonResource
             'quantity' => $totalQuantity,
             'shop_quantity'=>$shopQuantity,
             'car_quantity'=>$carQuantity,
+            'tank_quantity'=>$tankQuantity,
             'image' => $this->image,
           ];
     }
