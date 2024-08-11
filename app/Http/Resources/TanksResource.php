@@ -25,6 +25,15 @@ class TanksResource extends JsonResource
             'description'=>$this->description,
             'image' => $this->image,
             'is_car' => $this->is_car,
+            'productnews' => $this->productNews->groupBy('pivot.product_new_id')->map(function ($products) {
+                $latestProduct = $products->last();
+                return [
+                    'id' => $latestProduct->id,
+                    'title' => $latestProduct->name,
+                    'quantity' => $latestProduct->pivot->quantity,
+                    'image' => $latestProduct->image,
+                ];
+            })->values(),
           ];
     }
 }

@@ -14,12 +14,24 @@ class ShopsResource extends JsonResource
     public function toArray($request)
     {
         //return parent::toArray($request);
+        $productNews = $this->productNews()
+            ->wherePivot('transaction_id', 1)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->name,
+                    'image' => $product->image,
+                    'quantity' => $product->pivot->absolute,
+                ];
+            });
         return [
             'id' => $this->id,
             'title' => $this->name,
             'phonenumber' => $this->phonenumber,
             'description'=>$this->description,
             'image' => $this->image,
-          ];
+            'productnews' => $productNews,
+        ];
     }
 }
