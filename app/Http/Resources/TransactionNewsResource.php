@@ -18,6 +18,8 @@ class TransactionNewsResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->tag,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'details' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->map(function ($productNew) {
                     $shop = DB::table('product_new_shop')

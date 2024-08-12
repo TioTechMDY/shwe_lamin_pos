@@ -194,7 +194,7 @@ class PosController extends Controller
         $offset = $request['offset'] ?? 1;
 
 
-        $transactionNews = TransactionNew::with(['productNews', 'shops'])->paginate($limit, ['*'], 'page', $offset);
+        $transactionNews = TransactionNew::with(['productNews', 'shops'])->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
 
         $transactionNewsCollections = TransactionNewsResource::collection($transactionNews);
         $data = [
