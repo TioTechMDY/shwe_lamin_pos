@@ -224,6 +224,24 @@ class PosController extends Controller
         ];
         return response()->json($data, 200);
     }
+    public function getFinalTransferRecordIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+
+
+        $transferRecords = TransferRecord::with(['productNews'])->where('to_id',20)->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
+
+        $transferRecordsCollections = TransferRecordResource::collection($transferRecords);
+        $data = [
+            'total' => $transferRecords->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'transferRecords' => $transferRecordsCollections->items(),
+        ];
+        return response()->json($data, 200);
+    }
+
     public function getProductNewIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;

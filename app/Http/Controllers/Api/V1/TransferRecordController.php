@@ -59,6 +59,11 @@ class TransferRecordController extends Controller
         }else{
             $toType = 2;
         }
+        if(intval($toId)==20){
+            $status = 'confirmed';
+        }else{
+            $status = 'pending';
+        }
 
 
 
@@ -69,7 +74,7 @@ class TransferRecordController extends Controller
                 'to_id'=>intval($toId),
                 'to_type'=>$toType,
                 'isFinal'=>intval($isFinal),
-                'status' => 'pending',
+                'status' => $status,
             ]
         );
 

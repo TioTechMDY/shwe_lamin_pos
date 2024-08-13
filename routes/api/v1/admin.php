@@ -284,6 +284,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'transferrecord'], function () {
             Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
+
+            Route::get('soldlistlist', [PosController::class, 'getFinalTransferRecordIndex']);//done
             Route::post('store', [TransferRecordController::class, 'createTransferRecord']); //done
             Route::post('update', [TransferRecordController::class, 'update']);
             Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
