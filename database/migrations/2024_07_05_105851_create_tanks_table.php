@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tank', function (Blueprint $table) {
+        Schema::create('tanks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('total_quantity')->nullable();

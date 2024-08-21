@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::table('product_new_shop', function (Blueprint $table) {
-            $table->foreignId('transaction_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('transaction_new_id')->nullable()->constrained()->onDelete('cascade');
         });
     }
 
     public function down()
     {
         Schema::table('product_new_shop', function (Blueprint $table) {
-            $table->dropForeign(['transaction_id']);
-            $table->dropColumn('transaction_id');
+            $table->dropForeign(['transaction_new_id']);
+            $table->dropColumn('transaction_new_id');
         });
     }
 };
