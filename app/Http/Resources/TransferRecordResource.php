@@ -35,6 +35,7 @@ class TransferRecordResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'extra_description' => $this->extra_description,
 
             'productDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
