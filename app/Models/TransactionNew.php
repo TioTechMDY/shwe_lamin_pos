@@ -9,8 +9,7 @@ class TransactionNew extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tag'];
-
+    protected $fillable = ['tag', 'start_date', 'end_date', 'isPo'];
     public function shopProductNews()
     {
         return $this->hasManyThrough(ProductNew::class, Shop::class, 'transaction_new_id', 'product_new_id', 'id', 'id');
