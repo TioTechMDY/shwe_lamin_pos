@@ -359,8 +359,8 @@ const TIME_ZONE = [
 ];
 
 
-const MODULE_PERMISSION = [
-    "dashboard_section",
+//const MODULE_PERMISSION = [
+//    "dashboard_section",
 //    "pos_section",
 //    "product_section",
 //    "employee_section",
@@ -374,7 +374,44 @@ const MODULE_PERMISSION = [
 //    "account_section",
 //    "stock_section",
 //    "coupon_section",
+//    "po_history_section",
+//    "po_out_section",
+//    "sagaing_out_section"
+//];
+
+const MODULE_PERMISSION = [
+    "employee_section",
+    "employee_role_section",
+    //home
+    "home_section",
+    "home_product_edit_section",
+    "home_product_add_section",
+    //thilawa
+    "thilawa_shop_section",
+    "thilawa_shop_edit_section",
+    "thilawa_shop_add_section",
+    "thilawa_shop_delete_section",
+    "thilawa_shop_transfer_section",
+    // sagaing
+    "sagaing_tank_section",
+    "sagaing_tank_edit_section",
+    "sagaing_tank_add_section",
+    "sagaing_tank_delete_section",
+    "sagaing_tank_transfer_section",
+    //boxer_car
+    "boxer_car_section",
+    "boxer_car_edit_section",
+    "boxer_car_add_section",
+    "boxer_car_delete_section",
+    "boxer_car_transfer_section",
+
+    //po_history
     "po_history_section",
+
+    //po_out
     "po_out_section",
-    "sagaing_out_section"
+
+    //sagaing_out
+    "sagaing_out_section",
+
 ];
