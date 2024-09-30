@@ -32,6 +32,12 @@ $carQuantity = DB::table('product_new_tank')
     ->where('product_new_tank.product_new_id', $this->id)
     ->where('tanks.is_car', 1)
     ->sum('product_new_tank.quantity');
+$extraQuantity = DB::table('transfer_record_product_new')->join('tanks', 'transfer_record_product_new.to_id', '=', 'tanks.
+
+')
+    ->where('transfer_record_product_new.product_new_id', $this->id)
+    ->where('tanks.is_car', 1)->where('transfer_record_product_new.isExtra', 1)
+    ->sum('transfer_record_product_new.quantity');
 
         $totalQuantity = DB::table('product_new_shop')->where('product_new_id', $this->id)->where('transaction_id',1)->sum('absolute')
             + DB::table('product_new_tank')->where('product_new_id', $this->id)->sum('quantity');
