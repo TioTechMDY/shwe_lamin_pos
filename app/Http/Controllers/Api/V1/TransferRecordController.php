@@ -214,6 +214,12 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->wherePivot('isExtra',2)->updateExistingPivot($product_new['product_new_id'], [
                 'quantity' => $product_new['new_quantity'],
             ]);
+            EditTransferRecord::create([
+                'transfer_record_id' => $transferRecord->id,
+                'product_new_id' => $product_new['product_new_id'],
+                'old_quantity' => $product_new['old_quantity'],
+                'new_quantity' => $product_new['new_quantity'],
+            ]);
         }
 
         foreach ($productNews as $product_new) {
