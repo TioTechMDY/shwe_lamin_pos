@@ -239,12 +239,12 @@ class PosController extends Controller
             return [
                 'transaction_new_id' => $transactionId,
                 'shop_id' => $firstTransaction->shop_id,
+                'shop_title'=> $firstTransaction->shop->name,
                 'created_at' => $firstTransaction->created_at,
-                'products' => $transactions->map(function ($transaction) {
+                'product_news' => $transactions->map(function ($transaction) {
                     return [
                         'product_new_id' => $transaction->product_new_id,
                         'product_new_title' => $transaction->productNew->name,
-
                         'old_quantity' => $transaction->old_quantity,
                         'new_quantity' => $transaction->new_quantity,
                     ];

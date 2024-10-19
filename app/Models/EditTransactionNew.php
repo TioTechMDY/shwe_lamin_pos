@@ -21,4 +21,9 @@ class EditTransactionNew extends Model
     {
         return $this->belongsTo(ProductNew::class, 'product_new_id');
     }
+    public  function  shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+
+    }
 }
