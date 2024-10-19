@@ -203,8 +203,15 @@ class TransferRecordController extends Controller
         $transferRecord = TransferRecord::findOrFail($id);
         foreach ($productNews as $product_new) {
 //            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 2]);
-            // I want to update the quantity of the product_new_id in the transfer record to the new quantity
-            $transferRecord->productNews()->updateExistingPivot($product_new['product_new_id'], [
+            // I want to update the quantity of the product_new_id in the transfer record to the new quantity that is_Extra is 2,
+
+
+
+
+
+
+
+            $transferRecord->productNews()->wherePivot('isExtra',2)->updateExistingPivot($product_new['product_new_id'], [
                 'quantity' => $product_new['new_quantity'],
             ]);
         }
