@@ -141,6 +141,13 @@ class TransactionNewController extends Controller
 
 
                 ]);
+                    EditTransactionNew::create([
+                        'shop_id' => $shop->id,
+                        'product_new_id' => $productNew->id,
+                        'old_quantity' => $item['old_quantity'],
+                        'new_quantity' => $item['new_quantity'],
+                        'transaction_new_id' => $transaction->id,
+                    ]);
 
                 // Update the pivot table
 //                $shop->product_news()->attach($productNew->id, [
@@ -193,67 +200,6 @@ class TransactionNewController extends Controller
         ], 200);
     }
 
-   public function editTransaction1(Request $request){
-        $transactionId = $request->input('transaction_id');
-        $productRaw = $request->input('products');
-        $products = json_decode($productRaw, true);
-        if (!is_array($products)) {
-            return response()->json(['error' => $products], 400);
-        }
-
-        $transactionNew = TransactionNew::find($transactionId);
-        if (!$transactionNew) {
-            return response()->json(['error' => translate('Transaction not found')], 404);
-        }
-
-        foreach ($products as $item) {
-            $shop = Shop::find($item['shop_id']);
-            $productNew = ProductNew::find($item['product_id']);
-
-            if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {
-                // Retrieve the current quantity
-                $currentQuantity = $shop->product_news()->where('product_new_id', $productNew->id)->orderBy('transaction_new_id', 'desc')->first()->pivot->absolute;
-
-                // Increment the quantity by the specified amount
-                $newQuantity = $currentQuantity + $item['new_quantity']-$item['old_quantity'];
-//                $shop->product_news()->updateExistingPivot($productNew->id, [
-//                    'transaction_id' => 0,
-//                ]);
-
-                // Update the pivot table
-                $shop->product_news()->updateExistingPivot($productNew->id, [
-                    'quantity' => $item['new_quantity'],
-                    'absolute' => $newQuantity,
-                    'transaction_new_id' => $transactionNew->id,
-                    'created_at' => now(),
-                    'transaction_id'=>1,
-                ]);
-
-                EditTransactionNew::create([
-                    'shop_id' => $shop->id,
-                    'product_new_id' => $productNew->id,
-                    'old_quantity' => $item['old_quantity'],
-                    'new_quantity' => $item['new_quantity'],
-                    'transaction_new_id' => $transactionNew->id,
-                ]);
-            } else {
-                // If the product is not attached, attach it with the specified quantity
-                $shop->product_news()->attach($productNew->id, [
-                    'quantity' => $item['quantity'],
-                    'absolute' => $item['quantity'],
-                    'transaction_new_id' => $transactionNew->id,
-                    'created_at' => now(),
-                    'transaction_id'=>1,
-                ]);
-            }
-
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => translate('Expenses saved successfully'),
-        ], 200);
-    }
 
 
 }
