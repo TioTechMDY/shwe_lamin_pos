@@ -7,6 +7,7 @@ use App\Models\ProductNew;
 use App\Models\Shop;
 use App\Models\Tank;
 use App\Models\TransactionNew;
+use App\Models\EditTransactionNew;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
@@ -106,7 +107,12 @@ class TransactionNewController extends Controller
         }
 
         // Get the products from the request
-        $products = $request->input('products');
+//        $products = $request->input('products');
+        $productRaw = $request->input('products');
+        $products = json_decode($productRaw, true);
+        if (!is_array($products)) {
+            return response()->json(['error' => $products], 400);
+        }
 
         // Loop through each product
         foreach ($products as $item) {
@@ -222,6 +228,14 @@ class TransactionNewController extends Controller
                     'created_at' => now(),
                     'transaction_id'=>1,
                 ]);
+
+                EditTransactionNew::create([
+                    'shop_id' => $shop->id,
+                    'product_new_id' => $productNew->id,
+                    'old_quantity' => $item['old_quantity'],
+                    'new_quantity' => $item['new_quantity'],
+                    'transaction_new_id' => $transactionNew->id,
+                ]);
             } else {
                 // If the product is not attached, attach it with the specified quantity
                 $shop->product_news()->attach($productNew->id, [
@@ -243,3 +257,6 @@ class TransactionNewController extends Controller
 
 
 }
+
+
+// I want to create a model that records editTransaction History, named edit_transaction_news table. The table will contain the following columns: id, shop id, product  new id  , old quantity, new quantity, transaction new id and created_at. The table will be updated when the editTransaction method is called. The editTransaction method will be updated to include the edit_transaction_news table.
