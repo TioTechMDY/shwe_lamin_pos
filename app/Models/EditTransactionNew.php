@@ -16,4 +16,9 @@ class EditTransactionNew extends Model
         'new_quantity',
         'transaction_new_id',
     ];
+
+    public function productNew()
+    {
+        return $this->belongsTo(ProductNew::class, 'product_new_id');
+    }
 }

@@ -243,6 +243,8 @@ class PosController extends Controller
                 'products' => $transactions->map(function ($transaction) {
                     return [
                         'product_new_id' => $transaction->product_new_id,
+                        'product_new_title' => $transaction->productNew->name,
+
                         'old_quantity' => $transaction->old_quantity,
                         'new_quantity' => $transaction->new_quantity,
                     ];
@@ -254,7 +256,7 @@ class PosController extends Controller
             'total' => $editTransactions->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'data' => $data,
+            'edit_transaction_new_historys' => $data,
         ], 200);
     }
     public function getTransferRecordIndex(Request $request): JsonResponse
