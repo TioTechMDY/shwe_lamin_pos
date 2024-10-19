@@ -290,6 +290,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::group(['prefix' => 'transferrecord'], function () {
             Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
+            Route::post('edit', [TransferRecordController::class, 'editTransferRecord']); //done
 
             Route::get('soldlist', [PosController::class, 'getFinalTransferRecordIndex']);//done
             Route::post('store', [TransferRecordController::class, 'createTransferRecord']); //done

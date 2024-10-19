@@ -183,6 +183,72 @@ class TransferRecordController extends Controller
         ], 200);
     }
 
+    public function editTransferRecord(Request $request)
+    {
+        $request->validate([
+            'id'=> 'required',
+        ]);
+        $productNewRaw = $request->input('product_news');
+        $productNews = json_decode($productNewRaw, true);
+        if (!is_array($productNews)) {
+            return response()->json(['error' => $productNews], 400);
+        }
+        $isFinal = $request->input('isFinal'); // Get the tag from the request
+
+        $id = intval($request->id);
+        $toId = $request->input('to_id'); // Get the tag from the request
+        $toTank = Tank::find($toId);
 
 
+        $transferRecord = TransferRecord::findOrFail($id);
+        foreach ($productNews as $product_new) {
+//            $transferRecord->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['quantity'], 'isExtra' => 2]);
+            // I want to update the quantity of the product_new_id in the transfer record to the new quantity
+            $transferRecord->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                'quantity' => $product_new['new_quantity'],
+            ]);
+        }
+
+        foreach ($productNews as $product_new) {
+
+
+            if(intval($isFinal) == 0){
+                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+
+                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['new_quantity'] -$product_new['old_quantity'];
+
+                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => $product_new['new_quantity']]);
+                }
+            }
+            else{
+                if ($toTank->product_news()->where('product_new_id', $product_new['product_new_id'])->exists()) {
+                    $recieverCurrentQuantity = $toTank->productNews()->where('product_new_id', $product_new['product_new_id'])->first()->pivot->quantity;
+
+//                    $newRecieverQuantity = $recieverCurrentQuantity + $product_new['quantity'];
+                    $newRecieverQuantity = $recieverCurrentQuantity + 0;
+
+
+                    $toTank->productNews()->updateExistingPivot($product_new['product_new_id'], [
+                        'quantity' => $newRecieverQuantity,
+                    ]);
+                } else {
+                    $toTank->productNews()->attach($product_new['product_new_id'], ['quantity' => 0]);
+                }
+            }
+        }
+
+//        $transferRecord->status = 'confirmed';
+        $transferRecord->save();
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transfer record updated successfully',
+        ], 200);
+    }
 }
