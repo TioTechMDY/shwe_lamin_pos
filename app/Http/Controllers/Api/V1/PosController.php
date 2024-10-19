@@ -15,6 +15,7 @@ use App\Models\OrderDetail;
 use App\Models\TransactionNew;
 use App\Models\Transection;
 use App\Models\TransferRecord;
+use App\Models\EditTransactionNew;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\BusinessSetting;
@@ -205,8 +206,57 @@ class PosController extends Controller
         ];
         return response()->json($data, 200);
     }
+//    public function getEditTransactionHistoryIndex(Request $request): JsonResponse
+//    {
+//        $limit = $request['limit'] ?? 10;
+//        $offset = $request['offset'] ?? 1;
+//
+////        data example {'transaction_id':1,'shop_id':1,products:[
+////         {'product_id':1,'old_quantity':1,'new_quantity':2},
+////         {'product_id':2,'old_quantity':1,'new_quantity':2},
+////         {'product_id':3,'old_quantity':1,'new_quantity':2},
+////         {'product_id':4,'old_quantity':1,'new_quantity':2},
+////        ]
+////         the same transaction id will organize the data in the same transaction like this
+//
+//
+//
+//
+//        return response()->json($data, 200);
+//    }
 
 
+    public function getEditTransactionHistoryIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+
+        $editTransactions = EditTransactionNew::orderBy('created_at', 'desc')
+            ->paginate($limit, ['*'], 'page', $offset);
+
+        $data = $editTransactions->groupBy('transaction_new_id')->map(function ($transactions, $transactionId) {
+            $firstTransaction = $transactions->first();
+            return [
+                'transaction_new_id' => $transactionId,
+                'shop_id' => $firstTransaction->shop_id,
+                'created_at' => $firstTransaction->created_at,
+                'products' => $transactions->map(function ($transaction) {
+                    return [
+                        'product_new_id' => $transaction->product_new_id,
+                        'old_quantity' => $transaction->old_quantity,
+                        'new_quantity' => $transaction->new_quantity,
+                    ];
+                }),
+            ];
+        })->values();
+
+        return response()->json([
+            'total' => $editTransactions->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'data' => $data,
+        ], 200);
+    }
     public function getTransferRecordIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;

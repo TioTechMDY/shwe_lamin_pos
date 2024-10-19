@@ -284,6 +284,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
         });
 
+        Route::group(['prefix' => 'edittransactionhistory'],function (){
+            Route::get('list', [PosController::class, 'getEditTransactionHistoryIndex']);//done
+        });
+
         Route::group(['prefix' => 'transferrecord'], function () {
             Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
 
