@@ -32,6 +32,8 @@ use App\Http\Resources\TransferRecordResource;
 use App\Http\Resources\ProductNewsResource;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class PosController extends Controller
 {
@@ -262,7 +264,51 @@ class PosController extends Controller
     }
 
 
+    // app/Http/Controllers/Api/V1/PosController.php
+
     public function getEditTransferRecordHistoryIndex(Request $request): JsonResponse
+    {
+        $limit = $request['limit'] ?? 10;
+        $offset = $request['offset'] ?? 1;
+
+        $editTransferRecordHistories = EditTransferRecord::orderBy('created_at', 'desc')
+            ->paginate($limit, ['*'], 'page', $offset);
+
+        $data = $editTransferRecordHistories->groupBy('transfer_record_id')->map(function ($transferRecord, $transferRecordId) {
+            $firstTransaction = $transferRecord->first();
+            $transferRecordModel = TransferRecord::where('id', $transferRecordId)->first();
+            $toTitle = DB::table('tanks')->where('id', $transferRecordModel->to_id)->value('name');
+            if($transferRecordModel->from_type == 1){
+                $fromTitle = DB::table('shops')->where('id', $transferRecordModel->from_id)->value('name');
+            }else{
+                $fromTitle = DB::table('tanks')->where('id', $transferRecordModel->from_id)->value('name');
+            }
+            return [
+                'transfer_record_id' => $transferRecordId,
+                'from_id'=> $transferRecordModel->from_id,
+                'from_title'=> $fromTitle,
+                'to_id'=> $transferRecordModel->to_id,
+                'to_title'=> $toTitle,
+                'created_at' => $firstTransaction->created_at,
+                'product_news' => $transferRecord->map(function ($transaction) {
+                    return [
+                        'product_new_id' => $transaction->product_new_id,
+                        'product_new_title' => $transaction->productNew->name,
+                        'old_quantity' => $transaction->old_quantity,
+                        'new_quantity' => $transaction->new_quantity,
+                    ];
+                }),
+            ];
+        })->values();
+
+        return response()->json([
+            'total' => $editTransferRecordHistories->total(),
+            'limit' => $limit,
+            'offset' => $offset,
+            'edit_transfer_record_histories' => $data,
+        ], 200);
+    }
+    public function getEditTransferRecordHistoryIndex1(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
 
@@ -275,7 +321,7 @@ class PosController extends Controller
             $firstTransaction = $transferRecord->first();
             $transferRecord = TransferRecord::where('id', $transferRecordId)->first();
             $toTitle = DB::table('tanks')->where('id', $transferRecord->to_id)->value('name');
-            if($this->from_type == 1){
+            if($transferRecord->from_type == 1){
                 $fromTitle = DB::table('shops')->where('id', $transferRecord->from_id)->value('name');
             }else{
                 $fromTitle = DB::table('tanks')->where('id', $transferRecord->from_id)->value('name');
