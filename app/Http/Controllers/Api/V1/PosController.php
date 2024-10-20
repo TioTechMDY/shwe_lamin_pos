@@ -265,6 +265,7 @@ class PosController extends Controller
     public function getEditTransferRecordHistoryIndex(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
+
         $offset = $request['offset'] ?? 1;
 
         $editTransferRecordHistories = EditTransferRecord::orderBy('created_at', 'desc')
