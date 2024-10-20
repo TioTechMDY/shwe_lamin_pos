@@ -287,6 +287,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'edittransactionhistory'],function (){
             Route::get('list', [PosController::class, 'getEditTransactionHistoryIndex']);//done
         });
+        Route::group(['prefix' => 'edittransferrecordhistory'],function (){
+            Route::get('list', [PosController::class, 'getEditTransferRecordHistoryIndex']);//done
+        });
 
         Route::group(['prefix' => 'transferrecord'], function () {
             Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
