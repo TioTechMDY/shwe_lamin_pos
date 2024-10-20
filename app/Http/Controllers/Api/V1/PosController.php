@@ -348,7 +348,7 @@ class PosController extends Controller
             'total' => $editTransferRecordHistories->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'edit_transaction_new_historys' => $data,
+            'edit_transfer_record_historys' => $data,
         ], 200);
     }
     public function getTransferRecordIndex(Request $request): JsonResponse
