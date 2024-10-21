@@ -20,7 +20,7 @@ class TransferRecord extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['from_id', 'to_id', 'from_type', 'to_type','isFinal','status','extra_description','created_by','updated_by'];
+    protected $fillable = ['from_id', 'to_id', 'from_type', 'to_type','isFinal','status','extra_description','created_by','confirmed_by'];
 
     public function productNews()
     {
@@ -33,6 +33,6 @@ class TransferRecord extends Model
     }
     public  function updatedBy()
     {
-        return $this->belongsTo(Admin::class, 'updated_by','id');
+        return $this->belongsTo(Admin::class, 'confirmed_by','id');
     }
 }

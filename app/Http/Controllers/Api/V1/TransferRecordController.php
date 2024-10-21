@@ -47,7 +47,7 @@ class TransferRecordController extends Controller
         $from = $request->input('from_type');
         $toId = $request->input('to_id'); // Get the tag from the request
         $isFinal = $request->input('isFinal'); // Get the tag from the request
-        $extraDescription = $request->input('extra_description'); // Get the tag from the request
+        $extraDescription = $request->input('extra_description',''); // Get the tag from the request
 
         $to = $request->input('to_type');
         if($from == 'shop'){
@@ -179,7 +179,7 @@ class TransferRecordController extends Controller
         }
 
         $transferRecord->status = 'confirmed';
-        $transferRecord->updatedBy = $updatedBy;
+        $transferRecord->confirmed_by = $updatedBy;
         $transferRecord->save();
 
 
