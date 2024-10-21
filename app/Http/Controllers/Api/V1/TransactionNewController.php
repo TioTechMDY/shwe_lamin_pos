@@ -117,7 +117,7 @@ class TransactionNewController extends Controller
         $adminId = Auth::Id();
 
         $editTransactionNew= EditTransactionNew::create([
-                       'transaction_new_id' => $transaction->id,
+                       'transaction_new_id' => $transactionId,
                         'admin_id' => $adminId,
                     ]);
 
@@ -152,9 +152,10 @@ class TransactionNewController extends Controller
 
 
                 ]);
-                EditTransactionNew::create(
+                $editTransactionNewId = $editTransactionNew->id;
+                EditTransactionNewDetail::create(
                     [
-                        'edit_transaction_new_id' => $editTransactionNew->id,
+                        'edit_transaction_new_id' => $editTransactionNewId,
                         'product_new_id' => $productNew->id,
                         'old_quantity' => $item['old_quantity'],
                         'new_quantity' => $item['new_quantity'],

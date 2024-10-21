@@ -22,6 +22,11 @@ class EditTransactionNewDetail extends Model
 
     public function editTransactionNewDetails()
     {
-        return $this->hasMany(EditTransactionNewDetail::class);
+        return $this->hasMany(EditTransactionNew::class);
     }
+    public  function productNew()
+    {
+        return $this->belongsTo(ProductNew::class,'product_new_id','id');
+    }
+
 }

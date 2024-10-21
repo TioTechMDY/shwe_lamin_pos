@@ -282,7 +282,33 @@ class PosController extends Controller
             'total' => $editTransactions->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'edit_transaction_new_historys' => $editTransactions->items(),
+            'edit_transaction_new_historys'=> $editTransactions->map(function ($editTransaction) {
+//                $shopTitle = DB::table('shops')->where('id', $transferRecordModel->from_id)->value('name');
+                $transactionNewId = $editTransaction->transaction_new_id;
+
+                $shop = DB::table('product_new_shop')
+                    ->join('shops', 'product_new_shop.shop_id', '=', 'shops.id')
+                    ->where('product_new_shop.transaction_new_id', $transactionNewId)
+                    ->select('shops.id as shop_id', 'shops.name as shop_title')
+                    ->first();
+                return [
+                    'id' => $editTransaction->id,
+                    'transaction_new_id' => $editTransaction->transaction_new_id,
+                    'shop_id'=>$shop->id,
+                    'shop_title'=>$shop->shop_title,
+                    'created_at' => $editTransaction->created_at,
+                    'product_news' => $editTransaction->editTransactionNewDetails->map(function ($detail) {
+                        return [
+                            'id' => $detail->id,
+                            'product_new_title' => $detail->productNew->name,
+                            'product_new_id' => $detail->product_new_id,
+                            'old_quantity' => $detail->old_quantity,
+                            'new_quantity' => $detail->new_quantity,
+                        ];
+                    }),
+                ];
+            }),
+//            'edit_transaction_new_historys' => $editTransactions->items(),
         ];
 
         return response()->json($data, 200);
