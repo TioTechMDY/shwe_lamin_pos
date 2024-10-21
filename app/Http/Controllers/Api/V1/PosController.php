@@ -229,40 +229,64 @@ class PosController extends Controller
 //    }
 
 
+//    public function getEditTransactionHistoryIndex(Request $request): JsonResponse
+//    {
+//        $limit = $request['limit'] ?? 10;
+//        $offset = $request['offset'] ?? 1;
+//
+//        $editTransactions = EditTransactionNew::orderBy('created_at', 'desc')
+//            ->paginate($limit, ['*'], 'page', $offset);
+//
+//        // I want getEditTransactionHistoryIndex to response data of EditTransactionNew with its related EditTransactionNewDetails. How to do that? Please forget the old data format. U can look from model to do that.
+//
+//
+////        $data = $editTransactions->groupBy('transaction_new_id')->map(function ($transactions, $transactionId) {
+////            $firstTransaction = $transactions->first();
+////            return [
+////                'transaction_new_id' => $transactionId,
+////                'shop_id' => $firstTransaction->shop_id,
+////                'shop_title'=> $firstTransaction->shop->name,
+////                'created_at' => $firstTransaction->created_at,
+////                'product_news' => $transactions->map(function ($transaction) {
+////                    return [
+////                        'product_new_id' => $transaction->product_new_id,
+////                        'product_new_title' => $transaction->productNew->name,
+////                        'old_quantity' => $transaction->old_quantity,
+////                        'new_quantity' => $transaction->new_quantity,
+////                    ];
+////                }),
+////            ];
+////        })->values();
+//
+//        return response()->json([
+//            'total' => $editTransactions->total(),
+//            'limit' => $limit,
+//            'offset' => $offset,
+//            'edit_transaction_new_historys' => $data,
+//        ], 200);
+//    }
+// In the PosController
+
     public function getEditTransactionHistoryIndex(Request $request): JsonResponse
     {
-        $limit = $request['limit'] ?? 10;
-        $offset = $request['offset'] ?? 1;
+        $limit = $request->input('limit', 10);
+        $offset = $request->input('offset', 1);
 
-        $editTransactions = EditTransactionNew::orderBy('created_at', 'desc')
+        // Fetch EditTransactionNew records with their related EditTransactionNewDetails
+        $editTransactions = EditTransactionNew::with('editTransactionNewDetails')
+            ->orderBy('created_at', 'desc')
             ->paginate($limit, ['*'], 'page', $offset);
 
-        $data = $editTransactions->groupBy('transaction_new_id')->map(function ($transactions, $transactionId) {
-            $firstTransaction = $transactions->first();
-            return [
-                'transaction_new_id' => $transactionId,
-                'shop_id' => $firstTransaction->shop_id,
-                'shop_title'=> $firstTransaction->shop->name,
-                'created_at' => $firstTransaction->created_at,
-                'product_news' => $transactions->map(function ($transaction) {
-                    return [
-                        'product_new_id' => $transaction->product_new_id,
-                        'product_new_title' => $transaction->productNew->name,
-                        'old_quantity' => $transaction->old_quantity,
-                        'new_quantity' => $transaction->new_quantity,
-                    ];
-                }),
-            ];
-        })->values();
-
-        return response()->json([
+        // Format the data for the response
+        $data = [
             'total' => $editTransactions->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'edit_transaction_new_historys' => $data,
-        ], 200);
-    }
+            'edit_transaction_new_historys' => $editTransactions->items(),
+        ];
 
+        return response()->json($data, 200);
+    }
 
     // app/Http/Controllers/Api/V1/PosController.php
 

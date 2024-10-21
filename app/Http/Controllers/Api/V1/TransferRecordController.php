@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\CPU\Helpers;
+use App\Models\EditTransferRecordDetail;
 use App\Models\ProductNew;
 use App\Models\Shop;
 use App\Models\Tank;
@@ -225,6 +226,14 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->wherePivot('isExtra',2)->updateExistingPivot($product_new['product_new_id'], [
                 'quantity' => $product_new['new_quantity'],
             ]);
+            EditTransferRecordDetail::create(
+                [
+                    'edit_transfer_record_id' => $editTransferRecordId->id,
+                    'product_new_id' => $product_new['product_new_id'],
+                    'old_quantity' => $product_new['old_quantity'],
+                    'new_quantity' => $product_new['new_quantity'],
+                ]
+            );
 //            EditTransferRecord::create([
 //                'transfer_record_id' => $transferRecord->id,
 //                'product_new_id' => $product_new['product_new_id'],

@@ -7,6 +7,7 @@ use App\Models\ProductNew;
 use App\Models\Shop;
 use App\Models\Tank;
 use App\Models\TransactionNew;
+use App\Models\EditTransactionNewDetail;
 use App\Models\EditTransactionNew;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
@@ -151,6 +152,14 @@ class TransactionNewController extends Controller
 
 
                 ]);
+                EditTransactionNew::create(
+                    [
+                        'edit_transaction_new_id' => $editTransactionNew->id,
+                        'product_new_id' => $productNew->id,
+                        'old_quantity' => $item['old_quantity'],
+                        'new_quantity' => $item['new_quantity'],
+                    ]
+                );
 //                    EditTransactionNew::create([
 //                        'shop_id' => $shop->id,
 //                        'product_new_id' => $productNew->id,
@@ -217,3 +226,9 @@ class TransactionNewController extends Controller
 
 
 // I want to create a model that records editTransaction History, named edit_transaction_news table. The table will contain the following columns: id, shop id, product  new id  , old quantity, new quantity, transaction new id and created_at. The table will be updated when the editTransaction method is called. The editTransaction method will be updated to include the edit_transaction_news table.
+//php artisan make:migration create_edit_transaction_new_details_table
+//create_edit_transaction_new_details_table
+//create_edit_transfer_record_details_table
+//php artisan make:model EditTransactionNewDetail
+//make:model EditTransactionNewDetail
+//make:model EditTransferRecordDetail
