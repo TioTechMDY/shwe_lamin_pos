@@ -27,6 +27,6 @@ class EditTransferRecord extends Model
     }
     public function editTransferRecordDetails()
     {
-        return $this->hasMany(EditTransferRecordDetail::class, 'edit_transaction_new_id', 'id');
+        return $this->hasMany(EditTransferRecordDetail::class, 'edit_transfer_record_id', 'id');
     }
 }

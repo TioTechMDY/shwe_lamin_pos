@@ -229,7 +229,7 @@ class TransferRecordController extends Controller
             $editTransferRecordId = $editTransferRecord->id;
             EditTransferRecordDetail::create(
                 [
-                    'edit_transfer_record_id' => $editTransferRecordId->id,
+                    'edit_transfer_record_id' => $editTransferRecordId,
                     'product_new_id' => $product_new['product_new_id'],
                     'old_quantity' => $product_new['old_quantity'],
                     'new_quantity' => $product_new['new_quantity'],

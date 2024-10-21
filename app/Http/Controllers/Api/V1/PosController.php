@@ -294,7 +294,7 @@ class PosController extends Controller
                 return [
                     'id' => $editTransaction->id,
                     'transaction_new_id' => $editTransaction->transaction_new_id,
-                    'shop_id'=>$shop->id,
+                    'shop_id'=>$shop->shop_id,
                     'shop_title'=>$shop->shop_title,
                     'created_at' => $editTransaction->created_at,
                     'product_news' => $editTransaction->editTransactionNewDetails->map(function ($detail) {
@@ -321,7 +321,7 @@ class PosController extends Controller
         $limit = $request['limit'] ?? 10;
         $offset = $request['offset'] ?? 1;
         // Fetch EditTransactionNew records with their related EditTransactionNewDetails
-        $editTransferRecords = EditTransferRecord::with('editTransactionNewDetails')
+        $editTransferRecords = EditTransferRecord::with('editTransferRecordDetails')
             ->orderBy('created_at', 'desc')
             ->paginate($limit, ['*'], 'page', $offset);
 
@@ -330,7 +330,7 @@ class PosController extends Controller
             'total' => $editTransferRecords->total(),
             'limit' => $limit,
             'offset' => $offset,
-            'edit_transaction_new_historys'=> $editTransferRecords->map(function ($editTransferRecord) {
+            'edit_transfer_record_histories'=> $editTransferRecords->map(function ($editTransferRecord) {
                 $transferRecordId = $editTransferRecord->transfer_record_id;
 
                 $transferRecordModel = TransferRecord::where('id', $transferRecordId)->first();
