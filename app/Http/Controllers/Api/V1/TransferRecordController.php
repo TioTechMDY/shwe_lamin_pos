@@ -79,7 +79,7 @@ class TransferRecordController extends Controller
                 'to_type'=>$toType,
                 'isFinal'=>intval($isFinal),
                 'status' => $status,
-                'extra_description' => $extraDescription,
+                'extra_description' => $extraDescription??'',
                 'created_by' => $createdBy,
             ]
         );
