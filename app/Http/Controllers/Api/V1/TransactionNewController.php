@@ -48,10 +48,10 @@ class TransactionNewController extends Controller
 
         $transactionNew = TransactionNew::create(
             [
-            'tag' => $tag,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'isPo' => $isPo,
+                'tag' => $tag,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'isPo' => $isPo,
                 'created_by' => $adminId,
             ]
         );
@@ -117,9 +117,9 @@ class TransactionNewController extends Controller
         $adminId = Auth::Id();
 
         $editTransactionNew= EditTransactionNew::create([
-                       'transaction_new_id' => $transactionId,
-                        'admin_id' => $adminId,
-                    ]);
+            'transaction_new_id' => $transactionId,
+            'admin_id' => $adminId,
+        ]);
 
         if (!is_array($products)) {
             return response()->json(['error' => $products], 400);
@@ -137,13 +137,14 @@ class TransactionNewController extends Controller
             }
 
             // product and shop are already attached. want  to update the quantity of the product in the shop
-                if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {
+            if ($shop->product_news()->where('product_new_id', $productNew->id)->exists()) {
                 // Retrieve the current quantity
                 $currentQuantity = $shop->product_news()->where('product_new_id', $productNew->id)->orderBy('transaction_new_id', 'desc')->first()->pivot->absolute;
 
                 // Increment the quantity by the specified amount
                 $newQuantity = $currentQuantity + $item['new_quantity']-$item['old_quantity'];
-                $shop->product_news()->updateExistingPivot($productNew->id, [
+
+                $shop->product_news()->wherePivot('transaction_new_id',$transactionId)->updateExistingPivot($productNew->id, [
                     'quantity' => $item['new_quantity'],
                     'absolute' => $newQuantity,
                     'transaction_new_id' => $transaction->id,
