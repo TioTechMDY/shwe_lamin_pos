@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('edit_transfer_records', function (Blueprint $table) {
-            $table->integer('admin_id')->after('new_quantity');
+            $table->integer('admin_id');
         });
     }
 

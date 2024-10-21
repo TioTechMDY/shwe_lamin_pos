@@ -16,9 +16,6 @@ return new class extends Migration
         Schema::create('edit_transfer_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('transfer_record_id')->constrained('transfer_records');
-            $table->foreignId('product_new_id')->constrained('product_news');
-            $table->integer('old_quantity');
-            $table->integer('new_quantity');
             $table->timestamps();
         });
     }

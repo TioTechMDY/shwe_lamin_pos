@@ -114,6 +114,12 @@ class TransactionNewController extends Controller
         $productRaw = $request->input('products');
         $products = json_decode($productRaw, true);
         $adminId = Auth::Id();
+
+        $editTransactionNew= EditTransactionNew::create([
+                       'transaction_new_id' => $transaction->id,
+                        'admin_id' => $adminId,
+                    ]);
+
         if (!is_array($products)) {
             return response()->json(['error' => $products], 400);
         }
@@ -145,14 +151,14 @@ class TransactionNewController extends Controller
 
 
                 ]);
-                    EditTransactionNew::create([
-                        'shop_id' => $shop->id,
-                        'product_new_id' => $productNew->id,
-                        'old_quantity' => $item['old_quantity'],
-                        'new_quantity' => $item['new_quantity'],
-                        'transaction_new_id' => $transaction->id,
-                        'admin_id' => $adminId,
-                    ]);
+//                    EditTransactionNew::create([
+//                        'shop_id' => $shop->id,
+//                        'product_new_id' => $productNew->id,
+//                        'old_quantity' => $item['old_quantity'],
+//                        'new_quantity' => $item['new_quantity'],
+//                        'transaction_new_id' => $transaction->id,
+//                        'admin_id' => $adminId,
+//                    ]);
 
                 // Update the pivot table
 //                $shop->product_news()->attach($productNew->id, [
