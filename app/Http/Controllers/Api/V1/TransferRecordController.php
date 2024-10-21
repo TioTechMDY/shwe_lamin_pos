@@ -7,6 +7,7 @@ use App\Models\ProductNew;
 use App\Models\Shop;
 use App\Models\Tank;
 use App\Models\TransferRecord;
+use App\Models\EditTransferRecord;
 use Box\Spout\Common\Exception\InvalidArgumentException;
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Common\Exception\UnsupportedTypeException;
