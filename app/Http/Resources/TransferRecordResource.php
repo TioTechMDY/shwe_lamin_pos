@@ -36,7 +36,10 @@ class TransferRecordResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'extra_description' => $this->extra_description,
-
+            'created_by_id'=> $this->created_by,
+            'created_by_name'=> $this->createdBy->f_name . ' ' . $this->createdBy->l_name,
+            'updated_by'=> $this->updated_by,
+            'updated_by_name'=> $this->updatedBy->f_name . ' ' . $this->updatedBy->l_name,
             'productDetails' => $this->whenLoaded('productNews', function () {
                 return $this->productNews->filter(function ($productNew) {
                     return $productNew->pivot->isExtra == 0;

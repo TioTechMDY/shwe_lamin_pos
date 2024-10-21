@@ -42,6 +42,7 @@ class TransactionNewController extends Controller
         $startDate = $request->input('start_date'); // Get the start date from the request
         $endDate = $request->input('end_date'); // Get the end date from the request
         $isPo = $request->input('isPo'); // Get the end date from the request
+        $adminId = Auth::Id();
 
 
         $transactionNew = TransactionNew::create(
@@ -49,7 +50,8 @@ class TransactionNewController extends Controller
             'tag' => $tag,
             'start_date' => $startDate,
             'end_date' => $endDate,
-            'isPo' => $isPo
+            'isPo' => $isPo,
+                'created_by' => $adminId,
             ]
         );
 

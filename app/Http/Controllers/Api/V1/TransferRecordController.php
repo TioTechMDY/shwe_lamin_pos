@@ -67,6 +67,7 @@ class TransferRecordController extends Controller
         }else{
             $status = 'pending';
         }
+        $createdBy = Auth::id();
 
 
 
@@ -79,6 +80,7 @@ class TransferRecordController extends Controller
                 'isFinal'=>intval($isFinal),
                 'status' => $status,
                 'extra_description' => $extraDescription,
+                'created_by' => $createdBy,
             ]
         );
 
@@ -135,6 +137,7 @@ class TransferRecordController extends Controller
         $id = intval($request->id);
         $toId = $request->input('to_id'); // Get the tag from the request
         $toTank = Tank::find($toId);
+        $updatedBy = Auth::id();
 
 
         $transferRecord = TransferRecord::findOrFail($id);
@@ -176,6 +179,7 @@ class TransferRecordController extends Controller
         }
 
         $transferRecord->status = 'confirmed';
+        $transferRecord->updatedBy = $updatedBy;
         $transferRecord->save();
 
 
