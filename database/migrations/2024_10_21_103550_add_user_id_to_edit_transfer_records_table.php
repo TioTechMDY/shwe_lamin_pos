@@ -14,14 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('edit_transfer_records', function (Blueprint $table) {
-            $table->foreignId('admin_id')->constrained('admins')->after('new_quantity');
+            $table->int('admin_id')->after('new_quantity');
         });
     }
 
     public function down()
     {
         Schema::table('edit_transfer_records', function (Blueprint $table) {
-            $table->dropForeign(['admin_id']);
             $table->dropColumn('admin_id');
         });
     }
