@@ -16,6 +16,7 @@ class EditTransferRecord extends Model
         'product_new_id',
         'old_quantity',
         'new_quantity',
+        'admin_id',
     ];
 
     public function transferRecord()
@@ -26,5 +27,9 @@ class EditTransferRecord extends Model
     public function productNew()
     {
         return $this->belongsTo(ProductNew::class, 'product_new_id');
+    }
+    public function  admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 }

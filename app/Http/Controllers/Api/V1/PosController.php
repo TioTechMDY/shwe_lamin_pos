@@ -339,6 +339,7 @@ class PosController extends Controller
                         'product_new_title' => $transaction->productNew->name,
                         'old_quantity' => $transaction->old_quantity,
                         'new_quantity' => $transaction->new_quantity,
+                        'created_at'=> $transaction->created_at,
                     ];
                 }),
             ];

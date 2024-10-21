@@ -15,6 +15,7 @@ class EditTransactionNew extends Model
         'old_quantity',
         'new_quantity',
         'transaction_new_id',
+        'admin_id',
     ];
 
     public function productNew()
@@ -25,5 +26,9 @@ class EditTransactionNew extends Model
     {
         return $this->belongsTo(Shop::class, 'shop_id');
 
+    }
+    public  function  admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
     }
 }

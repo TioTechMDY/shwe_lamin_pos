@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use function App\CPU\translate;
@@ -110,6 +111,7 @@ class TransactionNewController extends Controller
 //        $products = $request->input('products');
         $productRaw = $request->input('products');
         $products = json_decode($productRaw, true);
+        $adminId = Auth::Id();
         if (!is_array($products)) {
             return response()->json(['error' => $products], 400);
         }
@@ -147,6 +149,7 @@ class TransactionNewController extends Controller
                         'old_quantity' => $item['old_quantity'],
                         'new_quantity' => $item['new_quantity'],
                         'transaction_new_id' => $transaction->id,
+                        'admin_id' => $adminId,
                     ]);
 
                 // Update the pivot table

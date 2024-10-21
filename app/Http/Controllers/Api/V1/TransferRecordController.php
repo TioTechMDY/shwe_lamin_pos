@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use function App\CPU\translate;
 
@@ -199,6 +200,7 @@ class TransferRecordController extends Controller
         $id = intval($request->id);
         $toId = $request->input('to_id'); // Get the tag from the request
         $toTank = Tank::find($toId);
+        $adminId = Auth::id();
 
 
         $transferRecord = TransferRecord::findOrFail($id);
@@ -220,6 +222,7 @@ class TransferRecordController extends Controller
                 'product_new_id' => $product_new['product_new_id'],
                 'old_quantity' => $product_new['old_quantity'],
                 'new_quantity' => $product_new['new_quantity'],
+                'admin_id' => $adminId,
             ]);
         }
 
