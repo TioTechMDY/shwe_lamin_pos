@@ -23,6 +23,10 @@ class EditTransferRecord extends Model
 
     public function  admin()
     {
-        return $this->belongsTo(Admin::class, 'admin_id');
+        return $this->belongsTo(Admin::class, 'admin_id','id');
+    }
+    public function editTransferRecordDetails()
+    {
+        return $this->hasMany(EditTransferRecordDetail::class, 'edit_transaction_new_id', 'id');
     }
 }

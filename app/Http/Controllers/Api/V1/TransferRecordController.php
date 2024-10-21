@@ -209,8 +209,8 @@ class TransferRecordController extends Controller
 
 
         $transferRecord = TransferRecord::findOrFail($id);
-       $editTransferRecordId = EditTransferRecord::create([
-                'transfer_record_id' => $transferRecord->id,
+       $editTransferRecord = EditTransferRecord::create([
+                'transfer_record_id' => $id,
                 'admin_id' => $adminId,
             ]);
         foreach ($productNews as $product_new) {
@@ -226,6 +226,7 @@ class TransferRecordController extends Controller
             $transferRecord->productNews()->wherePivot('isExtra',2)->updateExistingPivot($product_new['product_new_id'], [
                 'quantity' => $product_new['new_quantity'],
             ]);
+            $editTransferRecordId = $editTransferRecord->id;
             EditTransferRecordDetail::create(
                 [
                     'edit_transfer_record_id' => $editTransferRecordId->id,

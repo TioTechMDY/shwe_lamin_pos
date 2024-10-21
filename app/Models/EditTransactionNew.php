@@ -23,4 +23,8 @@ class EditTransactionNew extends Model
     {
         return $this->belongsTo(Admin::class, 'admin_id','id');
     }
+    public function editTransactionNewDetails()
+    {
+        return $this->hasMany(EditTransactionNewDetail::class, 'edit_transaction_new_id', 'id');
+    }
 }

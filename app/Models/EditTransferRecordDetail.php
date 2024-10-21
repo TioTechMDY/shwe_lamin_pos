@@ -18,4 +18,8 @@ class EditTransferRecordDetail extends Model
     {
         return $this->belongsTo(EditTransferRecord::class,'edit_transfer_record_id','id');
     }
+    public  function productNew()
+    {
+        return $this->belongsTo(ProductNew::class,'product_new_id','id');
+    }
 }
