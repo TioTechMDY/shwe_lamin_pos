@@ -296,6 +296,8 @@ class PosController extends Controller
                     'transaction_new_id' => $editTransaction->transaction_new_id,
                     'shop_id'=>$shop->shop_id,
                     'shop_title'=>$shop->shop_title,
+                    'edited_by_id'=>$editTransaction->admin_id,
+                    'edited_by'=> $editTransaction->admin->f_name . ' ' . $editTransaction->admin->l_name,
                     'created_at' => $editTransaction->created_at,
                     'product_news' => $editTransaction->editTransactionNewDetails->map(function ($detail) {
                         return [
@@ -347,6 +349,8 @@ class PosController extends Controller
                     'from_title'=> $fromTitle,
                     'to_id'=> $transferRecordModel->to_id,
                     'to_title'=> $toTitle,
+                    'edited_by_id'=>$editTransferRecord->admin_id,
+                    'edited_by'=>$editTransferRecord->admin->f_name . ' ' . $editTransferRecord->admin->l_name,
                     'created_at' => $editTransferRecord->created_at,
                     'product_news' => $editTransferRecord->editTransferRecordDetails->map(function ($transferRecord) {
                     return [
