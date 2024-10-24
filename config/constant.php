@@ -407,11 +407,29 @@ const MODULE_PERMISSION = [
 
     //po_history
     "po_history_section",
+    "create_transaction_section",
+
 
     //po_out
     "po_out_section",
+    "create_po_out_section",
+    "confirm_po_out_section",
+
 
     //sagaing_out
     "sagaing_out_section",
+    "create_sagaing_out_section",
+//    "confirm_sagaing_out_section",
+
+    //edit_transaction
+    "edit_transaction_section",
+    "create_edit_transaction_section",
+
+    //edit_transfer_record_section
+    "edit_transfer_record_section",
+    "create_transfer_record_section",
+    "create_edit_sagaing_out_section",
 
 ];
+
+

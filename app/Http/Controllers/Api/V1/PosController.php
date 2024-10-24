@@ -104,7 +104,7 @@ class PosController extends Controller
     }
     public function getAllTankIndex(Request $request): JsonResponse
     {
-        $limit = $request['limit'] ?? 10;
+        $limit = 100;
         $offset = $request['offset'] ?? 1;
         $tank = $this->tank->latest()->paginate($limit, ['*'], 'page', $offset);
         $tanks = TanksResource::collection($tank);
@@ -336,12 +336,12 @@ class PosController extends Controller
                 $transferRecordId = $editTransferRecord->transfer_record_id;
 
                 $transferRecordModel = TransferRecord::where('id', $transferRecordId)->first();
-           $toTitle = DB::table('tanks')->where('id', $transferRecordModel->to_id)->value('name');
-            if($transferRecordModel->from_type == 1){
-               $fromTitle = DB::table('shops')->where('id', $transferRecordModel->from_id)->value('name');
-           }else{
-               $fromTitle = DB::table('tanks')->where('id', $transferRecordModel->from_id)->value('name');
-            }
+                $toTitle = DB::table('tanks')->where('id', $transferRecordModel->to_id)->value('name');
+                if($transferRecordModel->from_type == 1){
+                    $fromTitle = DB::table('shops')->where('id', $transferRecordModel->from_id)->value('name');
+                }else{
+                    $fromTitle = DB::table('tanks')->where('id', $transferRecordModel->from_id)->value('name');
+                }
                 return [
                     'id' => $editTransferRecord->id,
                     'transfer_record_id' => $editTransferRecord->transfer_record_id,
@@ -353,19 +353,19 @@ class PosController extends Controller
                     'edited_by'=>$editTransferRecord->admin->f_name . ' ' . $editTransferRecord->admin->l_name,
                     'created_at' => $editTransferRecord->created_at,
                     'product_news' => $editTransferRecord->editTransferRecordDetails->map(function ($transferRecord) {
-                    return [
-                        'product_new_id' => $transferRecord->product_new_id,
-                        'product_new_title' => $transferRecord->productNew->name,
-                        'old_quantity' => $transferRecord->old_quantity,
-                        'new_quantity' => $transferRecord->new_quantity,
-                    ];
-                }),
+                        return [
+                            'product_new_id' => $transferRecord->product_new_id,
+                            'product_new_title' => $transferRecord->productNew->name,
+                            'old_quantity' => $transferRecord->old_quantity,
+                            'new_quantity' => $transferRecord->new_quantity,
+                        ];
+                    }),
 //            'edit_transaction_new_historys' => $editTransactions->items(),
-        ];
+                ];
 
             })];
-                return response()->json($data, 200);
-}
+        return response()->json($data, 200);
+    }
 
 //        $editTransferRecordHistories = EditTransferRecord::orderBy('created_at', 'desc')
 //            ->paginate($limit, ['*'], 'page', $offset);
@@ -403,7 +403,7 @@ class PosController extends Controller
 //            'offset' => $offset,
 //            'edit_transfer_record_histories' => $data,
 //        ], 200);
- //   }
+    //   }
     public function getEditTransferRecordHistoryIndex1(Request $request): JsonResponse
     {
         $limit = $request['limit'] ?? 10;
@@ -424,7 +424,7 @@ class PosController extends Controller
             }
             return [
                 'transfer_record_id' => $transferRecordId,
-               'from_id'=> $firstTransaction->from_id,
+                'from_id'=> $firstTransaction->from_id,
                 'from_title'=> $fromTitle,
                 'to_id'=> $firstTransaction->to_id,
                 'to_title'=> $toTitle,
@@ -454,7 +454,7 @@ class PosController extends Controller
         $offset = $request['offset'] ?? 1;
 
 
-        $transferRecords = TransferRecord::with(['productNews'])->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
+        $transferRecords = TransferRecord::with(['productNews'])->where('isFinal',0)->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
 
         $transferRecordsCollections = TransferRecordResource::collection($transferRecords);
         $data = [
@@ -471,7 +471,7 @@ class PosController extends Controller
         $offset = $request['offset'] ?? 1;
 
 
-        $transferRecords = TransferRecord::with(['productNews'])->where('to_id',20)->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
+        $transferRecords = TransferRecord::with(['productNews'])->where('isFinal',1)->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $offset);
 
         $transferRecordsCollections = TransferRecordResource::collection($transferRecords);
         $data = [
@@ -1386,3 +1386,4 @@ class PosController extends Controller
         return response()->json($data, 200);
     }
 }
+
