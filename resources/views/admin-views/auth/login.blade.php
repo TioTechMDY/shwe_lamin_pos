@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width">
     <title>{{\App\CPU\translate('admin')}} | {{\App\CPU\translate('login')}}</title>
     <link rel="shortcut icon" href="">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/google-fonts.css">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/vendor.min.css">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/vendor/icon-set/style.css">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/theme.minc619.css?v=1.0">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/toastr.css">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/auth-page.css">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/google-fonts.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/vendor.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/vendor/icon-set/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/theme.minc619.css?v=1.0')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/toastr.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/auth-page.css')}}">
 
 </head>
 
