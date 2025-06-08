@@ -4,7 +4,7 @@
 
 @push('css_or_js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
+    <link rel="stylesheet" href="{{asset('assets/admin/css/custom.css')}}"/>
 @endpush
 
 @section('content')
