@@ -1,5 +1,5 @@
 @push('css_or_js')
-    <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/custom.css" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/custom.css') }}" />
 @endpush
 <div class="card-body pt-0">
     <div class="table-responsive pos-cart-table border">
