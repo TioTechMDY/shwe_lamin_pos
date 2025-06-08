@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
+<link rel="stylesheet" href="{{asset('assets/admin/css/custom.css')}}"/>
 <div class="modal-header p-2">
     <h4 class="modal-title product-title">
     </h4>
