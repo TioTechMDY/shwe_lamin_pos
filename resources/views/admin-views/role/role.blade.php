@@ -3,7 +3,7 @@
 @section('title', \App\CPU\translate('create_role'))
 
 @push('css_or_js')
-    <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/custom.css" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/custom.css') }}" />
 
     <style>
         .check--item-wrapper {
