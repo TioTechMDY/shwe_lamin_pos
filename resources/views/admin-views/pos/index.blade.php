@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width">
     <title>{{\App\CPU\translate('Add to cart page')}}</title>
     @php($favIcon=\App\Models\BusinessSetting::where(['key'=>'fav_icon'])->first()->value)
-    <link rel="shortcut icon" href="{{asset('storage/app/public/shop').'/' . $favIcon }}">
+    <link rel="shortcut icon" href="{{asset('storage/app/shop').'/' . $favIcon }}">
 
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/google-fonts.css">
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/vendor.min.css">
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/vendor/icon-set/style.css">
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/theme.minc619.css?v=1.0">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/google-fonts.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/vendor.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/vendor/icon-set/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/theme.minc619.css?v=1.0')}}">
     @stack('css_or_js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/pos.css"/>
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/toastr.css">
+    <link rel="stylesheet" href="{{asset('assets/admin/css/custom.cs')}}s"/>
+    <link rel="stylesheet" href="{{asset('assets/admin/css/pos.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/admin/css/toastr.css')}}">
 
     <style>
         .text-decoration{
