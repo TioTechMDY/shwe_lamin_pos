@@ -3,7 +3,7 @@
 @section('title', $product->name . ' ' . \App\CPU\translate('barcode') . ' ' . date("Y/m/d"))
 
 @push('css_or_js')
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/barcode.css"/>
+    <link rel="stylesheet" href="{{asset('assets/admin/css/barcode.css')}}"/>
 @endpush
 
 @section('content')
