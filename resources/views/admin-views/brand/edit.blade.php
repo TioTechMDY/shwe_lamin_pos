@@ -3,7 +3,7 @@
 @section('title',\App\CPU\translate('update_brand'))
 
 @push('css_or_js')
-    <link rel="stylesheet" href="{{asset('public/assets/admin')}}/css/custom.css"/>
+    <link rel="stylesheet" href="{{asset('assets/adminz/css/custom.css')}}"/>
 @endpush
 
 @section('content')
