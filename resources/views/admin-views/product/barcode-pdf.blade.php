@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{{\App\CPU\translate('Product Barcode')}}</title>
-    <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/bootstrap.css" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.css') }}" />
     <style>
         @font-face {
             font-family: 'DejaVuSans';
