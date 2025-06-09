@@ -14,3 +14,9 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
+
+# Ignore root .env file
+.env
+
+# Ignore .env file in application directory
+application/.env

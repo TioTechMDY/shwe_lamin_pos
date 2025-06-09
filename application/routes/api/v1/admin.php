@@ -1,0 +1,322 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\PosController;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\UnitController;
+use App\Http\Controllers\Api\V1\BrandController;
+use App\Http\Controllers\Api\V1\CouponController;
+use App\Http\Controllers\Api\V1\IncomeController;
+use App\Http\Controllers\Api\V1\AccountController;
+use App\Http\Controllers\Api\V1\ExpenseController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\ProductNewController;
+use App\Http\Controllers\Api\V1\ShopController;
+use App\Http\Controllers\Api\V1\TankController;
+use App\Http\Controllers\Api\V1\TransactionNewController;
+use App\Http\Controllers\Api\V1\TransferRecordController;
+
+
+
+use App\Http\Controllers\Api\V1\SettingController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\SupplierController;
+use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\EmployeeController;
+use App\Http\Controllers\Api\V1\CustomRoleController;
+use App\Http\Controllers\Api\V1\SubCategoryController;
+use App\Http\Controllers\Api\V1\TransactionController;
+
+
+
+Route::group(['prefix' => 'v1'], function () {
+    Route::post('login', [AuthController::class, 'adminLogin']);
+    Route::get('config', [SettingController::class, 'configuration']);
+    Route::group(['middleware' => ['auth:admin-api']], function () {
+        /**************** Admin Settings Route Starts Here ***********************/
+        Route::post('change-password', [AuthController::class, 'passwordChange']);
+        Route::post('update/shop', [SettingController::class, 'updateShop']);
+        Route::get('profile', [AuthController::class, 'profile']);
+        /**************** Dashboard Route Starts Here ***********************/
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('revenue-summary', [DashboardController::class, 'getIndex']);
+            Route::get('revenue/filtering', [DashboardController::class, 'getFilter']);
+            Route::get('product/limited-stock', [DashboardController::class, 'productLimitedStockList']);
+            Route::get('monthly/revenue', [DashboardController::class, 'incomeRevenue']);
+            Route::get('quantity/increase', [DashboardController::class, 'quantityIncrease']);
+        });
+        /**************** Employee Role Route Starts Here ***********************/
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('list', [CustomRoleController::class, 'list']);
+            Route::post('store', [CustomRoleController::class, 'store']);
+            Route::post('update', [CustomRoleController::class, 'update']);
+            Route::get('delete', [CustomRoleController::class, 'delete']);
+            Route::get('search', [CustomRoleController::class, 'getSearch']);
+        });
+        /**************** Employee Route Starts Here ***********************/
+        Route::group(['prefix' => 'employee'], function () {
+            Route::get('list', [EmployeeController::class, 'list']);
+            Route::post('store', [EmployeeController::class, 'store']);
+            Route::post('update', [EmployeeController::class, 'update']);
+            Route::get('delete', [EmployeeController::class, 'delete']);
+            Route::get('search', [EmployeeController::class, 'getSearch']);
+        });
+        /**************** Category Route Starts Here ***********************/
+        Route::group(['prefix' => 'category'], function () {
+            Route::get('list', [CategoryController::class, 'getIndex']);
+            Route::post('store', [CategoryController::class, 'postStore']);
+            Route::post('update', [CategoryController::class, 'postUpdate']);
+            Route::get('delete', [CategoryController::class, 'delete']);
+            Route::get('search',  [CategoryController::class, 'getSearch']);
+            Route::get('status', [CategoryController::class, 'updateStatus']);
+        });
+
+        Route::group(['prefix' => 'sub/category'], function () {
+            Route::get('list', [SubCategoryController::class, 'getIndex']);
+            Route::post('store', [SubCategoryController::class, 'postStore']);
+            Route::post('update', [SubCategoryController::class, 'postUpdate']);
+            Route::get('delete', [SubCategoryController::class, 'delete']);
+            Route::get('search',  [SubCategoryController::class, 'getSearch']);
+        });
+        /**************** Brand Route Starts Here ******************************/
+        Route::group(['prefix' => 'brand'], function () {
+            Route::get('list', [BrandController::class, 'getIndex']);
+            Route::post('store', [BrandController::class, 'postStore']);
+            Route::post('update', [BrandController::class, 'postUpdate']);
+            Route::get('delete', [BrandController::class, 'delete']);
+            Route::get('search',  [BrandController::class, 'getSearch']);
+            Route::get('status',  [BrandController::class, 'updateStatus']);
+        });
+        /********************* Unit Route Starts Here **************************/
+        Route::group(['prefix' => 'unit'], function () {
+            Route::get('list', [UnitController::class, 'getIndex']);
+            Route::post('store', [UnitController::class, 'postStore']);
+            Route::put('update', [UnitController::class, 'postUpdate']);
+            Route::get('delete', [UnitController::class, 'delete']);
+            Route::get('search',  [UnitController::class, 'getSearch']);
+        });
+        /********************* Coupon Route Starts Here **************************/
+        Route::group(['prefix' => 'coupon'], function () {
+            Route::get('list', [CouponController::class, 'getIndex']);
+            Route::post('store', [CouponController::class, 'postStore']);
+            Route::put('update', [CouponController::class, 'postUpdate']);
+            Route::get('delete', [CouponController::class, 'delete']);
+            Route::get('status', [CouponController::class, 'updateStatus']);
+            Route::get('check', [CouponController::class, 'checkCoupon']);
+            Route::get('search', [CouponController::class, 'getSearch']);
+        });
+        /********************* Customer Route Starts Here **************************/
+        Route::group(['prefix' => 'customer'], function () {
+            Route::get('list', [CustomerController::class, 'getIndex']);
+            Route::post('store', [CustomerController::class, 'postStore']);
+            Route::get('details', [CustomerController::class, 'getDetails']);
+            Route::put('update', [CustomerController::class, 'postUpdate']);
+            Route::get('delete', [CustomerController::class, 'delete']);
+            Route::post('add-balance', [CustomerController::class, 'addBalance']);
+            Route::post('update/balance', [CustomerController::class, 'updateBalance']);
+            Route::get('search', [CustomerController::class, 'getSearch']);
+            Route::get('filter', [CustomerController::class, 'dateWiseFilter']);
+            Route::get('transaction', [CustomerController::class, 'totalTransaction']);
+            Route::get('transaction/filter', [CustomerController::class, 'transactionFilter']);
+
+        });
+        /********************* Account Route Starts Here **************************/
+        Route::group(['prefix' => 'account'], function () {
+            Route::get('list', [AccountController::class, 'getIndex']);
+            Route::post('save', [AccountController::class, 'accountStore']);
+            Route::post('update', [AccountController::class, 'accountUpdate']);
+            Route::get('delete', [AccountController::class, 'delete']);
+            Route::get('search', [AccountController::class, 'getSearch']);
+        });
+
+        /********************* Account Route Starts Here **************************/
+        Route::group(['prefix' => 'income'], function () {
+            Route::post('store', [IncomeController::class, 'newIncome']);
+            Route::get('list', [IncomeController::class, 'index']);
+            Route::get('filter', [IncomeController::class, 'getFilter']);
+        });
+        /********************* Supplier Route Starts Here **************************/
+        Route::group(['prefix' => 'supplier'], function () {
+            Route::get('list', [SupplierController::class, 'getIndex']);
+            Route::post('store', [SupplierController::class, 'postStore']);
+            Route::get('details', [SupplierController::class, 'getDetails']);
+            Route::put('update', [SupplierController::class, 'postUpdate']);
+            Route::get('delete', [SupplierController::class, 'delete']);
+            Route::get('search', [SupplierController::class, 'getSearch']);
+            Route::get('filter', [SupplierController::class, 'filterByCity']);
+
+            Route::get('transactions', [SupplierController::class, 'transactions']);
+            Route::post('payment', [SupplierController::class, 'payment']);
+            Route::post('new/purchase', [SupplierController::class, 'newPurchase']);
+            Route::get('transactions/date/filter', [SupplierController::class, 'transactionsDateFilter']);
+
+        });
+        /********************* Expense Route Starts Here **************************/
+        Route::group(['prefix' => 'transaction'], function () {
+            Route::get('list', [TransactionController::class, 'getIndex']);
+            Route::post('expense', [ExpenseController::class, 'storeExpenses']);
+            Route::get('exp/list', [ExpenseController::class, 'getExpense']);
+            Route::get('expense/search',  [ExpenseController::class, 'getSearch']);
+            Route::post('transfer', [ExpenseController::class, 'storeTransfer']);
+
+            Route::get('transfer-list', [ExpenseController::class, 'transferList']);
+            Route::get('filter', [TransactionController::class, 'transactionFilter']);
+            Route::get('transfer/accounts', [TransactionController::class, 'transferAccounts']);
+            Route::post('fund/transfer', [TransactionController::class, 'fundTransfer']);
+            Route::get('transfer/export', [TransactionController::class, 'transferListExport'])->withoutMiddleware('auth:admin-api');
+            Route::get('types', [TransactionController::class, 'transactionTypes']);
+        });
+        /********************* Cart Route Starts Here **************************/
+        Route::post('add/to/cart/{id}', [CartController::class, 'addToCart']);
+        Route::post('remove/cart', [CartController::class, 'removeCart']);
+        /********************* POS Route Starts Here **************************/
+        Route::group(['prefix' => 'pos'], function () {
+            Route::post('place/order', [PosController::class, 'placeOrder']);
+            Route::get('order/list', [PosController::class, 'orderList']);
+            Route::get('invoice', [PosController::class, 'invoiceGenerate']);
+            Route::get('order/search', [PosController::class, 'orderGetSearch']);
+            Route::get('customer/orders', [PosController::class, 'customerOrders']);
+        });
+        Route::group(['prefix' => 'product'], function () {
+            Route::get('list', [PosController::class, 'getProductIndex']);
+            Route::post('store', [PosController::class, 'storeProduct']);
+            Route::post('update', [PosController::class, 'productUpdate']);
+            Route::get('search',  [PosController::class, 'getSearch']);
+            Route::get('code/search',  [ProductController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'delete']);
+            Route::post('import', [ProductController::class, 'bulkImportData']);
+            Route::get('export', [ProductController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api');
+            Route::get('download/excel/sample', [ProductController::class, 'downloadExcelSample']);
+            Route::get('barcode/generate', [ProductController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api');
+            Route::get('category-wise', [ProductController::class, 'categoryWiseProduct']);
+            Route::get('sort', [ProductController::class, 'productSort']);
+            Route::get('popular/filter', [ProductController::class, 'popularProductSort']);
+            Route::get('supplier/wise', [ProductController::class, 'supplierWiseProduct']);
+        });
+        Route::group(['prefix' => 'productnew'], function () {
+            Route::get('list', [PosController::class, 'getProductNewIndex']);
+            Route::get('alllist', [PosController::class, 'getProductNewList']);
+            Route::post('store', [PosController::class, 'storeProductNew']);
+            Route::post('update', [PosController::class, 'productNewUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchNew']);
+            Route::get('code/search',  [ProductNewController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'deleteNew']);
+            Route::post('import', [ProductNewController::class, 'bulkImportData']); // will check later
+            Route::get('export', [ProductNewController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [ProductNewController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [ProductNewController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [ProductNewController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [ProductNewController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [ProductNewController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [ProductNewController::class, 'supplierWiseProduct']); // will check later
+        });
+        Route::group(['prefix' => 'shop'], function () {
+            Route::get('list', [PosController::class, 'getShopIndex']);
+            Route::get('product', [PosController::class, 'getShopWithProducts']);
+            Route::post('store', [PosController::class, 'storeShop']);
+            Route::post('update', [PosController::class, 'shopUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchShop']);
+            Route::get('code/search',  [ShopController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'deleteShop']);
+            Route::post('import', [ShopController::class, 'bulkImportData']); // will check later
+            Route::get('export', [ShopController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [ShopController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [ShopController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [ShopController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [ShopController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [ShopController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [ShopController::class, 'supplierWiseProduct']); // will check later
+        });
+
+        Route::group(['prefix' => 'tank'], function () {
+            Route::get('list', [PosController::class, 'getTankIndex']);
+            Route::get('product', [PosController::class, 'getTankWithProducts']);
+            Route::get('alllist', [PosController::class, 'getAllTankIndex']);
+            Route::post('store', [PosController::class, 'storeTank']);
+            Route::post('update', [PosController::class, 'tankUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchTank']);
+            Route::get('code/search',  [TankController::class, 'codeSearch']);
+            Route::get('delete', [PosController::class, 'deleteTank']);
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
+        });
+        Route::group(['prefix' => 'car'], function () {
+            Route::get('list', [PosController::class, 'getCarIndex']);//done
+            Route::post('store', [PosController::class, 'storeCar']); //done
+            Route::post('update', [PosController::class, 'carUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
+            Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
+            Route::get('delete', [PosController::class, 'deleteCar']); //done
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
+        });
+
+        Route::group(['prefix' => 'transactionnew'], function () {
+            Route::get('list', [PosController::class, 'getTransactionIndex']);//done
+            Route::post('store', [TransactionNewController::class, 'createTransaction']); //done
+            Route::post('edit', [TransactionNewController::class, 'editTransaction']); //done
+
+            Route::post('update', [PosController::class, 'carUpdate']);
+            Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
+            Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
+            Route::get('delete', [PosController::class, 'deleteCar']); //done
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
+        });
+
+        Route::group(['prefix' => 'edittransactionhistory'],function (){
+            Route::get('list', [PosController::class, 'getEditTransactionHistoryIndex']);//done
+        });
+        Route::group(['prefix' => 'edittransferrecordhistory'],function (){
+            Route::get('list', [PosController::class, 'getEditTransferRecordHistoryIndex']);//done
+        });
+
+        Route::group(['prefix' => 'transferrecord'], function () {
+            Route::get('list', [PosController::class, 'getTransferRecordIndex']);//done
+            Route::post('edit', [TransferRecordController::class, 'editTransferRecord']); //done
+
+            Route::get('soldlist', [PosController::class, 'getFinalTransferRecordIndex']);//done
+            Route::post('store', [TransferRecordController::class, 'createTransferRecord']); //done
+            Route::post('update', [TransferRecordController::class, 'update']);
+            Route::get('search',  [PosController::class, 'getSearchCar']); // will get later
+            Route::get('code/search',  [TankController::class, 'codeSearch']); // will get later
+            Route::get('delete', [PosController::class, 'deleteCar']); //done
+            Route::post('import', [TankController::class, 'bulkImportData']); // will check later
+            Route::get('export', [TankController::class, 'bulkExportData'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('download/excel/sample', [TankController::class, 'downloadExcelSample']); // will check later
+            Route::get('barcode/generate', [TankController::class, 'barcodeGenerate'])->withoutMiddleware('auth:admin-api'); // will check later
+            Route::get('category-wise', [TankController::class, 'categoryWiseProduct']); // will check later
+            Route::get('sort', [TankController::class, 'productSort']); // will check later
+            Route::get('popular/filter', [TankController::class, 'popularProductSort']); // will check later
+            Route::get('supplier/wise', [TankController::class, 'supplierWiseProduct']); // will check later
+        });
+
+
+
+
+    });
+});
+// Fallback route
+Route::fallback(function () {
+    return response()->json(['message' => 'Not Found.'], 404);
+});

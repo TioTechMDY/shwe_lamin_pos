@@ -1,0 +1,38 @@
+<?php
+//
+//namespace App\Models;
+//
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\Model;
+//
+//class TransferRecord extends Model
+//{
+//    use HasFactory;
+//}
+
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TransferRecord extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['from_id', 'to_id', 'from_type', 'to_type','isFinal','status','extra_description','created_by','confirmed_by'];
+
+    public function productNews()
+    {
+        return $this->belongsToMany(ProductNew::class, 'transfer_record_product_new', 'transfer_record_id', 'product_new_id')
+            ->withPivot('quantity','isExtra');
+    }
+    public  function createdBy()
+    {
+        return $this->belongsTo(Admin::class, 'created_by','id');
+    }
+    public  function updatedBy()
+    {
+        return $this->belongsTo(Admin::class, 'confirmed_by','id');
+    }
+}
