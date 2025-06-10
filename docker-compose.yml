@@ -1,7 +1,7 @@
 services:
   nginx:
-    image: zgdocker77/shwelaminpos-nginx:1.0
-    ports: 
+    image: zgdocker77/shwelaminpos-nginx:4.0
+    ports:
       - "8080:80"
     networks:
       - internal
@@ -10,7 +10,7 @@ services:
       - ./logs/nginx:/var/log/nginx/
     container_name: nginx
   php:
-    image: zgdocker77/shwelaminpos-php:1.0
+    image: zgdocker77/shwelaminpos-php:4.0
     networks:
       - internal
     volumes:
